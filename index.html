@@ -329,7 +329,7 @@
   }
   .member-kpi-edit-btn:hover { opacity: 1; }
   .hero-kpis {
-    display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px;
+    display: grid; grid-template-columns: minmax(0, 320px); gap: 12px;
   }
   .hero-kpi {
     background: var(--surface); border: 1px solid var(--line);
@@ -1007,7 +1007,6 @@
   .toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
 
   @media (max-width: 1100px) {
-    .hero-kpis { grid-template-columns: repeat(2, 1fr); }
     .today-grid { grid-template-columns: 1fr; }
     .detail-grid { grid-template-columns: 1fr; }
   }
@@ -1016,7 +1015,6 @@
     .topbar { padding: 16px 18px 22px; }
     .tabs-wrap { padding: 0 16px; overflow-x: auto; }
     .hero-title { font-size: 22px; }
-    .hero-kpis { grid-template-columns: 1fr; }
     /* 관리 탭의 표는 패널 안에서만 가로로 밀리게 — 화면 전체가 흔들리지 않도록 */
     #page-manage .panel { overflow-x: auto; }
     /* 등록 폼은 좁은 화면에서 한 줄에 하나씩 (인라인 grid 설정을 덮어씀) */
@@ -2974,18 +2972,6 @@
         <div class="hero-kpi-bar"><div class="hero-kpi-bar-fill" id="kpi-doing-bar" style="width:0%"></div></div>
         <div class="hero-kpi-foot"><span id="kpi-doing-detail">평균 진척률 0%</span></div>
       </div>
-      <div class="hero-kpi">
-        <div class="hero-kpi-label">⏰ 마감 임박 (3일 내, 루틴성)</div>
-        <div class="hero-kpi-value"><span id="kpi-urgent">0</span><span class="unit">건</span></div>
-        <div class="hero-kpi-bar"><div class="hero-kpi-bar-fill warn" id="kpi-urgent-bar" style="width:0%"></div></div>
-        <div class="hero-kpi-foot"><span id="kpi-urgent-detail">기한 초과 0건 포함</span></div>
-      </div>
-      <div class="hero-kpi">
-        <div class="hero-kpi-label">✅ 이번 주 완료</div>
-        <div class="hero-kpi-value"><span id="kpi-weekly-done">0</span><span class="unit">건</span></div>
-        <div class="hero-kpi-bar"><div class="hero-kpi-bar-fill" id="kpi-weekly-bar" style="width:0%"></div></div>
-        <div class="hero-kpi-foot"><span id="kpi-weekly-detail">일회성 + 루틴 합계</span></div>
-      </div>
     </div>
   </div>
 </header>
@@ -4223,18 +4209,6 @@ function toggleRoutineCheck(routineId, dateStr) {
   renderTeamPage();
 }
 
-// 이번 주 월요일 ~ 일요일 (월요일 시작)
-function thisWeekRange() {
-  const d = new Date(today());
-  const day = d.getDay();
-  const offset = day === 0 ? -6 : 1 - day;  // 월요일로
-  const monday = new Date(d); monday.setDate(d.getDate() + offset);
-  return Array.from({ length: 7 }, (_, i) => {
-    const dd = new Date(monday); dd.setDate(monday.getDate() + i);
-    return dd.toISOString().slice(0,10);
-  });
-}
-
 // 두 ISO 날짜(YYYY-MM-DD) 사이의 일수 (b - a)
 function daysBetween(a, b) {
   return Math.floor((new Date(b) - new Date(a)) / 86400000);
@@ -5305,8 +5279,6 @@ function commitMemberKPI(memberId, val) {
 
 // ===== Hero =====
 function renderHero() {
-  const t = today();
-
   // 팀 KPI 표시
   const mainTeam = DATA.teams[0];
   if (mainTeam) {
@@ -5324,30 +5296,6 @@ function renderHero() {
   const avgProgress = doing.length > 0 ? Math.round(doing.reduce((s,t)=>s+(t.progress||0), 0) / doing.length) : 0;
   $('kpi-doing-bar').style.width = avgProgress + '%';
   $('kpi-doing-detail').textContent = `평균 진척률 ${avgProgress}%`;
-
-  // 기한 임박
-  const now = new Date(t);
-  const urgent = DATA.tasks.filter(tk => {
-    if (tk.status === 'done') return false;
-    if (!tk.dueDate) return false;
-    const days = (new Date(tk.dueDate) - now) / 86400000;
-    return days <= 3;
-  });
-  const overdue = urgent.filter(tk => new Date(tk.dueDate) < now).length;
-  $('kpi-urgent').textContent = urgent.length;
-  $('kpi-urgent-bar').style.width = Math.min(100, urgent.length * 20) + '%';
-  $('kpi-urgent-detail').textContent = `기한 초과 ${overdue}건 포함`;
-
-  // 이번 주 완료
-  const weekDates = thisWeekRange();
-  const weeklyTaskDone = DATA.tasks.filter(tk =>
-    tk.status === 'done' && tk.completedAt && weekDates.includes(tk.completedAt)
-  ).length;
-  const weeklyRoutineDone = DATA.routineChecks.filter(c => weekDates.includes(c.date)).length;
-  const total = weeklyTaskDone + weeklyRoutineDone;
-  $('kpi-weekly-done').textContent = total;
-  $('kpi-weekly-bar').style.width = Math.min(100, total * 5) + '%';
-  $('kpi-weekly-detail').textContent = `업무 ${weeklyTaskDone}건 + 루틴 ${weeklyRoutineDone}건`;
 }
 
 // ===== 오늘 탭 =====
