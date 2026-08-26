@@ -329,7 +329,7 @@
   }
   .member-kpi-edit-btn:hover { opacity: 1; }
   .hero-kpis {
-    display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px;
+    display: grid; grid-template-columns: minmax(0, 300px); gap: 12px;
   }
   .hero-kpi {
     background: var(--surface); border: 1px solid var(--line);
@@ -2832,7 +2832,6 @@
 
   <div class="hero">
     <div>
-      <h1 class="hero-title">오늘, <span class="accent">팀 업무 한눈에</span></h1>
       <p class="hero-sub">루틴 업무는 빈도에 맞춰 자동 갱신되고, 프로젝트는 보조 업무로 쪼개서 관리합니다.</p>
 
       <!-- 팀 KPI 목표 -->
@@ -2850,28 +2849,10 @@
     </div>
     <div class="hero-kpis">
       <div class="hero-kpi">
-        <div class="hero-kpi-label">🔄 오늘 루틴 완료율</div>
-        <div class="hero-kpi-value"><span id="kpi-routine-pct">0</span><span class="unit">%</span></div>
-        <div class="hero-kpi-bar"><div class="hero-kpi-bar-fill" id="kpi-routine-bar" style="width:0%"></div></div>
-        <div class="hero-kpi-foot"><span id="kpi-routine-detail">0 / 0건 완료</span></div>
-      </div>
-      <div class="hero-kpi">
         <div class="hero-kpi-label">🚀 진행중 프로젝트</div>
         <div class="hero-kpi-value"><span id="kpi-doing">0</span><span class="unit">건</span></div>
         <div class="hero-kpi-bar"><div class="hero-kpi-bar-fill" id="kpi-doing-bar" style="width:0%"></div></div>
         <div class="hero-kpi-foot"><span id="kpi-doing-detail">평균 진척률 0%</span></div>
-      </div>
-      <div class="hero-kpi">
-        <div class="hero-kpi-label">⏰ 마감 임박 (3일 내, 루틴성)</div>
-        <div class="hero-kpi-value"><span id="kpi-urgent">0</span><span class="unit">건</span></div>
-        <div class="hero-kpi-bar"><div class="hero-kpi-bar-fill warn" id="kpi-urgent-bar" style="width:0%"></div></div>
-        <div class="hero-kpi-foot"><span id="kpi-urgent-detail">기한 초과 0건 포함</span></div>
-      </div>
-      <div class="hero-kpi">
-        <div class="hero-kpi-label">✅ 이번 주 완료</div>
-        <div class="hero-kpi-value"><span id="kpi-weekly-done">0</span><span class="unit">건</span></div>
-        <div class="hero-kpi-bar"><div class="hero-kpi-bar-fill" id="kpi-weekly-bar" style="width:0%"></div></div>
-        <div class="hero-kpi-foot"><span id="kpi-weekly-detail">일회성 + 루틴 합계</span></div>
       </div>
     </div>
 
@@ -5923,8 +5904,6 @@ function commitMemberKPI(memberId, val) {
 
 // ===== Hero =====
 function renderHero() {
-  const t = today();
-
   // 팀 KPI 표시
   const mainTeam = DATA.teams[0];
   if (mainTeam) {
@@ -5936,46 +5915,12 @@ function renderHero() {
     }
   }
 
-  // 오늘 표시 루틴 완료율 (분기/연 포함)
-  const todayRoutines = DATA.routines.filter(r => routineShowToday(r, t));
-  const doneCount = todayRoutines.filter(r => routineCompletedInPeriod(r.id, t)).length;
-  const totalCount = todayRoutines.length;
-  const pct = totalCount > 0 ? Math.round(doneCount/totalCount*100) : 100;
-  $('kpi-routine-pct').textContent = pct;
-  $('kpi-routine-bar').style.width = pct + '%';
-  $('kpi-routine-bar').className = 'hero-kpi-bar-fill' + (pct < 30 ? ' danger' : pct < 70 ? ' warn' : '');
-  $('kpi-routine-detail').textContent = `${doneCount} / ${totalCount}건 완료`;
-
   // 진행 중 업무
   const doing = DATA.tasks.filter(t => t.status === 'doing');
   $('kpi-doing').textContent = doing.length;
   const avgProgress = doing.length > 0 ? Math.round(doing.reduce((s,t)=>s+(t.progress||0), 0) / doing.length) : 0;
   $('kpi-doing-bar').style.width = avgProgress + '%';
   $('kpi-doing-detail').textContent = `평균 진척률 ${avgProgress}%`;
-
-  // 기한 임박
-  const now = new Date(t);
-  const urgent = DATA.tasks.filter(tk => {
-    if (tk.status === 'done') return false;
-    if (!tk.dueDate) return false;
-    const days = (new Date(tk.dueDate) - now) / 86400000;
-    return days <= 3;
-  });
-  const overdue = urgent.filter(tk => new Date(tk.dueDate) < now).length;
-  $('kpi-urgent').textContent = urgent.length;
-  $('kpi-urgent-bar').style.width = Math.min(100, urgent.length * 20) + '%';
-  $('kpi-urgent-detail').textContent = `기한 초과 ${overdue}건 포함`;
-
-  // 이번 주 완료
-  const weekDates = thisWeekRange();
-  const weeklyTaskDone = DATA.tasks.filter(tk =>
-    tk.status === 'done' && tk.completedAt && weekDates.includes(tk.completedAt)
-  ).length;
-  const weeklyRoutineDone = DATA.routineChecks.filter(c => weekDates.includes(c.date)).length;
-  const total = weeklyTaskDone + weeklyRoutineDone;
-  $('kpi-weekly-done').textContent = total;
-  $('kpi-weekly-bar').style.width = Math.min(100, total * 5) + '%';
-  $('kpi-weekly-detail').textContent = `업무 ${weeklyTaskDone}건 + 루틴 ${weeklyRoutineDone}건`;
 
   // 정체 업무 알림 동기화
   renderStaleBanner();
