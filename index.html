@@ -2834,18 +2834,6 @@
     <div>
       <p class="hero-sub">루틴 업무는 빈도에 맞춰 자동 갱신되고, 프로젝트는 보조 업무로 쪼개서 관리합니다.</p>
 
-      <!-- 팀 KPI 목표 -->
-      <div class="team-kpi-card">
-        <div class="team-kpi-head">
-          <span class="team-kpi-flag">🎯</span>
-          <span class="team-kpi-title" id="team-kpi-team-name">B2B</span>
-          <span class="team-kpi-label">팀 KPI 목표</span>
-        </div>
-        <input type="text" id="team-kpi-input" class="team-kpi-input"
-          placeholder="팀의 올해 대표 KPI를 한 줄로 적어주세요 (예: 신규 MOU 12건 체결 · 협력사 만족도 90%)"
-          onchange="updateTeamKPI(this.value)"
-          onkeydown="if(event.key==='Enter')this.blur();">
-      </div>
     </div>
     <div class="hero-kpis">
       <div class="hero-kpi">
@@ -5853,13 +5841,6 @@ function printMindmap() {
 }
 
 // ===== KPI 관리 =====
-function updateTeamKPI(val) {
-  if (DATA.teams.length === 0) return;
-  DATA.teams[0].kpi = (val || '').trim();
-  save();
-  toast(DATA.teams[0].kpi ? '✓ 팀 KPI 저장됨' : 'KPI를 비웠습니다');
-}
-
 function updateMemberKPI(memberId, val) {
   const m = DATA.members.find(x => x.id === memberId);
   if (!m) return;
@@ -5904,17 +5885,6 @@ function commitMemberKPI(memberId, val) {
 
 // ===== Hero =====
 function renderHero() {
-  // 팀 KPI 표시
-  const mainTeam = DATA.teams[0];
-  if (mainTeam) {
-    const teamNameEl = $('team-kpi-team-name');
-    if (teamNameEl) teamNameEl.textContent = mainTeam.name;
-    const kpiInput = $('team-kpi-input');
-    if (kpiInput && document.activeElement !== kpiInput) {
-      kpiInput.value = mainTeam.kpi || '';
-    }
-  }
-
   // 진행 중 업무
   const doing = DATA.tasks.filter(t => t.status === 'doing');
   $('kpi-doing').textContent = doing.length;
