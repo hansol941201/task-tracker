@@ -10,27 +10,30 @@
 <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,400;12..96,600;12..96,800&family=JetBrains+Mono:wght@400;600;800&display=swap" rel="stylesheet">
 <style>
   :root {
-    --bg: #F7F9FC;
+    --bg: #F8FAFC;
     --surface: #FFFFFF;
-    --ink: #16202E;
-    --ink-2: #33415C;
-    --muted: #64748B;
-    --line: #D7DEE7;
-    --line-2: #EAEFF5;
-    --accent: #244A73;
-    --accent-soft: #E3EBF5;
-    --accent-2: #3A6EA5;
-    --accent-2-soft: #E4EDF8;
-    --success: #17693F;
-    --success-soft: #DCF0E4;
-    --warn: #9A5B00;
-    --warn-soft: #FBEBD0;
+    --ink: #0F1E33;          /* 딥 네이비 타이포 */
+    --ink-2: #33445E;
+    --muted: #647389;
+    --line: #E5EAF2;         /* 매우 얇은 테두리 */
+    --line-2: #EFF3F9;
+    --accent: #12325C;       /* 딥 네이비 — 메인 */
+    --accent-soft: #EAF1FC;
+    --accent-2: #2563EB;     /* 선명한 블루 — 포인트 */
+    --accent-2-soft: #EAF1FC;
+    --success: #0E7C66;      /* 민트 */
+    --success-soft: #E3F5F0;
+    --warn: #B45309;         /* 주황 */
+    --warn-soft: #FDF0DC;
+    --violet: #5B4BC4;       /* 보라 */
+    --violet-soft: #EDEAFA;
     --danger: #B3261E;
-    --danger-soft: #F9DEDC;
-    --shadow-sm: 0 1px 2px rgba(22,32,46,0.04), 0 1px 3px rgba(22,32,46,0.03);
-    --shadow-md: 0 6px 24px rgba(22,32,46,0.06), 0 2px 6px rgba(22,32,46,0.04);
-    --radius: 14px;
-    --radius-sm: 10px;
+    --danger-soft: #FBE5E3;
+    --shadow-sm: 0 1px 2px rgba(15,30,51,0.04);
+    --shadow-md: 0 2px 10px rgba(15,30,51,0.05);
+    --radius: 12px;
+    --radius-sm: 8px;
+    --sidebar-w: 200px;
     --num: 'JetBrains Mono','Bricolage Grotesque',Pretendard,sans-serif;
     --display: 'Bricolage Grotesque',Pretendard,sans-serif;
     --body: Pretendard,'Bricolage Grotesque',sans-serif;
@@ -2916,17 +2919,389 @@
     white-space: pre-wrap; word-break: break-word; font-size: 13.5px; line-height: 1.7; color: var(--ink);
     background: var(--bg); border: 1px solid var(--line-2); border-radius: 10px; padding: 16px; max-height: 60vh; overflow: auto;
   }
+  /* ══════════════════════════════════════════════════════════
+     리디자인 레이어 — 화이트 기반 · 딥 네이비 · 얇은 테두리
+     ══════════════════════════════════════════════════════════ */
+
+  /* ── 앱 셸 ── */
+  body { background: var(--bg); font-size: 14px; }
+
+  .sidebar {
+    position: fixed; top: 0; left: 0; bottom: 0; width: var(--sidebar-w);
+    background: var(--surface); border-right: 1px solid var(--line);
+    display: flex; flex-direction: column; padding: 20px 12px 14px;
+    z-index: 60;
+  }
+  .sidebar-brand { padding: 0 8px 18px; }
+  .sidebar .brand-mark {
+    font-family: var(--body); font-weight: 800; font-size: 15px;
+    letter-spacing: -0.02em; color: var(--ink); line-height: 1.3;
+  }
+  .sidebar .brand-mark::before { content: none; }
+  .sidebar .brand-sub {
+    margin-top: 5px; font-size: 8.5px; color: var(--muted);
+    letter-spacing: 0.06em; font-weight: 600; text-transform: uppercase;
+    white-space: nowrap;
+  }
+  .sidebar .tabs {
+    display: flex; flex-direction: column; gap: 2px; flex: 1; overflow: visible;
+  }
+  .sidebar .tab {
+    display: flex; align-items: center; gap: 9px;
+    padding: 9px 10px; border: 0; background: transparent;
+    border-radius: 7px; font-size: 13px; font-weight: 600;
+    color: var(--ink-2); text-align: left; width: 100%;
+    transition: background .12s, color .12s;
+  }
+  .sidebar .tab .tab-ico { font-size: 13px; filter: grayscale(1); opacity: .55; }
+  .sidebar .tab:hover { background: var(--line-2); color: var(--ink); }
+  .sidebar .tab.active {
+    background: var(--accent-soft); color: var(--accent-2); font-weight: 700;
+  }
+  .sidebar .tab.active .tab-ico { filter: none; opacity: 1; }
+  .sidebar .tab::after { content: none; }
+
+  .sidebar-user {
+    display: flex; align-items: center; gap: 9px;
+    padding: 10px 8px 2px; margin-top: 10px; border-top: 1px solid var(--line);
+  }
+  .sidebar-user-avatar {
+    width: 28px; height: 28px; border-radius: 8px; flex: none;
+    background: var(--accent); color: #fff;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 12px; font-weight: 800;
+  }
+  .sidebar-user-text { min-width: 0; }
+  .sidebar-user-name {
+    font-size: 12px; font-weight: 700; color: var(--ink);
+    white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+  }
+  .sidebar-user-sub { font-size: 10px; color: var(--muted); margin-top: 1px; }
+
+  .app-main { margin-left: var(--sidebar-w); min-width: 0; }
+
+  /* ── 상단 헤더 ── */
+  .topbar {
+    background: var(--surface); border-bottom: 1px solid var(--line);
+    padding: 0; position: sticky; top: 0; z-index: 50;
+  }
+  .topbar .brand-row {
+    display: flex; align-items: center; justify-content: flex-end;
+    gap: 8px; margin: 0; padding: 11px 28px; flex-wrap: wrap;
+  }
+  .today-pill {
+    background: transparent; border: 0; padding: 0 8px 0 0;
+    font-size: 12.5px; font-weight: 600; color: var(--muted);
+    font-family: var(--body); letter-spacing: 0;
+  }
+  .today-pill::before { content: none; }
+
+  .cloud-status,
+  .topbar-actions .action-btn.ghost.sm {
+    height: 32px; padding: 0 12px; border-radius: 7px;
+    border: 1px solid var(--line); background: var(--surface);
+    font-size: 12.5px; font-weight: 600; color: var(--ink-2);
+    display: inline-flex; align-items: center; gap: 6px; box-shadow: none;
+  }
+  .cloud-status:hover,
+  .topbar-actions .action-btn.ghost.sm:hover {
+    background: var(--line-2); border-color: var(--line); color: var(--ink);
+    transform: none;
+  }
+  .topbar-actions .action-btn.ghost.sm span:not(.action-icon) { display: inline; }
+  .topbar-actions .action-icon { font-size: 12px; }
+  .topbar-actions .action-btn.project {
+    height: 32px; padding: 0 14px; border-radius: 7px;
+    background: var(--accent); border: 1px solid var(--accent); color: #fff;
+    font-size: 12.5px; font-weight: 700; box-shadow: none;
+  }
+  .topbar-actions .action-btn.project::before { content: none; }
+  .topbar-actions .action-btn.project:hover { background: #0C2545; transform: none; }
+  .topbar-actions .action-btn.project .action-icon { color: #fff; }
+
+  /* ── 히어로 ── */
+  .hero {
+    display: block; padding: 22px 28px 4px; max-width: none; margin: 0;
+  }
+  .hero-title {
+    font-family: var(--body); font-size: 25px; font-weight: 800;
+    letter-spacing: -0.03em; color: var(--ink); margin: 0;
+  }
+  .hero-title .accent { color: var(--accent-2); background: none; }
+  .hero-sub { margin: 6px 0 0; font-size: 12.5px; color: var(--muted); }
+
+  .hero-row {
+    display: grid; grid-template-columns: minmax(0,1fr) 268px;
+    gap: 12px; margin-top: 14px; align-items: stretch;
+  }
+  .team-kpi-card {
+    display: flex; align-items: center; gap: 12px; margin: 0;
+    background: var(--surface); border: 1px solid var(--line);
+    border-left: 3px solid var(--accent-2);
+    border-radius: var(--radius); padding: 13px 16px; box-shadow: none;
+  }
+  .team-kpi-card::before { content: none; }
+  .team-kpi-flag {
+    font-size: 15px; flex: none; width: 32px; height: 32px; border-radius: 8px;
+    background: var(--accent-soft); display: flex; align-items: center; justify-content: center;
+  }
+  .team-kpi-body { flex: 1; min-width: 0; }
+  .team-kpi-head { display: flex; align-items: center; gap: 7px; margin: 0 0 3px; }
+  .team-kpi-title { font-size: 12.5px; font-weight: 800; color: var(--ink); }
+  .team-kpi-label {
+    font-size: 9.5px; font-weight: 700; color: var(--ink-2);
+    letter-spacing: .08em; text-transform: uppercase;
+    background: var(--line-2); padding: 2px 6px; border-radius: 4px;
+  }
+  .team-kpi-input {
+    width: 100%; border: 0; background: transparent; padding: 0;
+    font-size: 13px; color: var(--ink); font-weight: 500;
+  }
+  .team-kpi-input:focus { outline: none; }
+  .team-kpi-input::placeholder { color: #9AA8BC; font-weight: 400; }
+
+  .hero-kpi {
+    background: var(--surface); border: 1px solid var(--line);
+    border-radius: var(--radius); padding: 13px 16px; gap: 0;
+    box-shadow: none; display: flex; flex-direction: column; justify-content: center;
+  }
+  .hero-kpi-label {
+    font-size: 11px; font-weight: 700; color: var(--muted);
+    letter-spacing: 0; text-transform: none;
+  }
+  .hero-kpi-value {
+    font-family: var(--body); font-size: 26px; font-weight: 800;
+    color: var(--ink); line-height: 1.15; margin-top: 2px;
+    display: flex; align-items: baseline; gap: 3px;
+  }
+  .hero-kpi-value .unit { font-size: 12px; font-weight: 700; color: var(--muted); }
+  .hero-kpi-bar { height: 4px; background: var(--line-2); border-radius: 99px; margin-top: 8px; }
+  .hero-kpi-bar-fill { background: var(--accent-2); border-radius: 99px; }
+  .hero-kpi-bar-fill.warn { background: var(--warn); }
+  .hero-kpi-bar-fill.danger { background: var(--danger); }
+  .hero-kpi-foot { font-size: 10.5px; color: var(--muted); margin-top: 6px; }
+
+  /* ── 본문 ── */
+  main { padding: 16px 28px 60px; max-width: none; margin: 0; }
+  .section-sub { max-width: 860px; font-size: 12px; color: var(--muted); line-height: 1.6; }
+  .board-head {
+    display: flex; align-items: center; gap: 14px;
+    flex-wrap: wrap; margin-bottom: 12px;
+  }
+  .section-title {
+    font-size: 14px; font-weight: 800; color: var(--ink);
+    letter-spacing: -0.01em; margin: 0; display: flex; align-items: center; gap: 8px;
+  }
+  .section-title::before { content: none; }
+  .section-title .count {
+    font-family: var(--body); font-size: 11.5px; font-weight: 600;
+    color: var(--muted); background: none; padding: 0;
+  }
+  .board-filters { display: flex; gap: 6px; margin-left: auto; flex-wrap: wrap; }
+  .board-pill {
+    border: 1px solid var(--line); background: var(--surface);
+    border-radius: 99px; padding: 4px 11px; font-size: 11.5px;
+    font-weight: 600; color: var(--ink-2); cursor: pointer;
+    display: inline-flex; align-items: center; gap: 5px; transition: all .12s;
+  }
+  .board-pill:hover { border-color: #CBD8E8; background: var(--line-2); }
+  .board-pill.on { background: var(--accent); border-color: var(--accent); color: #fff; }
+  .board-pill .n { font-family: var(--num); font-weight: 700; }
+
+  /* ── 직원별 업무 보드 ── */
+  .today-grid {
+    display: grid; grid-template-columns: repeat(auto-fill, minmax(272px, 1fr));
+    gap: 14px; align-items: stretch;
+  }
+  @media (min-width: 1600px) {
+    .today-grid { grid-template-columns: repeat(auto-fill, minmax(288px, 1fr)); }
+  }
+  .today-card {
+    background: var(--surface); border: 1px solid var(--line);
+    border-radius: var(--radius); padding: 0; box-shadow: var(--shadow-sm);
+    overflow: hidden; display: flex; flex-direction: column;
+  }
+  .today-card:hover { box-shadow: var(--shadow-md); transform: none; }
+  .today-card::before { content: none; }
+
+  .col-head {
+    display: flex; align-items: center; gap: 9px;
+    padding: 12px 14px; border-bottom: 1px solid var(--line-2);
+  }
+  .col-avatar {
+    width: 30px; height: 30px; border-radius: 99px; flex: none;
+    display: flex; align-items: center; justify-content: center;
+    color: #fff; font-size: 12px; font-weight: 800; letter-spacing: -0.02em;
+  }
+  .col-name { font-size: 13.5px; font-weight: 800; color: var(--ink); line-height: 1.2; }
+  .col-role { font-size: 10.5px; color: var(--muted); margin-top: 1px; }
+  .col-count {
+    margin-left: auto; font-family: var(--num); font-size: 11px; font-weight: 700;
+    color: var(--ink-2); background: var(--line-2); border-radius: 99px; padding: 3px 9px;
+  }
+
+  .col-kpi {
+    display: flex; align-items: center; gap: 6px; margin: 0;
+    padding: 8px 14px; border-bottom: 1px solid var(--line-2);
+    background: transparent; border-radius: 0; cursor: pointer;
+  }
+  .col-kpi:hover { background: var(--line-2); }
+  .col-kpi .member-kpi-flag { font-size: 10px; }
+  .col-kpi .member-kpi-text {
+    font-size: 11px; color: var(--ink-2); flex: 1; min-width: 0;
+    white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+    padding: 0; text-align: left;   /* 전역 .empty 규칙(padding:48px) 무력화 */
+  }
+  .col-kpi .member-kpi-text.empty { color: #9AA8BC; font-style: normal; }
+  .col-kpi .member-kpi-edit-btn {
+    border: 0; background: none; font-size: 10px; opacity: 0; padding: 0;
+  }
+  .col-kpi:hover .member-kpi-edit-btn { opacity: .6; }
+
+  .col-body { padding: 10px 12px; display: flex; flex-direction: column; gap: 7px; flex: 1; }
+  .col-sub-label {
+    font-size: 9.5px; font-weight: 800; color: var(--muted);
+    letter-spacing: .09em; text-transform: uppercase;
+    display: flex; align-items: center; gap: 6px; margin: 2px 0 1px;
+  }
+  .col-sub-label .n { font-family: var(--num); color: var(--ink-2); }
+  .col-empty { font-size: 11.5px; color: #9AA8BC; padding: 4px 2px 6px; }
+
+  /* 업무 카드 */
+  .tcard {
+    border: 1px solid var(--line); border-radius: 10px;
+    background: var(--surface); padding: 9px 11px; cursor: pointer;
+    transition: border-color .12s, box-shadow .12s;
+  }
+  .tcard:hover { border-color: #CBD8E8; box-shadow: var(--shadow-sm); }
+  .tcard-top { display: flex; align-items: center; gap: 6px; margin-bottom: 5px; }
+  .tcard-title {
+    font-size: 12.5px; font-weight: 700; color: var(--ink);
+    line-height: 1.35; word-break: keep-all;
+  }
+  .tcard-meta { font-size: 10.5px; color: var(--muted); margin-top: 3px; }
+  .tcard-foot {
+    display: flex; align-items: center; gap: 6px; margin-top: 7px;
+  }
+  .tcard-time { font-size: 10.5px; color: var(--muted); font-family: var(--num); }
+  .tcard-pct {
+    margin-left: auto; font-family: var(--num); font-size: 10.5px;
+    font-weight: 700; color: var(--ink-2);
+  }
+  .tcard-bar { height: 3px; background: var(--line-2); border-radius: 99px; margin-top: 6px; }
+  .tcard-bar > div { height: 100%; background: var(--accent-2); border-radius: 99px; }
+
+  /* 상태 pill — 배경은 아주 연하게, 글씨만 진하게 */
+  .pill {
+    font-size: 10px; font-weight: 700; padding: 2px 7px; border-radius: 5px;
+    letter-spacing: -0.01em; white-space: nowrap;
+  }
+  .pill.doing  { background: var(--accent-soft); color: var(--accent-2); }
+  .pill.todo   { background: #FBF3E2; color: #92640F; }
+  .pill.done   { background: var(--success-soft); color: var(--success); }
+  .pill.hold   { background: var(--violet-soft); color: var(--violet); }
+  .pill.urgent { background: var(--danger-soft); color: var(--danger); }
+  .pill.routine{ background: var(--line-2); color: var(--ink-2); }
+
+  /* 루틴 행 */
+  .col-body .routine-item {
+    border: 1px solid var(--line); border-radius: 10px;
+    padding: 8px 10px; gap: 8px; background: var(--surface);
+  }
+  .col-body .routine-item:hover { background: var(--surface); border-color: #CBD8E8; }
+  .col-body .routine-item.done { background: var(--line-2); border-color: var(--line-2); }
+  .col-body .routine-title { font-size: 12px; font-weight: 600; }
+  .col-body .routine-check {
+    width: 15px; height: 15px; border-radius: 5px; border: 1.5px solid #C3D0E0;
+  }
+  .col-body .routine-item.done .routine-check { background: var(--success); border-color: var(--success); }
+
+  .col-foot { padding: 0 12px 12px; }
+  .col-add {
+    width: 100%; border: 1px dashed #CBD8E8; background: var(--surface);
+    color: var(--accent-2); border-radius: 9px; padding: 8px;
+    font-size: 12px; font-weight: 700; transition: all .12s;
+  }
+  .col-add:hover { background: var(--accent-soft); border-color: var(--accent-2); }
+  .col-add.ghost {
+    color: var(--muted); border-color: var(--line); margin-top: 5px;
+    font-weight: 600; font-size: 11px; padding: 6px;
+  }
+  .col-add.ghost:hover { background: var(--line-2); border-color: #CBD8E8; color: var(--ink-2); }
+
+  /* 새 직원 추가 컬럼 */
+  .today-card-add {
+    border: 1px dashed #CBD8E8; background: var(--surface); box-shadow: none;
+    min-height: 190px; display: flex; align-items: center; justify-content: center;
+  }
+  .today-card-add:hover { border-color: var(--accent-2); background: var(--surface); box-shadow: none; }
+  .today-card-add-icon {
+    font-size: 26px; color: var(--accent-2); background: var(--accent-soft);
+    width: 44px; height: 44px; border-radius: 12px; margin: 0 auto 10px;
+    display: flex; align-items: center; justify-content: center;
+  }
+  .today-card-add-title { font-size: 13px; font-weight: 700; color: var(--ink); }
+  .today-card-add-sub { font-size: 11px; color: var(--muted); margin-top: 3px; }
+
+  /* ── 공통 컴포넌트 톤 정리 ── */
+  .panel { border-radius: var(--radius); box-shadow: none; border-color: var(--line); }
+  .btn, .action-btn { border-radius: 7px; box-shadow: none; }
+  .btn:hover, .action-btn:hover { transform: none; }
+  .modal { border-radius: var(--radius); }
+  .fab-add {
+    background: var(--accent); box-shadow: 0 4px 14px rgba(15,30,51,.16);
+    width: 46px; height: 46px; font-size: 22px;
+  }
+  .fab-add:hover { background: #0C2545; }
+
+  @media (max-width: 900px) {
+    .sidebar {
+      position: static; width: auto; flex-direction: row; align-items: center;
+      border-right: 0; border-bottom: 1px solid var(--line); padding: 10px 14px;
+      gap: 12px; overflow-x: auto;
+    }
+    .sidebar-brand { padding: 0; flex: none; }
+    .sidebar .tabs { flex-direction: row; flex: none; gap: 2px; }
+    .sidebar .tab { white-space: nowrap; padding: 7px 10px; }
+    .sidebar-user { display: none; }
+    .app-main { margin-left: 0; }
+    .topbar .brand-row { padding: 10px 14px; }
+    .hero { padding: 16px 14px 4px; }
+    .hero-row { grid-template-columns: 1fr; }
+    main { padding: 14px 14px 60px; }
+  }
+
 </style>
 </head>
 <body>
 
-<!-- ============== HEADER ============== -->
+<!-- ============== 좌측 사이드바 ============== -->
+<aside class="sidebar">
+  <div class="sidebar-brand">
+    <div class="brand-mark">B2B 업무 트래커</div>
+    <div class="brand-sub">SERVICE OPS · TASK TRACKER</div>
+  </div>
+  <nav class="tabs">
+    <button class="tab active" data-page="today"><span class="tab-ico">📅</span>오늘</button>
+    <button class="tab" data-page="team"><span class="tab-ico">👥</span>팀별 보기</button>
+    <button class="tab" data-page="automation"><span class="tab-ico">🚀</span>자동화</button>
+    <button class="tab" data-page="manuals"><span class="tab-ico">📖</span>매뉴얼</button>
+    <button class="tab" data-page="kpi"><span class="tab-ico">🎯</span>KPI 체계</button>
+  </nav>
+  <div class="sidebar-user">
+    <div class="sidebar-user-avatar" id="sidebar-user-avatar">B</div>
+    <div class="sidebar-user-text">
+      <div class="sidebar-user-name" id="sidebar-user-name">B2B</div>
+      <div class="sidebar-user-sub" id="sidebar-user-sub">팀원 0명</div>
+    </div>
+  </div>
+</aside>
+
+<div class="app-main">
+
+<!-- ============== 상단 헤더 ============== -->
 <header class="topbar">
   <div class="brand-row">
-    <div class="brand">
-      <span class="brand-mark">B2B 업무 트래커</span>
-      <span class="brand-sub">SERVICE OPS · TASK TRACKER</span>
-    </div>
     <div class="today-pill" id="today-pill">2026.05.11 월</div>
     <div class="topbar-actions">
       <!-- Firebase 클라우드 동기화 상태 -->
@@ -2947,15 +3322,18 @@
     </div>
   </div>
 
-  <div class="hero">
-    <div>
-      <h1 class="hero-title">오늘, <span class="accent">팀 업무 한눈에</span></h1>
-      <p class="hero-sub">루틴 업무는 빈도에 맞춰 자동 갱신되고, 프로젝트는 보조 업무로 쪼개서 관리합니다.</p>
+</header>
 
-      <!-- 팀 KPI 목표 -->
-      <div class="team-kpi-card">
+<div class="hero">
+  <h1 class="hero-title">오늘, <span class="accent">팀 업무 한눈에</span></h1>
+  <p class="hero-sub">루틴 업무는 빈도에 맞춰 자동 갱신되고, 프로젝트는 보조 업무로 쪼개서 관리합니다.</p>
+
+  <div class="hero-row">
+    <!-- 팀 KPI 목표 -->
+    <div class="team-kpi-card">
+      <span class="team-kpi-flag">🎯</span>
+      <div class="team-kpi-body">
         <div class="team-kpi-head">
-          <span class="team-kpi-flag">🎯</span>
           <span class="team-kpi-title" id="team-kpi-team-name">B2B</span>
           <span class="team-kpi-label">팀 KPI 목표</span>
         </div>
@@ -2965,25 +3343,13 @@
           onkeydown="if(event.key==='Enter')this.blur();">
       </div>
     </div>
-    <div class="hero-kpis">
-      <div class="hero-kpi">
-        <div class="hero-kpi-label">🚀 진행중 프로젝트</div>
-        <div class="hero-kpi-value"><span id="kpi-doing">0</span><span class="unit">건</span></div>
-        <div class="hero-kpi-bar"><div class="hero-kpi-bar-fill" id="kpi-doing-bar" style="width:0%"></div></div>
-        <div class="hero-kpi-foot"><span id="kpi-doing-detail">평균 진척률 0%</span></div>
-      </div>
-    </div>
-  </div>
-</header>
 
-<!-- ============== TABS ============== -->
-<div class="tabs-wrap">
-  <div class="tabs">
-    <button class="tab active" data-page="today">📅 오늘</button>
-    <button class="tab" data-page="team">👥 팀별 보기</button>
-    <button class="tab" data-page="automation">🚀 자동화</button>
-    <button class="tab" data-page="manuals">📖 매뉴얼</button>
-    <button class="tab" data-page="kpi">🎯 KPI 체계</button>
+    <div class="hero-kpi">
+      <div class="hero-kpi-label">진행중 프로젝트</div>
+      <div class="hero-kpi-value"><span id="kpi-doing">0</span><span class="unit">건</span></div>
+      <div class="hero-kpi-bar"><div class="hero-kpi-bar-fill" id="kpi-doing-bar" style="width:0%"></div></div>
+      <div class="hero-kpi-foot"><span id="kpi-doing-detail">평균 진척률 0%</span></div>
+    </div>
   </div>
 </div>
 
@@ -2992,9 +3358,12 @@
 
   <!-- ===== PAGE 1: 오늘 ===== -->
   <div class="page active" id="page-today">
-    <div class="section-title">
-      팀 멤버별 오늘 할 일
-      <span class="count" id="today-day-text">2026년 5월 11일 (월요일)</span>
+    <div class="board-head">
+      <div class="section-title">
+        팀 멤버별 오늘 할 일
+        <span class="count" id="today-day-text">2026년 5월 11일 (월요일)</span>
+      </div>
+      <div class="board-filters" id="today-filters"></div>
     </div>
     <div class="today-grid" id="today-grid"></div>
   </div>
@@ -3044,6 +3413,7 @@
   </div>
 
 </main>
+</div><!-- /app-main -->
 
 <!-- ===== 플로팅 추가 버튼 ===== -->
 <button class="fab-add" onclick="openAddMenu()" title="새 업무 추가 (Ctrl+N)">＋</button>
@@ -5302,215 +5672,189 @@ function renderHero() {
 function renderTodayPage() {
   const t = today();
   const d = new Date(t);
-  $('today-pill').textContent = `${t.replaceAll('-','.')} ${weekDays[d.getDay()]}`;
+  $('today-pill').textContent = `${t.replaceAll('-','.')} (${weekDays[d.getDay()]})`;
   $('today-day-text').textContent = `${d.getFullYear()}년 ${d.getMonth()+1}월 ${d.getDate()}일 (${weekDays[d.getDay()]}요일)`;
+
+  // 사이드바 하단 사용자 영역
+  if ($('sidebar-user-name')) {
+    $('sidebar-user-name').textContent = teamName();
+    $('sidebar-user-avatar').textContent = initials(teamName());
+    $('sidebar-user-sub').textContent = `팀원 ${DATA.members.filter(m => !m.isAlba).length}명`;
+  }
 
   const grid = $('today-grid');
   if (!DATA.members.length) {
+    if ($('today-filters')) $('today-filters').innerHTML = '';
     grid.innerHTML = `<div class="empty" style="grid-column:1/-1;">
       <div class="empty-emoji">👥</div>
       <div>등록된 멤버가 없습니다.</div>
-      <div style="margin-top:6px; font-size:12px;">[관리] 탭에서 팀 멤버부터 추가해주세요.</div>
+      <div style="margin-top:6px; font-size:12px;">아래 [＋ 새 직원 추가]로 팀원을 등록해 주세요.</div>
     </div>`;
     return;
   }
 
-  // 일반 멤버 + (담당 루틴/업무가 있는 알바)만 카드로 표시
   const visibleMembers = DATA.members.filter(m => {
     if (!m.isAlba) return true;
-    const hasContent = DATA.routines.some(r => r.memberId === m.id && r.active)
-                    || DATA.tasks.some(tk => tk.memberId === m.id && tk.status !== 'done');
-    return hasContent;
+    return DATA.routines.some(r => r.memberId === m.id && r.active)
+        || DATA.tasks.some(tk => tk.memberId === m.id && tk.status !== 'done');
   });
+
+  // ── 요약 필터 pill ──
+  const allTasks = DATA.tasks;
+  const counts = {
+    all:  allTasks.length,
+    doing: allTasks.filter(tk => tk.status === 'doing').length,
+    done:  allTasks.filter(tk => tk.status === 'done').length
+  };
+  if (!UI.todayFilter) UI.todayFilter = 'all';
+  if ($('today-filters')) {
+    $('today-filters').innerHTML = [
+      ['all', '전체', counts.all], ['doing', '진행중', counts.doing], ['done', '완료', counts.done]
+    ].map(([k, label, n]) => `
+      <button class="board-pill ${UI.todayFilter === k ? 'on' : ''}" onclick="setTodayFilter('${k}')">
+        ${label} <span class="n">${n}건</span>
+      </button>`).join('');
+  }
+
+  const addColumn = DATA.teams.length > 0 ? `
+    <div class="today-card today-card-add" onclick="quickAddMember('${DATA.teams[0].id}')" title="새 직원을 추가합니다">
+      <div class="today-card-add-inner" style="text-align:center;">
+        <div class="today-card-add-icon">＋</div>
+        <div class="today-card-add-title">새 직원 추가</div>
+        <div class="today-card-add-sub">팀에 새 멤버를 추가하세요</div>
+      </div>
+    </div>` : '';
 
   if (visibleMembers.length === 0) {
     grid.innerHTML = `<div class="empty" style="grid-column:1/-1;">
-      <div class="empty-emoji">👥</div>
-      <div>표시할 멤버가 없습니다.</div>
-    </div>`;
+      <div class="empty-emoji">👥</div><div>표시할 멤버가 없습니다.</div>
+    </div>` + addColumn;
     return;
   }
 
   grid.innerHTML = visibleMembers.map(m => {
-    // 오늘 표시할 루틴 (분기/연 포함)
-    const todayRoutines = DATA.routines.filter(r =>
-      r.memberId === m.id && routineShowToday(r, t)
-    );
-    const doneIds = new Set(
-      todayRoutines.filter(r => routineCompletedInPeriod(r.id, t)).map(r => r.id)
-    );
-
-    const totalToday = todayRoutines.length;
+    // 오늘 표시할 루틴
+    const todayRoutines = DATA.routines.filter(r => r.memberId === m.id && routineShowToday(r, t));
+    const doneIds = new Set(todayRoutines.filter(r => routineCompletedInPeriod(r.id, t)).map(r => r.id));
     const doneToday = todayRoutines.filter(r => doneIds.has(r.id)).length;
-    const pct = totalToday > 0 ? Math.round(doneToday/totalToday*100) : 100;
 
-    // 진행 중 업무
-    const tasks = DATA.tasks.filter(tk => tk.memberId === m.id && tk.status !== 'done');
-    tasks.sort((a,b) => {
-      const aDate = a.dueDate || '9999-12-31';
-      const bDate = b.dueDate || '9999-12-31';
-      return aDate.localeCompare(bDate);
-    });
-    const topTasks = tasks.slice(0, 5);
-
-    // 진행률 ring SVG
-    const rCircum = 2 * Math.PI * 16;
-    const rOffset = rCircum * (1 - pct/100);
+    // 업무 — 필터 적용
+    let myTasks = DATA.tasks.filter(tk => tk.memberId === m.id);
+    if (UI.todayFilter === 'doing')     myTasks = myTasks.filter(tk => tk.status === 'doing');
+    else if (UI.todayFilter === 'done') myTasks = myTasks.filter(tk => tk.status === 'done');
+    else                                myTasks = myTasks.filter(tk => tk.status !== 'done');
+    myTasks.sort((a, b) => (a.dueDate || '9999-12-31').localeCompare(b.dueDate || '9999-12-31'));
+    const topTasks = myTasks.slice(0, 6);
+    const colCount = myTasks.length + todayRoutines.length;
 
     return `
       <div class="today-card">
-        <div class="today-card-head">
-          <div class="member-info">
-            <div class="avatar" style="background:${m.color || '#244A73'};">${m.isAlba ? '🧑‍💼' : escapeHtml(initials(m.name))}</div>
-            <div>
-              <div class="member-name">${escapeHtml(m.name)}${m.isAlba ? ` <span style="font-size:10px; color:#9A5B00; background:#FCE7CD; padding:1px 6px; border-radius:99px; font-weight:800; margin-left:4px;">알바</span>` : ''}</div>
-              <div class="member-role">${m.isAlba ? escapeHtml((DATA.teams.find(t=>t.id===m.teamId)||{}).name || '') + ' • ' : ''}${escapeHtml(m.role || '')}</div>
-            </div>
+        <div class="col-head">
+          <div class="col-avatar" style="background:${m.color || 'var(--accent)'};">${m.isAlba ? '🧑‍💼' : escapeHtml(initials(m.name))}</div>
+          <div style="min-width:0;">
+            <div class="col-name">${escapeHtml(m.name)}</div>
+            ${m.role ? `<div class="col-role">${escapeHtml(m.role)}</div>` : ''}
           </div>
-          <div class="today-progress">
-            <div class="ring">
-              <svg width="38" height="38">
-                <circle cx="19" cy="19" r="16" fill="none" stroke="#D7DEE7" stroke-width="3"/>
-                <circle cx="19" cy="19" r="16" fill="none" stroke="${m.color || '#244A73'}" stroke-width="3"
-                  stroke-dasharray="${rCircum}" stroke-dashoffset="${rOffset}" stroke-linecap="round"/>
-              </svg>
-              <div class="ring-text">${pct}%</div>
-            </div>
-          </div>
+          <span class="col-count">${colCount}건</span>
         </div>
 
-        <!-- 개인 KPI 한 줄 -->
         ${!m.isAlba ? `
-          <div class="member-kpi-line" data-kpi-row="${m.id}" onclick="startMemberKPIEdit('${m.id}')" title="클릭하여 KPI 수정">
+          <div class="col-kpi" data-kpi-row="${m.id}" onclick="startMemberKPIEdit('${m.id}')" title="클릭하여 KPI 수정">
             <span class="member-kpi-flag">🎯</span>
             <span class="member-kpi-text ${m.kpi ? '' : 'empty'}">${m.kpi ? escapeHtml(m.kpi) : '연간 KPI 목표를 입력하세요'}</span>
             <button class="member-kpi-edit-btn" onclick="event.stopPropagation(); startMemberKPIEdit('${m.id}')">✏️</button>
-          </div>
-        ` : ''}
+          </div>` : ''}
 
-        <div class="today-section">
-          <div class="today-section-label">
-            <span>🔄 오늘 루틴</span>
-            <span class="today-section-count">${doneToday}/${totalToday}</span>
-          </div>
-          ${totalToday === 0 ? `<div class="empty-small">오늘 예정된 루틴이 없어요.</div>` :
-            `<div class="routine-list">${todayRoutines.map(r => {
-              const isDone = doneIds.has(r.id);
-              const isAlba = r.assignee === 'alba';
-              const freqTag = `<span class="routine-tag ${r.frequency}">${
-                r.frequency === 'daily' ? '매일' :
-                r.frequency === 'weekly' ? '주간' : '월간'
-              }</span>`;
-              return `
-                <div class="routine-item ${isDone ? 'done' : ''} ${isAlba ? 'alba' : ''}">
-                  <span class="routine-check" onclick="toggleRoutineCheck('${r.id}','${t}')"></span>
-                  <span class="routine-title" onclick="toggleRoutineCheck('${r.id}','${t}')">${escapeHtml(r.title)}</span>
-                  ${freqTag}
-                  <button class="routine-edit-btn" onclick="event.stopPropagation(); openRoutineModal('${r.id}')" title="루틴 수정">✏️</button>
-                  <button class="routine-del-btn" onclick="event.stopPropagation(); deleteRoutineQuick('${r.id}')" title="루틴 삭제">×</button>
-                </div>
-              `;
-            }).join('')}</div>`
-          }
+        <div class="col-body">
+          ${todayRoutines.length > 0 ? `
+            <div class="col-sub-label">오늘 루틴 <span class="n">${doneToday}/${todayRoutines.length}</span></div>
+            ${todayRoutines.map(r => `
+              <div class="routine-item ${doneIds.has(r.id) ? 'done' : ''} ${r.assignee === 'alba' ? 'alba' : ''}">
+                <span class="routine-check" onclick="toggleRoutineCheck('${r.id}','${t}')"></span>
+                <span class="routine-title" onclick="toggleRoutineCheck('${r.id}','${t}')">${escapeHtml(r.title)}</span>
+                <button class="routine-edit-btn" onclick="event.stopPropagation(); openRoutineModal('${r.id}')" title="루틴 수정">✏️</button>
+                <button class="routine-del-btn" onclick="event.stopPropagation(); deleteRoutineQuick('${r.id}')" title="루틴 삭제">×</button>
+              </div>`).join('')}
+          ` : ''}
+
+          <div class="col-sub-label">업무 <span class="n">${myTasks.length}</span></div>
+          ${topTasks.length === 0
+            ? `<div class="col-empty">표시할 업무가 없습니다.</div>`
+            : topTasks.map(tk => renderTaskCard(tk, t)).join('')}
+          ${myTasks.length > topTasks.length
+            ? `<div class="col-empty" style="text-align:center;">외 ${myTasks.length - topTasks.length}건</div>` : ''}
         </div>
 
-        <div class="today-section">
-          <div class="today-section-label">
-            <span>🚀 진행중 프로젝트</span>
-            <span class="today-section-count">${tasks.length}건</span>
-          </div>
-          ${topTasks.length === 0 ? `<div class="empty-small">진행 중인 프로젝트가 없어요.</div>` :
-            `<div class="task-mini-list">${topTasks.map(tk => {
-              const isUrgent = tk.dueDate && new Date(tk.dueDate) - new Date(t) <= 86400000 * 3;
-              const taskType = tk.taskType || 'project';
-              const subs = tk.subtasks || [];
-              const isExpanded = UI.expandedTasks.has(tk.id);
-              const priority = tk.priority || 'mid';
-              // 프로젝트는 시작 후 경과일, 루틴성은 마감일
-              let rightInfo = '';
-              if (taskType === 'project' && tk.startDate) {
-                const days = daysBetween(tk.startDate, t);
-                rightInfo = `<div class="task-mini-due" style="color:#1B3A5C; font-weight:800;">+${days}d</div>`;
-              } else if (tk.dueDate) {
-                rightInfo = `<div class="task-mini-due ${isUrgent ? 'urgent' : ''}">${tk.dueDate.slice(5)}</div>`;
-              }
-              const subInfo = subs.length > 0 ? `<span style="font-size:10px; color:var(--muted); margin-left:4px;">📎${subs.filter(s=>s.status==='done').length}/${subs.length}</span>` : '';
-
-              // 보조업무 인라인 펼침 영역
-              const expandHtml = `
-                <div class="task-mini-expand ${isExpanded ? 'open' : ''}" id="task-expand-${tk.id}">
-                  <div class="task-mini-expand-head">
-                    <span>📎 보조 업무 ${subs.length}개</span>
-                    ${subs.length > 0 ? `<span style="font-family:var(--num); color:var(--success);">${subs.filter(s=>s.status==='done').length} 완료</span>` : ''}
-                    <div class="task-mini-expand-actions">
-                      <button onclick="event.stopPropagation(); openProjectModal('${tk.id}')">✏️ 상세 수정</button>
-                      <button class="danger" onclick="event.stopPropagation(); deleteTask('${tk.id}')">🗑 삭제</button>
-                    </div>
-                  </div>
-                  <div class="task-mini-sub-list">
-                    ${subs.length === 0 ? `<div class="task-mini-sub-empty">보조 업무가 없습니다. 상세 수정에서 추가하세요.</div>` :
-                      subs.map(st => {
-                        const icon = { todo:'○', doing:'▶', done:'✓' }[st.status] || '○';
-                        return `
-                          <div class="task-mini-sub ${st.status}">
-                            <div class="task-mini-sub-icon" onclick="event.stopPropagation(); cycleSubtaskStatus('${tk.id}','${st.id}')" title="상태 변경">${icon}</div>
-                            <div class="task-mini-sub-title">${escapeHtml(st.title)}</div>
-                            <span class="task-mini-sub-pct">${st.progress || 0}%</span>
-                            <button class="task-mini-sub-del" onclick="event.stopPropagation(); deleteSubtask('${tk.id}','${st.id}')" title="보조업무 삭제">×</button>
-                          </div>
-                        `;
-                      }).join('')
-                    }
-                  </div>
-                </div>
-              `;
-
-              return `
-                <div>
-                  <div class="task-mini ${taskType === 'routine' ? 'routine-type' : ''} status-${tk.status} ${isExpanded ? 'expanded' : ''}"
-                    onclick="toggleTaskExpand('${tk.id}')"
-                    title="클릭하여 보조업무 펼치기/접기">
-                    <span class="task-mini-pri-dot ${priority}" title="우선순위: ${priority==='high'?'높음':priority==='low'?'낮음':'보통'}"></span>
-                    <div class="task-mini-progress">
-                      <div class="task-mini-progress-fill" style="width:${tk.progress || 0}%"></div>
-                    </div>
-                    <div class="task-mini-title">${taskType==='routine'?'🔁 ':'🚀 '}${escapeHtml(tk.title)}${subInfo}</div>
-                    ${rightInfo}
-                    <button class="task-mini-toggle" title="${isExpanded ? '접기' : '펼치기'}">▼</button>
-                  </div>
-                  ${expandHtml}
-                </div>
-              `;
-            }).join('')}</div>`
-          }
-          ${tasks.length > 5 ? `<div style="font-size: 11px; color: var(--muted); margin-top: 8px; text-align: center;">외 ${tasks.length - 5}건</div>` : ''}
+        <div class="col-foot">
+          <button class="col-add" onclick="openProjectModalForMember('${m.id}')">＋ 할 일 추가</button>
+          <button class="col-add ghost" onclick="openRoutineModalForMember('${m.id}')">＋ 루틴 추가</button>
         </div>
+      </div>`;
+  }).join('') + addColumn;
+}
 
-        <div style="margin-top: 10px; display:grid; grid-template-columns: ${m.isAlba ? '1fr' : '1fr 1fr'}; gap:8px;">
-          ${m.isAlba ? `
-            <button class="action-btn alba sm" onclick="openRoutineModalForMember('${m.id}')">
-              <span class="action-icon">＋</span><span>알바 루틴 추가</span>
-            </button>
-          ` : `
-            <button class="action-btn project sm" onclick="openProjectModalForMember('${m.id}')">
-              <span class="action-icon">＋</span><span>프로젝트 추가</span>
-            </button>
-            <button class="action-btn routine sm" onclick="openRoutineModalForMember('${m.id}')">
-              <span class="action-icon">＋</span><span>루틴 추가</span>
-            </button>
-          `}
+// 요약 필터
+function setTodayFilter(k) {
+  UI.todayFilter = k;
+  renderTodayPage();
+}
+
+// 업무 카드 한 장 — 상태 pill · 제목 · 부가설명 · 시간 · 진척률
+function renderTaskCard(tk, t) {
+  const type = tk.taskType || 'project';
+  const subs = tk.subtasks || [];
+  const isExpanded = UI.expandedTasks.has(tk.id);
+  const isUrgent = tk.status !== 'done' && tk.dueDate
+    && (new Date(tk.dueDate) - new Date(t)) <= 86400000 * 3;
+
+  const STATUS = { doing: '진행중', todo: '예정', hold: '보류', done: '완료' };
+  const pill = tk.status === 'done' ? `<span class="pill done">완료</span>`
+    : isUrgent                       ? `<span class="pill urgent">긴급</span>`
+    :                                  `<span class="pill ${tk.status}">${STATUS[tk.status] || '예정'}</span>`;
+
+  // 부가 설명 — 종류 · 보조업무
+  const meta = [type === 'routine' ? '루틴성 업무' : '프로젝트']
+    .concat(subs.length ? [`보조 업무 ${subs.filter(x => x.status === 'done').length}/${subs.length}`] : [])
+    .join(' · ');
+
+  // 시간 — 프로젝트는 시작 후 경과일, 루틴성은 마감일
+  let time = '';
+  if (type === 'project' && tk.startDate) time = `시작 +${daysBetween(tk.startDate, t)}일`;
+  else if (tk.dueDate) time = `마감 ${tk.dueDate.slice(5).replace('-', '.')}`;
+
+  return `
+    <div>
+      <div class="tcard ${isExpanded ? 'expanded' : ''}" onclick="toggleTaskExpand('${tk.id}')" title="클릭하여 보조업무 펼치기/접기">
+        <div class="tcard-top">${pill}</div>
+        <div class="tcard-title">${escapeHtml(tk.title)}</div>
+        <div class="tcard-meta">${escapeHtml(meta)}</div>
+        <div class="tcard-bar"><div style="width:${tk.progress || 0}%"></div></div>
+        <div class="tcard-foot">
+          <span class="tcard-time">${escapeHtml(time)}</span>
+          <span class="tcard-pct">${tk.progress || 0}%</span>
         </div>
       </div>
-    `;
-  }).join('') + (DATA.teams.length > 0 ? `
-    <div class="today-card today-card-add" onclick="quickAddMember('${DATA.teams[0].id}')" title="새 직원을 추가합니다">
-      <div class="today-card-add-inner">
-        <div class="today-card-add-icon">＋</div>
-        <div class="today-card-add-title">새 직원 추가</div>
-        <div class="today-card-add-sub">팀에 새 멤버를 추가합니다</div>
+      <div class="task-mini-expand ${isExpanded ? 'open' : ''}" id="task-expand-${tk.id}">
+        <div class="task-mini-expand-head">
+          <span>📎 보조 업무 ${subs.length}개</span>
+          <div class="task-mini-expand-actions">
+            <button onclick="event.stopPropagation(); openProjectModal('${tk.id}')">✏️ 상세 수정</button>
+            <button class="danger" onclick="event.stopPropagation(); deleteTask('${tk.id}')">🗑 삭제</button>
+          </div>
+        </div>
+        <div class="task-mini-sub-list">
+          ${subs.length === 0
+            ? `<div class="task-mini-sub-empty">보조 업무가 없습니다. 상세 수정에서 추가하세요.</div>`
+            : subs.map(st => `
+              <div class="task-mini-sub ${st.status}">
+                <div class="task-mini-sub-icon" onclick="event.stopPropagation(); cycleSubtaskStatus('${tk.id}','${st.id}')" title="상태 변경">${({todo:'○',doing:'▶',done:'✓'})[st.status] || '○'}</div>
+                <div class="task-mini-sub-title">${escapeHtml(st.title)}</div>
+                <span class="task-mini-sub-pct">${st.progress || 0}%</span>
+                <button class="task-mini-sub-del" onclick="event.stopPropagation(); deleteSubtask('${tk.id}','${st.id}')" title="보조업무 삭제">×</button>
+              </div>`).join('')}
+        </div>
       </div>
-    </div>
-  ` : '');
+    </div>`;
 }
 
 // 멤버 컨텍스트에서 모달 열기 (담당자 미리 선택)
