@@ -3451,7 +3451,7 @@
       <button class="btn ghost" onclick="exportData()">📦 JSON 내보내기</button>
       <button class="btn ghost" onclick="document.getElementById('import-file').click()">📥 JSON 불러오기</button>
       <input type="file" id="import-file" accept=".json" style="display:none;" onchange="importData(event)">
-      <button class="btn ghost" onclick="loadSampleData()">🎁 샘플 데이터 채우기</button>
+      <button class="btn ghost" onclick="loadSampleData()">👥 기본 팀 구성 채우기</button>
       <button class="btn danger" onclick="clearAll()">🗑 전체 초기화</button>
     </div>
 
@@ -3989,7 +3989,8 @@
 
 
 <script>
-const STORAGE_KEY = 'task_tracker_v18';
+const STORAGE_KEY = 'task_tracker_v19';
+const KPI_PLAN_REV = 4; // KPI 체계 개정 번호 — 올리면 저장된 체계가 새 기본값으로 교체된다
 const FB_CONFIG_KEY = 'task_tracker_fb_config'; // Firebase URL + 팀 ID 저장용
 const STALE_DAYS = 7; // 정체 업무 기준 (일)
 
@@ -4335,73 +4336,11 @@ function seedInitialData() {
 // 구버전 데이터에 신규 필드 보강
 // ── KPI 체계 최종본(첨부) 빌더 ──────────────────────────────
 function buildKpiPlan() {
-  const mk = (text, cur, tgt, unit, dir, base) => ({
-    id: uid(), text, status: 'todo',
-    cur: (cur === undefined ? null : cur),
-    tgt: (tgt === undefined ? null : tgt),
-    unit: unit || '', dir: dir || 'up',
-    base: (base === undefined ? null : base)
-  });
   return {
-    version: 2, planRev: 3, updatedAt: '2026-07-02',
-    teamKpi: '실행 효율화와 영업지원 강화로 매출 기반을 다지고, 자금 회수와 신규업무를 체계화함으로 운영 안정성을 높인다.',
-    teamGoals: [
-      { id: 'tg1', no: 1, title: '반복업무 자동화·표준화를 통한 실행 효율 극대화', desc: '물량산출·현장운영·영업지원 등 반복 업무 전반을 자동화·표준화하고, 정체·누락·오류를 선제적으로 관리하여 처리 정확도와 속도를 동시에 높인다.', color: '#1B5E6E' },
-      { id: 'tg2', no: 2, title: '영업지원체계 강화를 통한 매출 기여 기반 마련', desc: '영업기회 유실과 견적·계약 처리 지연·오류를 줄여 계약 체결까지의 처리속도와 성공률을 높여 매출 창출을 뒷받침한다.', color: '#B4651E' },
-      { id: 'tg3', no: 3, title: '자금 회수율 제고를 통한 현금흐름 개선 및 자금안정화', desc: '차수별 적기 청구와 사전 리마인드·독촉·보고 체계로 기간 내 수금율을 높이고 장기미수를 억제한다.', color: '#2F7D66' },
-      { id: 'tg4', no: 4, title: '신규·미관리 업무의 운영체계 구축', desc: '기존에 없거나 관리되지 않던 업무, 또는 타부서에서 이관받은 업무에 대해 표준 프로세스와 기준을 처음부터 수립하여 반복 가능한 운영체계로 정착시킨다.', color: '#5A5B9E' }
-    ],
-    kpis: [
-      // ── 팀 목표 1 ──
-      { id: uid(), goalId: 'tg1', ownerName: '신수진', title: '물량산출 자동화',
-        objective: '물량산출 및 내역서 작성 업무를 자동화하여 적은 투입으로도 정확하고 빠르게 산출할 수 있는 체계를 유지한다.',
-        lagging: [ mk('물량산출 오류율 1% 이하', null, 1, '%', 'down') ],
-        leading: [ mk('CAD 자동 물량산출 적용률 90% 이상 (CAD 미제공·도면 판독 불가 현장 제외)', 0, 90, '%', 'up', 0), mk('내역서 작성 자동화 적용률 100%', 0, 100, '%', 'up', 0) ] },
-      { id: uid(), goalId: 'tg1', ownerName: '신수진', title: '표준 공식·내역서 템플릿 정립',
-        objective: '누구나 표준 공식과 양식만 따라 하면 동일한 물량이 나오도록, 공정별 표준 공식과 내역서 표준 템플릿을 정립한다.',
-        lagging: [ mk('표준 양식 기준 물량산출 리드타임 2영업일 이내', null, 2, '일', 'down') ],
-        leading: [ mk('표준 공식 정립 완료율 100% (① 외벽 산출 ② 내부 코어 ③ 지하주차장)', 0, 100, '%', 'up', 0), mk('아스퀘 내역서 표준 템플릿(외벽·내부 코어) 적용률 100%', 0, 100, '%', 'up', 0), mk('동일 현장 산출자 간 물량 편차 ±1% 이내', 0, 1, '%', 'up', 0) ] },
-      { id: uid(), goalId: 'tg1', ownerName: '김경미', title: '현장 운영 프로세스 개선 및 자동화',
-        objective: '반복 수작업을 개선하고, 실제 현장에서 활용 가능한 자동화 프로세스를 구축하여 운영 효율성을 높인다.',
-        lagging: [ mk('핵심 반복업무 자동화율 80%', 0, 80, '%', 'up', 0), mk('주요 현장 운영 업무 건당 처리시간 80분 → 30분', 80, 30, '분', 'down', 80) ],
-        leading: [ mk('프로세스 개선·자동화 기능 배포 분기 4건 이상', 0, 4, '건', 'up', 0), mk('구축 프로세스 실제 착공 현장 적용률 95% 이상', 0, 95, '%', 'up', 0) ] },
-      { id: uid(), goalId: 'tg1', ownerName: '김경미', title: '현장 운영 현황 누락 개선',
-        objective: '전체 현장 현황의 실시간 정확성과 제출 서류의 기간 내 제출률을 높여 현장 정보 누락을 줄인다.',
-        lagging: [ mk('현장 정보 누락·오류 0건', null, 0, '건', 'down'), mk('제출서류 기간 내 제출률 — 착공일 2일 이내 95% / 준공일 3일 이내 90%', null, 2, '일', 'down') ],
-        leading: [ mk('대시보드 최신화 주기 준수 — 주 2회 전 현장 업데이트율 100%', 0, 100, '%', 'up', 0), mk('현장 서류·소통방 일정 준수 — 2~3일 내 서류 송부 및 3일 내 소통방 개설 90%', 0, 90, '%', 'up', 0) ] },
-      // ── 팀 목표 2 ──
-      { id: uid(), goalId: 'tg2', ownerName: '김수진', title: '영업기회 및 영업흐름 관리',
-        objective: '릴레잇, 고객관리, 후속 연락, 담당 배정 등 영업 흐름에서 발생하는 정체·미배정·미조치 건을 선제적으로 확인하고 개입하여 영업기회 유실을 방지한다.',
-        lagging: [ mk('팀 전체 평균 영업 파이프라인 소요시간(리드획득~계약체결) 15% 단축', 0, 15, '%', 'up', 0), mk('정체고객 재활성화를 통한 영업기회 최종 수주 성공률 20% 이상', 0, 20, '%', 'up', 0), mk('미조치 방치로 인한 리드 유실률 3% 미만 유지', 0, 3, '%', 'down') ],
-        leading: [ mk('정체고객(최종접촉 후 7일경과) 재접촉 및 개입 실행률 95% 이상', 0, 95, '%', 'up', 0), mk('영업담당자별 리드배정 편차율 15% 이내 유지', 0, 15, '%', 'down'), mk('담당자 후속액션 지정율 90% 이상', 0, 90, '%', 'up', 0) ] },
-      { id: uid(), goalId: 'tg2', ownerName: '김수진', title: '견적·계약·입찰 및 영업지원 대응관리',
-        objective: '견적요청, 계약진행, 입찰대응, 기술자문 가능 건 관리 과정에서 지연·누락·금액오류가 발생하지 않도록 영업지원 흐름을 사전에 관리한다.',
-        lagging: [ mk('단순행정(견적/계약서작성) 업무처리 평균 리드타임 30% 단축', 0, 30, '%', 'up', 0), mk('견적·입찰·계약 행정오류로 인한 패널티 또는 재작성비율 0%', 0, 0, '%', 'down') ],
-        leading: [ mk('자주쓰는 견적서/계약서 표준가이드라인 및 자동화템플릿 도입 80% 이상', 0, 80, '%', 'up', 0), mk('대형입찰/계약 마감 5일 전 주관 사전리스크검토 진행률 100%', 0, 100, '%', 'up', 0) ] },
-      // ── 팀 목표 3 ──
-      { id: uid(), goalId: 'tg3', ownerName: '이지연', title: '기간 내 수금율 관리',
-        objective: '차수별 적기 청구와 선제 리마인드·독촉·보고 체계로 기간 내 수금율을 높이고 장기미수를 억제한다.',
-        headline: '자재매출 기간내 수금율 52% · 전체 기간내 수금율 65% 달성',
-        lagging: [ mk('장기미수 전환(90일 이상)율 10% 미만 유지', null, 10, '%', 'down'), mk('평균 회수일수 — 컨설팅(선급금 11일/중도금 22일)·자재 24일 이내 유지', null, 24, '일', 'down'), mk('전체 수금율 95% 이상 달성', null, 95, '%', 'up'), mk('자재매출 기간 내 수금율 52% 이상 달성', 0, 52, '%', 'up', 0) ],
-        leading: [ mk('차수별 적기 청구 실행율 95% 이상', 0, 95, '%', 'up', 0), mk('사전 리마인드 실행율 95% 이상', 0, 95, '%', 'up', 0), mk('60일 기한 도래 시 즉시 독촉 실행율 90% 이상', 0, 90, '%', 'up', 0), mk('경영진 선제보고 실행율 100%', 0, 100, '%', 'up', 0) ] },
-      // ── 팀 목표 4 ──
-      { id: uid(), goalId: 'tg4', ownerName: '김경미', title: '아파트스퀘어 대시보드 개선 및 통합',
-        objective: '아파트스퀘어 대시보드를 보기 쉽게 구축하고 분산되어 있는 파일들을 통합하여 운영 효율성을 높인다.',
-        lagging: [ mk('스퀘어 대시보드 개선 완료율 100%', 0, 100, '%', 'up', 0), mk('분산 대시보드 통합 4개 → 1개, 통합률 90% (현장관리앱+캘린더+고객만족도설문지+현장대시보드)', 4, 1, '개', 'down', 4) ],
-        leading: [ mk('개선 항목 1건 도출', 0, 100, '%', 'up', 0), mk('흩어진 대시보드 전수 목록화 90%', 0, 90, '%', 'up', 0) ] },
-      { id: uid(), goalId: 'tg4', ownerName: '송보람', title: '아파트스퀘어 운영체계 구축',
-        objective: '신규로 이관받은 아파트스퀘어 업무에 대해 문의접수, 응대, 담당배정, 진행상태, 후속조치 기준을 정리하여 반복가능한 운영체계를 구축한다.',
-        lagging: [ mk('프로세스 가이드라인 준수율 95% 이상', 0, 95, '%', 'up', 0), mk('아파트스퀘어 초기응대(4시간 이내) 및 최종 조기종결 목표달성율 90% 이상', 0, 90, '%', 'up', 0), mk('인수인계 및 체계미흡으로 인한 부서간 혼선건수 월 0건', 0, 0, '건', 'down') ],
-        leading: [ mk('아파트스퀘어 업무 표준운영프로세스(SOP) 수립 및 유관부서 합의 100% 완료', 0, 100, '%', 'up', 0), mk('예외상황(특이클레임) 대응프로세스 구축 80% 이상', 0, 80, '%', 'up', 0), mk('신규업무 숙달교육 및 프로세스테스트 실시율 100%', 0, 100, '%', 'up', 0) ] },
-      { id: uid(), goalId: 'tg4', ownerName: '이지연', title: '자재발주 시스템 구축과 정착지원',
-        objective: '타부서에서 이관받은 자재발주 업무를 기존 방식 그대로 답습하지 않고, 프로세스 자체를 새롭게 설계·구축하여 반복 가능한 운영체계로 정착시킨다.',
-        lagging: [ mk('자재발주 시스템 실사용 정착률 90% 이상', 0, 90, '%', 'up', 0), mk('발주 오류·누락 건수 월 0건 유지', null, 0, '건', 'down'), mk('(선택) 발주~입고 리드타임 단축률 — 목표치 확인 필요', null, null, '%', 'up') ],
-        leading: [ mk('신규 자재발주 프로세스 설계 및 시스템 구축 완료율 100%', 0, 100, '%', 'up', 0), mk('유관부서·현장 대상 사용 교육 실시율 100%', 0, 100, '%', 'up', 0), mk('초기 정착지원(문의·오류 대응) 체계 수립 100%', 0, 100, '%', 'up', 0) ] },
-      { id: uid(), goalId: 'tg4', ownerName: '이지연', title: '하자처리비용(유지보수수수료) 예산·실비용 관리체계 구축',
-        objective: '하자발생현장에 대해 지출되는 유지보수수수료(하자처리비용)의 예산과 실비용을 체계적으로 관리하여, 매출 대비 하자처리비용 비율을 파악하고 견적서 마진에 반영된 하자비용 산정이 적정한지 검증한다.',
-        lagging: [ mk('매출 대비 하자처리비용 비율 OO% 이내 유지 — 목표치 확인 필요', null, null, '%', 'down'), mk('하자처리비용 예산 대비 실비용 오차율 OO% 이내 — 목표치 확인 필요', null, null, '%', 'down'), mk('견적 마진 내 하자비용 반영 적정성 검증 완료율 100%', 0, 100, '%', 'up', 0) ],
-        leading: [ mk('현장별 하자처리비용 전수조사 및 실비용 데이터베이스 구축 100%', 0, 100, '%', 'up', 0), mk('예산 대비 실비용 비교·리포팅 프로세스(월별/분기별) 수립 100%', 0, 100, '%', 'up', 0), mk('견적서 마진 산정 기준(하자비용 반영률) 표준화 100%', 0, 100, '%', 'up', 0) ] }
-    ]
+    version: 2, planRev: KPI_PLAN_REV, updatedAt: today(),
+    teamKpi: '',
+    teamGoals: [],
+    kpis: []
   };
 }
 
@@ -4414,15 +4353,11 @@ function migrateData() {
   if (!DATA.routines) DATA.routines = [];
   if (!DATA.members) DATA.members = [];
 
-  // v5→v6: 팀이 여러 개면 "서비스운영본부" 단일 팀으로 통합
-  // 첫 번째 팀을 본부로 개명하고 나머지 팀의 멤버를 모두 이동
+  // 팀이 하나도 없을 때만 기본 팀을 만든다 — 이미 있는 팀의 이름·색·아이콘은 건드리지 않는다
   if (DATA.teams.length === 0) {
     DATA.teams.push({ id: 'team_main', name: '서비스운영본부', color: '#1B5E6E', icon: '🏢' });
   } else {
     const main = DATA.teams[0];
-    main.name = '서비스운영본부';
-    main.color = '#1B5E6E';
-    main.icon = '🏢';
     if (DATA.teams.length > 1) {
       const others = DATA.teams.slice(1);
       const otherIds = others.map(t => t.id);
@@ -4442,21 +4377,8 @@ function migrateData() {
     if (m.isAlba === undefined) m.isAlba = false;
   });
 
-  // 직책 자동 갱신 (이름 기준)
-  const roleMap = {
-    '주현진': '수석매니저',
-    '신명희': '수석매니저',
-    '송보람': '리드매니저'
-  };
-  DATA.members.forEach(m => {
-    if (m.isAlba) return;
-    if (roleMap[m.name]) {
-      m.role = roleMap[m.name];
-    } else if (m.role !== '매니저') {
-      // 위 3명 외에는 모두 '매니저'로
-      m.role = '매니저';
-    }
-  });
+  // 직책은 사용자가 관리 탭에서 입력한 값을 그대로 유지한다 (자동 덮어쓰기 없음)
+  DATA.members.forEach(m => { if (m.role === undefined || m.role === null) m.role = ''; });
 
   DATA.routines.forEach(r => {
     if (!r.assignee) r.assignee = 'member';
@@ -4479,16 +4401,6 @@ function migrateData() {
       if (!st.createdAt) st.createdAt = tk.createdAt || today();
       if (!st.lastUpdatedAt) st.lastUpdatedAt = st.createdAt;
     });
-  });
-
-  // 신규 멤버 자동 보강
-  const ensureMembers = [
-    { name: '김경미', role: '매니저', color: '#6B7570' }
-  ];
-  ensureMembers.forEach(em => {
-    if (!DATA.members.find(m => m.name === em.name && !m.isAlba)) {
-      DATA.members.push({ id: uid(), teamId: mainTeamId, isAlba: false, ...em });
-    }
   });
 
   // v8→v9: 알바 가상 멤버 폐지
@@ -4523,27 +4435,9 @@ function migrateData() {
     if (t.kpi === undefined) t.kpi = '';
   });
 
-  // KPI 체계: 첨부 최종본(4대 팀목표)으로 재구성 — planRev 갱신 시 교체
-  if (!DATA.kpiPlan || DATA.kpiPlan.planRev !== 3) {
+  // KPI 체계: 저장된 개정본이 없으면 빈 체계로 시작 — 내용은 KPI 탭에서 직접 채운다
+  if (!DATA.kpiPlan || DATA.kpiPlan.planRev !== KPI_PLAN_REV) {
     DATA.kpiPlan = buildKpiPlan();
-  }
-
-  // 담당자명 정정: 박보람 → 송보람 (입력값 보존, 반복 실행 안전)
-  if (DATA.kpiPlan && DATA.kpiPlan.kpis) {
-    DATA.kpiPlan.kpis.forEach(k => { if (k.ownerName === '박보람') k.ownerName = '송보람'; });
-  }
-
-  // 멤버 KPI 헤드라인 반영 (KPI 체계 개정 시 1회)
-  if (DATA.kpiHeadlineRev !== 3) {
-    const headline = {
-      '신수진': '물량산출·내역서 자동화 및 표준 공식·템플릿 정립',
-      '김수진': '영업기회·영업흐름 관리 및 견적·계약·입찰 대응 관리',
-      '김경미': '현장 운영 자동화·누락 개선 및 아스퀘어 대시보드 통합',
-      '이지연': '기간 내 수금율 관리 및 자재발주·하자비용 운영체계 구축',
-      '김미연': ''
-    };
-    DATA.members.forEach(m => { if (headline[m.name] !== undefined) m.kpi = headline[m.name]; });
-    DATA.kpiHeadlineRev = 3;
   }
 
   // v19→v20: 지표에 측정 필드(현재/목표/단위/방향) 부여 → 진척률 수시 설정·목표율 연동
@@ -7622,161 +7516,33 @@ function clearAll() {
 // ===== 샘플 데이터 =====
 function loadSampleData(silent) {
   if (!silent && DATA.members.length > 0) {
-    if (!confirm('현재 데이터에 샘플 데이터를 추가합니다. 계속할까요?')) return;
+    if (!confirm('기본 팀 구성(팀 1개 · 팀원 3명)을 다시 채웁니다. 이미 있는 이름은 건너뜁니다. 계속할까요?')) return;
   }
 
   const baseTeams = [
-    { id: 'team_main', name: '서비스운영본부', color: '#1B5E6E', icon: '🏢',
-      kpi: '2026년 신규 MOU 12건 체결 · 협력사 만족도 90% 이상 · 분기별 카탈로그 갱신 100%' }
+    { id: 'team_main', name: '서비스운영본부', color: '#1B5E6E', icon: '🏢', kpi: '' }
   ];
 
   const baseMembers = [
-    { id: 'mm1', teamId: 'team_main', name: '주현진', role: '수석매니저', color: '#1B5E6E', isAlba: false,
-      kpi: '본부 총괄 — 분기별 KPI 달성률 90% 유지' },
-    { id: 'mm2', teamId: 'team_main', name: '신명희', role: '수석매니저', color: '#B89968', isAlba: false,
-      kpi: 'R&D 로드맵 4개 마일스톤 완수 · 특허 4건 출원' },
-    { id: 'mm3', teamId: 'team_main', name: '송보람', role: '리드매니저', color: '#2E7D52', isAlba: false,
-      kpi: '신규 MOU 6건 체결 · 협력사 신규 발굴 10개' },
-    { id: 'mm4', teamId: 'team_main', name: '김수진', role: '매니저',     color: '#B4651E', isAlba: false,
-      kpi: '단가표 월간 갱신 100% · MSDS 자료 정리 완료' },
-    { id: 'mm5', teamId: 'team_main', name: '이지연', role: '매니저',     color: '#5B4B8A', isAlba: false,
-      kpi: '신소재 성능평가 4건 완료 · 시험성적서 발급 정시 처리' },
-    { id: 'mm6', teamId: 'team_main', name: '신수진', role: '매니저',     color: '#B83A2E', isAlba: false,
-      kpi: '논문 1편 게재 · 학회 발표 2회' },
-    { id: 'mm7', teamId: 'team_main', name: '김영성', role: '매니저',     color: '#2D3934', isAlba: false,
-      kpi: '협력사 기술교류회 분기 1회 운영 · 자료 정리 주간 100%' },
-    { id: 'mm8', teamId: 'team_main', name: '김경미', role: '매니저',     color: '#6B7570', isAlba: false,
-      kpi: '품질 데이터 통합 시스템 구축 완료 · 일일 점검 100%' }
+    { id: 'mm1', teamId: 'team_main', name: '신한솔', role: '', color: '#1B5E6E', isAlba: false, kpi: '' },
+    { id: 'mm2', teamId: 'team_main', name: '최세혁', role: '', color: '#B4651E', isAlba: false, kpi: '' },
+    { id: 'mm3', teamId: 'team_main', name: '조재연', role: '', color: '#2E7D52', isAlba: false, kpi: '' }
   ];
-
-  // assignee: 'member'(담당자 직접) | 'alba'(알바 의뢰) — 알바 의뢰여도 의뢰한 직원이 담당자
-  const sampleRoutines = [
-    { id: 'r1', memberId: 'mm1', title: '[예시] 일일 업무 보고 작성',       frequency: 'daily',  assignee: 'member', active: true, createdAt: today() },
-    { id: 'r2', memberId: 'mm1', title: '[예시] 주간 KPI 점검',             frequency: 'weekly', weekdays: [1], assignee: 'member', active: true, createdAt: today() },
-    { id: 'r3', memberId: 'mm2', title: '[예시] 시방서 업데이트 체크',      frequency: 'daily',  assignee: 'member', active: true, createdAt: today() },
-    { id: 'r4', memberId: 'mm2', title: '[예시] 월간 기술연구소 보고',      frequency: 'monthly', monthDay: 25, assignee: 'member', active: true, createdAt: today() },
-    { id: 'rq1', memberId: 'mm2', title: '[예시] 분기별 특허 출원 리뷰',    frequency: 'quarterly', assignee: 'member', active: true, createdAt: today() },
-    { id: 'ry1', memberId: 'mm2', title: '[예시] 연간 R&D 로드맵 수립',     frequency: 'yearly', assignee: 'member', active: true, createdAt: today() },
-    // 알바 의뢰 루틴 — 의뢰한 직원이 담당자, assignee로 구분
-    { id: 'r5', memberId: 'mm3', title: '[예시] 단가표 갱신 확인',          frequency: 'daily',  assignee: 'alba',   active: true, createdAt: today() },
-    { id: 'r6', memberId: 'mm3', title: '[예시] MSDS 신규자료 정리',        frequency: 'weekly', weekdays: [2,4], assignee: 'alba', active: true, createdAt: today() },
-    { id: 'r7', memberId: 'mm4', title: '[예시] 카탈로그 재고 확인',        frequency: 'daily',  assignee: 'alba',   active: true, createdAt: today() },
-    { id: 'r8', memberId: 'mm4', title: '[예시] 주간 업무 정리',            frequency: 'weekly', weekdays: [5], assignee: 'member', active: true, createdAt: today() },
-    { id: 'r9', memberId: 'mm5', title: '[예시] 실험데이터 일일 백업',      frequency: 'daily',  assignee: 'alba',   active: true, createdAt: today() },
-    { id: 'r10',memberId: 'mm6', title: '[예시] 문헌조사 자료 업로드',      frequency: 'weekly', weekdays: [1,3,5], assignee: 'alba', active: true, createdAt: today() },
-    { id: 'r11',memberId: 'mm7', title: '[예시] 협력사 공유자료 정리',      frequency: 'weekly', weekdays: [5], assignee: 'member', active: true, createdAt: today() },
-    { id: 'r12',memberId: 'mm8', title: '[예시] 품질문서 일일 점검',        frequency: 'daily',  assignee: 'member', active: true, createdAt: today() }
-  ];
-
-  // 하위업무 빌더
-  const mkSub = (title, progress, status='doing') => ({
-    id: uid(), title, progress, status,
-    createdAt: today(), lastUpdatedAt: today(),
-    completedAt: status === 'done' ? today() : null
-  });
-
-  const sampleTasks = [
-    { id: 't1', memberId: 'mm1', taskType: 'project', title: '[예시] POUR공법 카탈로그 v3 업데이트', startDate: addDays(-12), priority: 'high', status: 'doing', progress: 60, createdAt: addDays(-12), lastUpdatedAt: addDays(-2),
-      subtasks: [
-        mkSub('[예시] 도면 5건 재작업', 100, 'done'),
-        mkSub('[예시] 성능 데이터 갱신', 80, 'doing'),
-        mkSub('[예시] 영문 페이지 번역', 30, 'doing'),
-        mkSub('[예시] 인쇄 견적 의뢰', 0, 'todo')
-      ]
-    },
-    { id: 't2', memberId: 'mm1', taskType: 'project', title: '[예시] 아라미드 코어화이버 실험 4차 설계', startDate: addDays(-20), priority: 'mid', status: 'doing', progress: 30, createdAt: addDays(-20), lastUpdatedAt: addDays(-9),
-      subtasks: [
-        mkSub('[예시] 실험 변수 정리', 100, 'done'),
-        mkSub('[예시] 샘플 제작 5종', 40, 'doing'),
-        mkSub('[예시] 측정 장비 예약', 0, 'todo')
-      ]
-    },
-    { id: 't3', memberId: 'mm2', taskType: 'project', title: '[예시] 특허 4건 명세서 작성',          startDate: addDays(-30), priority: 'high', status: 'doing', progress: 75, createdAt: addDays(-30), lastUpdatedAt: addDays(-1),
-      subtasks: [
-        mkSub('[예시] 특허 1번 — 청구항 확정', 100, 'done'),
-        mkSub('[예시] 특허 2번 — 도면 작성', 100, 'done'),
-        mkSub('[예시] 특허 3번 — 명세서 초안', 70, 'doing'),
-        mkSub('[예시] 특허 4번 — 선행기술 조사', 30, 'doing')
-      ]
-    },
-    { id: 't4', memberId: 'mm2', taskType: 'routine', title: '[예시] 올리뉴 아스팔트슁글 시방서 작성', dueDate: addDays(5), priority: 'high', status: 'doing', progress: 45, createdAt: addDays(-8),  lastUpdatedAt: addDays(-3), subtasks: [] },
-    { id: 't5', memberId: 'mm3', taskType: 'project', title: '[예시] POUR-DO 공법 비교표 작성',     startDate: addDays(-15), priority: 'mid', status: 'todo', progress: 0,   createdAt: addDays(-15), lastUpdatedAt: addDays(-15),
-      subtasks: [
-        mkSub('[예시] 비교 항목 정의', 0, 'todo'),
-        mkSub('[예시] 현장 적용 사례 수집', 0, 'todo')
-      ]
-    },
-    { id: 't6', memberId: 'mm3', taskType: 'project', title: '[예시] 구리갈매스타힐스 컨설팅 자료 정리', startDate: addDays(-25), priority: 'high', status: 'hold', progress: 20, createdAt: addDays(-25), lastUpdatedAt: addDays(-12), subtasks: [] },
-    { id: 't7', memberId: 'mm4', taskType: 'routine', title: '[예시] POUR 단가표 1월 갱신',         dueDate: addDays(2),  priority: 'mid', status: 'doing', progress: 80, createdAt: addDays(-6),  lastUpdatedAt: today(), subtasks: [] },
-    { id: 't8', memberId: 'mm4', taskType: 'routine', title: '[예시] MSDS 자료 5건 변환',           dueDate: addDays(8),  priority: 'low', status: 'todo', progress: 0,   createdAt: addDays(-10), lastUpdatedAt: addDays(-10), subtasks: [] },
-    { id: 't9', memberId: 'mm5', taskType: 'project', title: '[예시] 신소재 흡음재 성능 평가',      startDate: addDays(-18), priority: 'mid', status: 'doing', progress: 25, createdAt: addDays(-18), lastUpdatedAt: addDays(-11),
-      subtasks: [
-        mkSub('[예시] 샘플 5종 입고', 100, 'done'),
-        mkSub('[예시] 흡음률 측정', 30, 'doing'),
-        mkSub('[예시] 내구성 시험', 0, 'todo'),
-        mkSub('[예시] 보고서 작성', 0, 'todo')
-      ]
-    },
-    { id: 't10',memberId: 'mm5', taskType: 'project', title: '[예시] 시험성적서 4건 발급 의뢰',     startDate: addDays(-7), priority: 'high', status: 'doing', progress: 50, createdAt: addDays(-7),  lastUpdatedAt: addDays(-1), subtasks: [] },
-    { id: 't11',memberId: 'mm6', taskType: 'project', title: '[예시] 논문 1편 초고 작성',           startDate: addDays(-22), priority: 'mid', status: 'doing', progress: 15, createdAt: addDays(-22), lastUpdatedAt: addDays(-14),
-      subtasks: [
-        mkSub('[예시] 서론 작성', 60, 'doing'),
-        mkSub('[예시] 실험 결과 정리', 10, 'doing'),
-        mkSub('[예시] 레퍼런스 정리', 0, 'todo')
-      ]
-    },
-    { id: 't12',memberId: 'mm6', taskType: 'routine', title: '[예시] 학회 발표자료 보완',           dueDate: addDays(6),  priority: 'mid', status: 'todo', progress: 0,   createdAt: addDays(-4),  lastUpdatedAt: addDays(-4), subtasks: [] },
-    { id: 't13',memberId: 'mm7', taskType: 'project', title: '[예시] 신규 협력사 기술교류회 준비', startDate: addDays(-9), priority: 'mid', status: 'doing', progress: 40, createdAt: addDays(-9),  lastUpdatedAt: addDays(-2),
-      subtasks: [
-        mkSub('[예시] 일정 조율', 100, 'done'),
-        mkSub('[예시] 발표 자료 작성', 50, 'doing'),
-        mkSub('[예시] 회의실 예약', 0, 'todo')
-      ]
-    },
-    { id: 't14',memberId: 'mm7', taskType: 'routine', title: '[예시] 품질매뉴얼 개정 검토',         dueDate: addDays(-3), priority: 'high', status: 'hold', progress: 35, createdAt: addDays(-21), lastUpdatedAt: addDays(-10), subtasks: [] },
-    { id: 't15',memberId: 'mm8', taskType: 'project', title: '[예시] 품질 데이터 통합 시스템 구축', startDate: addDays(-15), priority: 'mid', status: 'doing', progress: 35, createdAt: addDays(-15), lastUpdatedAt: addDays(-3),
-      subtasks: [
-        mkSub('[예시] 요구사항 정의', 100, 'done'),
-        mkSub('[예시] DB 스키마 설계', 60, 'doing'),
-        mkSub('[예시] UI 목업 제작', 10, 'doing')
-      ]
-    }
-  ];
-
-  // 오늘 루틴 일부 완료 처리
-  const sampleChecks = [
-    { id: 'c1', routineId: 'r1', date: today(), doneAt: new Date().toISOString() },
-    { id: 'c2', routineId: 'r3', date: today(), doneAt: new Date().toISOString() },
-    { id: 'c3', routineId: 'r5', date: today(), doneAt: new Date().toISOString() },
-    { id: 'c4', routineId: 'r7', date: today(), doneAt: new Date().toISOString() }
-  ];
-  // 어제 일부 완료
-  const y = addDays(-1);
-  sampleChecks.push(
-    { id: 'c5', routineId: 'r1', date: y, doneAt: y },
-    { id: 'c6', routineId: 'r3', date: y, doneAt: y },
-    { id: 'c7', routineId: 'r5', date: y, doneAt: y },
-    { id: 'c8', routineId: 'r7', date: y, doneAt: y },
-    { id: 'c9', routineId: 'r9', date: y, doneAt: y }
-  );
 
   if (silent) {
     DATA.teams = baseTeams;
     DATA.members = baseMembers;
-    DATA.routines = sampleRoutines;
-    DATA.routineChecks = sampleChecks;
-    DATA.tasks = sampleTasks;
+    DATA.routines = [];
+    DATA.routineChecks = [];
+    DATA.tasks = [];
   } else {
     DATA.teams = [...DATA.teams, ...baseTeams.filter(b => !DATA.teams.find(t => t.name === b.name))];
     DATA.members = [...DATA.members, ...baseMembers.filter(b => !DATA.members.find(m => m.name === b.name))];
-    DATA.routines = [...DATA.routines, ...sampleRoutines];
-    DATA.routineChecks = [...(DATA.routineChecks || []), ...sampleChecks];
-    DATA.tasks = [...DATA.tasks, ...sampleTasks];
   }
   save();
   if (!silent) {
     renderAll();
-    toast('샘플 데이터를 채웠습니다 ✓');
+    toast('기본 팀 구성을 채웠습니다 ✓');
   }
 }
 
