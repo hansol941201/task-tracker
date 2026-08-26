@@ -33,7 +33,6 @@
     --shadow-md: 0 2px 10px rgba(15,30,51,0.05);
     --radius: 12px;
     --radius-sm: 8px;
-    --sidebar-w: 200px;
     --num: 'JetBrains Mono','Bricolage Grotesque',Pretendard,sans-serif;
     --display: 'Bricolage Grotesque',Pretendard,sans-serif;
     --body: Pretendard,'Bricolage Grotesque',sans-serif;
@@ -2926,59 +2925,30 @@
   /* ── 앱 셸 ── */
   body { background: var(--bg); font-size: 14px; }
 
-  .sidebar {
-    position: fixed; top: 0; left: 0; bottom: 0; width: var(--sidebar-w);
-    background: var(--surface); border-right: 1px solid var(--line);
-    display: flex; flex-direction: column; padding: 20px 12px 14px;
-    z-index: 60;
-  }
-  .sidebar-brand { padding: 0 8px 18px; }
-  .sidebar .brand-mark {
-    font-family: var(--body); font-weight: 800; font-size: 15px;
-    letter-spacing: -0.02em; color: var(--ink); line-height: 1.3;
-  }
-  .sidebar .brand-mark::before { content: none; }
-  .sidebar .brand-sub {
-    margin-top: 5px; font-size: 8.5px; color: var(--muted);
-    letter-spacing: 0.06em; font-weight: 600; text-transform: uppercase;
-    white-space: nowrap;
-  }
-  .sidebar .tabs {
-    display: flex; flex-direction: column; gap: 2px; flex: 1; overflow: visible;
-  }
-  .sidebar .tab {
-    display: flex; align-items: center; gap: 9px;
-    padding: 9px 10px; border: 0; background: transparent;
-    border-radius: 7px; font-size: 13px; font-weight: 600;
-    color: var(--ink-2); text-align: left; width: 100%;
-    transition: background .12s, color .12s;
-  }
-  .sidebar .tab .tab-ico { font-size: 13px; filter: grayscale(1); opacity: .55; }
-  .sidebar .tab:hover { background: var(--line-2); color: var(--ink); }
-  .sidebar .tab.active {
-    background: var(--accent-soft); color: var(--accent-2); font-weight: 700;
-  }
-  .sidebar .tab.active .tab-ico { filter: none; opacity: 1; }
-  .sidebar .tab::after { content: none; }
+  .app-main { min-width: 0; }
 
-  .sidebar-user {
-    display: flex; align-items: center; gap: 9px;
-    padding: 10px 8px 2px; margin-top: 10px; border-top: 1px solid var(--line);
+  /* ── 상단 가로 네비게이션 (각지고 얇게) ── */
+  .topbar-brand {
+    font-weight: 800; font-size: 15px; letter-spacing: -0.02em;
+    color: var(--ink); white-space: nowrap;
+    padding-right: 18px; margin-right: 2px;
+    border-right: 1px solid var(--line); line-height: 1.2;
   }
-  .sidebar-user-avatar {
-    width: 28px; height: 28px; border-radius: 8px; flex: none;
-    background: var(--accent); color: #fff;
-    display: flex; align-items: center; justify-content: center;
-    font-size: 12px; font-weight: 800;
+  .topbar .tabs {
+    display: flex; align-items: stretch; gap: 0; margin-right: auto;
   }
-  .sidebar-user-text { min-width: 0; }
-  .sidebar-user-name {
-    font-size: 12px; font-weight: 700; color: var(--ink);
-    white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+  .topbar .tab {
+    position: relative; border: 0; background: transparent; border-radius: 0;
+    padding: 0 15px; height: 46px; font-size: 13px; font-weight: 600;
+    color: var(--muted); white-space: nowrap;
+    transition: color .12s;
   }
-  .sidebar-user-sub { font-size: 10px; color: var(--muted); margin-top: 1px; }
-
-  .app-main { margin-left: var(--sidebar-w); min-width: 0; }
+  .topbar .tab:hover { color: var(--ink); background: transparent; }
+  .topbar .tab.active { color: var(--accent); font-weight: 800; }
+  .topbar .tab.active::after {
+    content: ''; position: absolute; left: 12px; right: 12px; bottom: -1px;
+    height: 2px; background: var(--accent); border-radius: 0;
+  }
 
   /* ── 상단 헤더 ── */
   .topbar {
@@ -2986,8 +2956,8 @@
     padding: 0; position: sticky; top: 0; z-index: 50;
   }
   .topbar .brand-row {
-    display: flex; align-items: center; justify-content: flex-end;
-    gap: 8px; margin: 0; padding: 11px 28px; flex-wrap: wrap;
+    display: flex; align-items: center; gap: 8px; margin: 0;
+    padding: 0 24px; min-height: 46px; flex-wrap: nowrap;
   }
   .today-pill {
     background: transparent; border: 0; padding: 0 8px 0 0;
@@ -2998,7 +2968,7 @@
 
   .cloud-status,
   .topbar-actions .action-btn.ghost.sm {
-    height: 32px; padding: 0 12px; border-radius: 7px;
+    height: 30px; padding: 0 11px; border-radius: 3px;
     border: 1px solid var(--line); background: var(--surface);
     font-size: 12.5px; font-weight: 600; color: var(--ink-2);
     display: inline-flex; align-items: center; gap: 6px; box-shadow: none;
@@ -3011,7 +2981,7 @@
   .topbar-actions .action-btn.ghost.sm span:not(.action-icon) { display: inline; }
   .topbar-actions .action-icon { font-size: 12px; }
   .topbar-actions .action-btn.project {
-    height: 32px; padding: 0 14px; border-radius: 7px;
+    height: 30px; padding: 0 13px; border-radius: 3px;
     background: var(--accent); border: 1px solid var(--accent); color: #fff;
     font-size: 12.5px; font-weight: 700; box-shadow: none;
   }
@@ -3254,18 +3224,14 @@
   }
   .fab-add:hover { background: #0C2545; }
 
+  @media (max-width: 1100px) {
+    .topbar .brand-row { flex-wrap: wrap; padding: 8px 14px; row-gap: 4px; }
+    .topbar .tabs { order: 3; width: 100%; overflow-x: auto; margin-right: 0; }
+    .topbar .tab { height: 38px; padding: 0 12px; }
+    .today-pill { margin-left: auto; }
+  }
   @media (max-width: 900px) {
-    .sidebar {
-      position: static; width: auto; flex-direction: row; align-items: center;
-      border-right: 0; border-bottom: 1px solid var(--line); padding: 10px 14px;
-      gap: 12px; overflow-x: auto;
-    }
-    .sidebar-brand { padding: 0; flex: none; }
-    .sidebar .tabs { flex-direction: row; flex: none; gap: 2px; }
-    .sidebar .tab { white-space: nowrap; padding: 7px 10px; }
-    .sidebar-user { display: none; }
-    .app-main { margin-left: 0; }
-    .topbar .brand-row { padding: 10px 14px; }
+    .topbar-brand { font-size: 14px; padding-right: 12px; }
     .hero { padding: 16px 14px 4px; }
     .hero-row { grid-template-columns: 1fr; }
     main { padding: 14px 14px 60px; }
@@ -3275,33 +3241,19 @@
 </head>
 <body>
 
-<!-- ============== 좌측 사이드바 ============== -->
-<aside class="sidebar">
-  <div class="sidebar-brand">
-    <div class="brand-mark">B2B 업무 트래커</div>
-    <div class="brand-sub">SERVICE OPS · TASK TRACKER</div>
-  </div>
-  <nav class="tabs">
-    <button class="tab active" data-page="today"><span class="tab-ico">📅</span>오늘</button>
-    <button class="tab" data-page="team"><span class="tab-ico">👥</span>팀별 보기</button>
-    <button class="tab" data-page="automation"><span class="tab-ico">🚀</span>자동화</button>
-    <button class="tab" data-page="manuals"><span class="tab-ico">📖</span>매뉴얼</button>
-    <button class="tab" data-page="kpi"><span class="tab-ico">🎯</span>KPI 체계</button>
-  </nav>
-  <div class="sidebar-user">
-    <div class="sidebar-user-avatar" id="sidebar-user-avatar">B</div>
-    <div class="sidebar-user-text">
-      <div class="sidebar-user-name" id="sidebar-user-name">B2B</div>
-      <div class="sidebar-user-sub" id="sidebar-user-sub">팀원 0명</div>
-    </div>
-  </div>
-</aside>
-
 <div class="app-main">
 
-<!-- ============== 상단 헤더 ============== -->
+<!-- ============== 상단 헤더 + 가로 네비게이션 ============== -->
 <header class="topbar">
   <div class="brand-row">
+    <div class="topbar-brand">B2B 업무 트래커</div>
+    <nav class="tabs">
+      <button class="tab active" data-page="today">오늘</button>
+      <button class="tab" data-page="team">팀별 보기</button>
+      <button class="tab" data-page="automation">자동화</button>
+      <button class="tab" data-page="manuals">매뉴얼</button>
+      <button class="tab" data-page="kpi">KPI 체계</button>
+    </nav>
     <div class="today-pill" id="today-pill">2026.05.11 월</div>
     <div class="topbar-actions">
       <!-- Firebase 클라우드 동기화 상태 -->
@@ -5674,13 +5626,6 @@ function renderTodayPage() {
   const d = new Date(t);
   $('today-pill').textContent = `${t.replaceAll('-','.')} (${weekDays[d.getDay()]})`;
   $('today-day-text').textContent = `${d.getFullYear()}년 ${d.getMonth()+1}월 ${d.getDate()}일 (${weekDays[d.getDay()]}요일)`;
-
-  // 사이드바 하단 사용자 영역
-  if ($('sidebar-user-name')) {
-    $('sidebar-user-name').textContent = teamName();
-    $('sidebar-user-avatar').textContent = initials(teamName());
-    $('sidebar-user-sub').textContent = `팀원 ${DATA.members.filter(m => !m.isAlba).length}명`;
-  }
 
   const grid = $('today-grid');
   if (!DATA.members.length) {
