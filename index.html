@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>업무 트래커 | 서비스운영본부</title>
+<title>업무 트래커 | B2B</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css" rel="stylesheet">
@@ -329,7 +329,7 @@
   }
   .member-kpi-edit-btn:hover { opacity: 1; }
   .hero-kpis {
-    display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px;
+    display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px;
   }
   .hero-kpi {
     background: var(--surface); border: 1px solid var(--line);
@@ -1053,6 +1053,10 @@
     .tabs-wrap { padding: 0 16px; overflow-x: auto; }
     .hero-title { font-size: 22px; }
     .hero-kpis { grid-template-columns: 1fr; }
+    /* 관리 탭의 표는 패널 안에서만 가로로 밀리게 — 화면 전체가 흔들리지 않도록 */
+    #page-manage .panel { overflow-x: auto; }
+    /* 등록 폼은 좁은 화면에서 한 줄에 하나씩 (인라인 grid 설정을 덮어씀) */
+    #page-manage .form-card > div { grid-template-columns: 1fr !important; }
   }
 
   /* ===== 정체 업무 알림 (상단) ===== */
@@ -3025,7 +3029,7 @@
 <header class="topbar">
   <div class="brand-row">
     <div class="brand">
-      <span class="brand-mark">서비스운영본부 업무 트래커</span>
+      <span class="brand-mark">B2B 업무 트래커</span>
       <span class="brand-sub">SERVICE OPS · TASK TRACKER</span>
     </div>
     <div class="today-pill" id="today-pill">2026.05.11 월</div>
@@ -3057,7 +3061,7 @@
       <div class="team-kpi-card">
         <div class="team-kpi-head">
           <span class="team-kpi-flag">🎯</span>
-          <span class="team-kpi-title" id="team-kpi-team-name">서비스운영본부</span>
+          <span class="team-kpi-title" id="team-kpi-team-name">B2B</span>
           <span class="team-kpi-label">팀 KPI 목표</span>
         </div>
         <input type="text" id="team-kpi-input" class="team-kpi-input"
@@ -3067,12 +3071,6 @@
       </div>
     </div>
     <div class="hero-kpis">
-      <div class="hero-kpi">
-        <div class="hero-kpi-label">🔄 오늘 루틴 완료율</div>
-        <div class="hero-kpi-value"><span id="kpi-routine-pct">0</span><span class="unit">%</span></div>
-        <div class="hero-kpi-bar"><div class="hero-kpi-bar-fill" id="kpi-routine-bar" style="width:0%"></div></div>
-        <div class="hero-kpi-foot"><span id="kpi-routine-detail">0 / 0건 완료</span></div>
-      </div>
       <div class="hero-kpi">
         <div class="hero-kpi-label">🚀 진행중 프로젝트</div>
         <div class="hero-kpi-value"><span id="kpi-doing">0</span><span class="unit">건</span></div>
@@ -3091,38 +3089,6 @@
         <div class="hero-kpi-bar"><div class="hero-kpi-bar-fill" id="kpi-weekly-bar" style="width:0%"></div></div>
         <div class="hero-kpi-foot"><span id="kpi-weekly-detail">일회성 + 루틴 합계</span></div>
       </div>
-    </div>
-
-    <!-- ===== 정체 업무 알림 ===== -->
-    <div class="stale-banner" id="stale-banner">
-      <div class="stale-head" onclick="toggleStaleBanner()">
-        <div class="stale-icon" id="stale-icon">⚠️</div>
-        <div class="stale-text">
-          <div class="stale-title">
-            <span id="stale-title-text">정체된 업무</span>
-            <span class="stale-count-badge" id="stale-count-badge">0건</span>
-          </div>
-          <div class="stale-sub" id="stale-sub">7일 이상 진척률 변화가 없는 업무를 표시합니다.</div>
-        </div>
-        <div class="stale-toggle" id="stale-toggle">펼치기 ▾</div>
-      </div>
-      <div class="stale-body" id="stale-body"></div>
-    </div>
-
-    <!-- ===== 알바 진행 현황 ===== -->
-    <div class="alba-panel" id="alba-panel">
-      <div class="alba-panel-head" onclick="toggleAlbaPanel()">
-        <div class="alba-panel-icon">🧑‍💼</div>
-        <div class="alba-panel-text">
-          <div class="alba-panel-title">
-            <span>알바 진행 현황</span>
-            <span class="alba-count-badge" id="alba-count-badge">0건</span>
-          </div>
-          <div class="alba-panel-sub" id="alba-panel-sub">알바에게 의뢰된 루틴 업무의 의뢰자별 진행 상황입니다.</div>
-        </div>
-        <div class="alba-panel-toggle" id="alba-panel-toggle">펼치기 ▾</div>
-      </div>
-      <div class="alba-panel-body" id="alba-panel-body"></div>
     </div>
   </div>
 </header>
@@ -3232,7 +3198,7 @@
 
   <!-- ===== PAGE: KPI 체계 ===== -->
   <div class="page" id="page-kpi">
-    <div class="section-title">🎯 서비스운영본부 KPI 체계 <span class="count" id="kpi-updated">최종본</span></div>
+    <div class="section-title">🎯 <span id="kpi-page-team">B2B</span> KPI 체계 <span class="count" id="kpi-updated">최종본</span></div>
     <p class="section-sub">팀 목표 2개 아래에 담당자별 KPI를 정렬했습니다. <b>후행지표(성과 목표)</b>가 KPI 진척률의 기준이며, 그 아래 <b>선행지표(실행)</b>가 이를 만들어 냅니다. 각 지표의 <b>현재/목표값</b>을 수시로 입력하면 진척률이 자동 계산되어 KPI·팀 목표율에 연동됩니다.</p>
     <div class="kpi-toolbar">
       <div class="kpi-viewtoggle">
@@ -3993,6 +3959,8 @@ const STORAGE_KEY = 'task_tracker_v19';
 const KPI_PLAN_REV = 4; // KPI 체계 개정 번호 — 올리면 저장된 체계가 새 기본값으로 교체된다
 const FB_CONFIG_KEY = 'task_tracker_fb_config'; // Firebase URL + 팀 ID 저장용
 const STALE_DAYS = 7; // 정체 업무 기준 (일)
+const DEFAULT_TEAM_NAME = 'B2B';
+const TEAM_NAME_REV = 1; // 기본 팀 이름 일괄 변경 회차 — 올리면 기본 이름이 한 번 갱신된다
 
 // ===== Firebase 클라우드 동기화 상태 =====
 let FB_STATE = {
@@ -4281,8 +4249,6 @@ let DATA = {
 };
 let UI = {
   detailMember: null,
-  staleOpen: false,
-  albaOpen: false,
   routineFilter: 'all',
   taskFilter: 'all',
   teamFilter: 'all',
@@ -4298,6 +4264,8 @@ const fmt = n => new Intl.NumberFormat('ko-KR').format(Math.round(n || 0));
 const uid = () => 'id_' + Math.random().toString(36).slice(2, 10);
 const today = () => new Date().toISOString().slice(0,10);
 const weekDays = ['일','월','화','수','목','금','토'];
+// 화면에 표시할 팀 이름 — 저장된 팀 이름을 그대로 쓰고, 없으면 기본값
+const teamName = () => ((DATA.teams && DATA.teams[0] && DATA.teams[0].name) || DEFAULT_TEAM_NAME);
 
 function toast(msg) {
   const t = $('toast');
@@ -4355,7 +4323,7 @@ function migrateData() {
 
   // 팀이 하나도 없을 때만 기본 팀을 만든다 — 이미 있는 팀의 이름·색·아이콘은 건드리지 않는다
   if (DATA.teams.length === 0) {
-    DATA.teams.push({ id: 'team_main', name: '서비스운영본부', color: '#1B5E6E', icon: '🏢' });
+    DATA.teams.push({ id: 'team_main', name: DEFAULT_TEAM_NAME, color: '#1B5E6E', icon: '🏢' });
   } else {
     const main = DATA.teams[0];
     if (DATA.teams.length > 1) {
@@ -4434,6 +4402,12 @@ function migrateData() {
   DATA.teams.forEach(t => {
     if (t.kpi === undefined) t.kpi = '';
   });
+
+  // 기본 팀 이름을 B2B로 한 번 갱신 — 이후 사용자가 바꾼 이름은 그대로 둔다
+  if (DATA.teamNameRev !== TEAM_NAME_REV) {
+    if (DATA.teams[0] && DATA.teams[0].name === '서비스운영본부') DATA.teams[0].name = DEFAULT_TEAM_NAME;
+    DATA.teamNameRev = TEAM_NAME_REV;
+  }
 
   // KPI 체계: 저장된 개정본이 없으면 빈 체계로 시작 — 내용은 KPI 탭에서 직접 채운다
   if (!DATA.kpiPlan || DATA.kpiPlan.planRev !== KPI_PLAN_REV) {
@@ -4675,208 +4649,6 @@ function pctSpinnerHTML(currentVal, onChangeJs, size) {
       </div>
     </div>
   `;
-}
-
-// 정체된 업무 추출: 완료/취소가 아니면서, lastUpdatedAt이 STALE_DAYS일 이상 지난 업무
-function getStaleTasks() {
-  const t = today();
-  return DATA.tasks
-    .filter(tk => tk.status !== 'done')
-    .map(tk => {
-      const ref = tk.lastUpdatedAt || tk.createdAt || t;
-      const days = daysBetween(ref, t);
-      return { ...tk, _staleDays: days };
-    })
-    .filter(tk => tk._staleDays >= STALE_DAYS)
-    .sort((a,b) => b._staleDays - a._staleDays);
-}
-
-function renderStaleBanner() {
-  const stale = getStaleTasks();
-  const banner = $('stale-banner');
-  const countBadge = $('stale-count-badge');
-  const subEl = $('stale-sub');
-  const iconEl = $('stale-icon');
-  const titleEl = $('stale-title-text');
-  const toggleEl = $('stale-toggle');
-  const bodyEl = $('stale-body');
-
-  countBadge.textContent = stale.length + '건';
-
-  if (stale.length === 0) {
-    banner.classList.add('none');
-    banner.classList.remove('open');
-    UI.staleOpen = false;
-    iconEl.textContent = '✓';
-    titleEl.textContent = '정체된 업무 없음';
-    subEl.textContent = '모든 진행중 프로젝트와 루틴성 업무가 최근 7일 내에 업데이트되었습니다.';
-    toggleEl.style.display = 'none';
-    bodyEl.innerHTML = '';
-    return;
-  }
-
-  banner.classList.remove('none');
-  iconEl.textContent = '⚠️';
-  titleEl.textContent = '진행이 더딘 업무';
-  const severeCount = stale.filter(s => s._staleDays >= 14).length;
-  subEl.textContent = `${STALE_DAYS}일 이상 업데이트가 없는 업무입니다${severeCount > 0 ? ` · 14일 이상 ${severeCount}건` : ''}.`;
-  toggleEl.style.display = 'inline-block';
-  toggleEl.textContent = UI.staleOpen ? '접기 ▴' : '펼치기 ▾';
-  if (UI.staleOpen) banner.classList.add('open');
-  else banner.classList.remove('open');
-
-  bodyEl.innerHTML = `
-    <div class="stale-list">
-      ${stale.map(tk => {
-        const m = DATA.members.find(x => x.id === tk.memberId);
-        const severe = tk._staleDays >= 14;
-        const typeLabel = tk.taskType === 'routine' ? '🔁 루틴성' : '🚀 프로젝트';
-        const statusLabel = { todo:'할일', doing:'진행중', hold:'보류' }[tk.status] || tk.status;
-        return `
-          <div class="stale-item ${severe ? 'severe' : ''}" ${tk.taskType === 'project' ? `onclick="openProjectModal('${tk.id}')" style="cursor:pointer;"` : ''} title="${tk.taskType === 'project' ? '클릭하여 프로젝트 수정' : escapeHtml(tk.title)}">
-            <div class="stale-item-title">${escapeHtml(tk.title)}</div>
-            <div class="stale-item-days">${tk._staleDays}일</div>
-            <div class="stale-item-meta">
-              <span style="display:inline-block; width:8px; height:8px; border-radius:99px; background:${m ? m.color : '#999'};"></span>
-              <b style="color:var(--ink-2);">${m ? escapeHtml(m.name) : '—'}</b>
-              <span>·</span>
-              <span>${typeLabel}</span>
-              <span>·</span>
-              <span>${statusLabel}</span>
-              ${tk.taskType === 'project' && tk.startDate
-                ? `<span>·</span><span>📅 ${daysBetween(tk.startDate, today())}일째</span>`
-                : tk.dueDate ? `<span>·</span><span>마감 ${tk.dueDate.slice(5)}</span>` : ''}
-              <span style="margin-left:auto; font-family:var(--num); font-weight:700;">${tk.progress || 0}%</span>
-            </div>
-            <div class="stale-item-progbar"><div style="width:${tk.progress || 0}%"></div></div>
-          </div>
-        `;
-      }).join('')}
-    </div>
-    <div style="margin-top:12px; font-size:11px; color:var(--muted);">
-      💡 진척률을 조정하거나 상태를 변경하면 자동으로 정체 목록에서 제외됩니다.
-    </div>
-  `;
-}
-
-function toggleStaleBanner() {
-  if (getStaleTasks().length === 0) return;
-  UI.staleOpen = !UI.staleOpen;
-  renderStaleBanner();
-}
-
-// ===== 알바 진행 현황 패널 =====
-function getAlbaRoutines() {
-  return DATA.routines.filter(r => r.assignee === 'alba' && r.active);
-}
-
-function renderAlbaPanel() {
-  const panel = $('alba-panel');
-  if (!panel) return;
-  const albaRoutines = getAlbaRoutines();
-  const countBadge = $('alba-count-badge');
-  const subEl = $('alba-panel-sub');
-  const toggleEl = $('alba-panel-toggle');
-  const bodyEl = $('alba-panel-body');
-
-  countBadge.textContent = albaRoutines.length + '건';
-
-  if (albaRoutines.length === 0) {
-    panel.classList.add('none');
-    panel.classList.remove('open');
-    UI.albaOpen = false;
-    subEl.textContent = '알바에게 의뢰된 루틴 업무가 없습니다.';
-    toggleEl.style.display = 'none';
-    bodyEl.innerHTML = '';
-    return;
-  }
-
-  panel.classList.remove('none');
-  toggleEl.style.display = 'inline-block';
-
-  // 의뢰자별 그룹핑
-  const byRequester = {};
-  const t = today();
-  albaRoutines.forEach(r => {
-    if (!byRequester[r.memberId]) byRequester[r.memberId] = [];
-    const completedThisPeriod = routineCompletedInPeriod(r.id, t);
-    byRequester[r.memberId].push({ ...r, _completed: completedThisPeriod });
-  });
-
-  const totalCompleted = albaRoutines.filter(r => routineCompletedInPeriod(r.id, t)).length;
-  const totalPending = albaRoutines.length - totalCompleted;
-
-  subEl.innerHTML = `<b>의뢰자 ${Object.keys(byRequester).length}명</b> · 알바 의뢰 ${albaRoutines.length}건 (현재 주기 ${totalCompleted}건 완료, <b style="color:#B4651E;">${totalPending}건 대기</b>)`;
-  toggleEl.textContent = UI.albaOpen ? '접기 ▴' : '펼치기 ▾';
-  if (UI.albaOpen) panel.classList.add('open');
-  else panel.classList.remove('open');
-
-  // 의뢰자별 카드
-  const requesterIds = Object.keys(byRequester).sort((a,b) => {
-    const ma = DATA.members.find(x => x.id === a);
-    const mb = DATA.members.find(x => x.id === b);
-    return (ma?.name || '').localeCompare(mb?.name || '');
-  });
-
-  bodyEl.innerHTML = requesterIds.map(memberId => {
-    const m = DATA.members.find(x => x.id === memberId);
-    const team = m ? DATA.teams.find(t => t.id === m.teamId) : null;
-    const routines = byRequester[memberId];
-    const doneCnt = routines.filter(r => r._completed).length;
-    const pendingCnt = routines.length - doneCnt;
-
-    return `
-      <div class="alba-requester-group">
-        <div class="alba-requester-head">
-          <div class="alba-requester-avatar" style="background:${m ? m.color : '#999'};">${m ? escapeHtml(initials(m.name)) : '?'}</div>
-          <div>
-            <div class="alba-requester-name">${m ? escapeHtml(m.name) : '—'}<span style="font-size:11px; color:#B4651E; font-weight:700; margin-left:6px;">→ 🧑‍💼 알바</span></div>
-            <div class="alba-requester-team">${team ? escapeHtml(team.icon || '') + ' ' + escapeHtml(team.name) : ''} · ${m ? escapeHtml(m.role || '') : ''}</div>
-          </div>
-          <div class="alba-requester-stats">
-            ${doneCnt > 0 ? `<span class="alba-stat-pill done">완료 ${doneCnt}</span>` : ''}
-            ${pendingCnt > 0 ? `<span class="alba-stat-pill pending">대기 ${pendingCnt}</span>` : ''}
-            <span class="alba-stat-pill">총 ${routines.length}</span>
-          </div>
-        </div>
-        <div class="alba-task-list">
-          ${routines.map(r => {
-            const freqLabel = FREQ_LABELS[r.frequency] || r.frequency;
-            const periodInfo = albaPeriodInfo(r);
-            return `
-              <div class="alba-task-item ${r._completed ? 'done' : ''}">
-                <div class="alba-task-status ${r._completed ? 'done' : ''}" onclick="toggleRoutineCheck('${r.id}','${t}')" title="${r._completed ? '체크 해제' : '완료 체크'}">
-                  ${r._completed ? '✓' : '○'}
-                </div>
-                <div class="alba-task-title" onclick="openRoutineModal('${r.id}')" title="클릭하여 수정: ${escapeHtml(r.title)}" style="cursor:pointer;">${escapeHtml(r.title)}</div>
-                <span class="alba-task-freq ${r.frequency}">${freqLabel}</span>
-                <span class="alba-task-period">${periodInfo}</span>
-              </div>
-            `;
-          }).join('')}
-        </div>
-      </div>
-    `;
-  }).join('');
-}
-
-function albaPeriodInfo(r) {
-  const t = today();
-  if (r.frequency === 'daily') return '오늘';
-  if (r.frequency === 'weekly') {
-    const days = (r.weekdays || []).map(d => weekDays[d]).join('·');
-    return days + '요일';
-  }
-  if (r.frequency === 'monthly') return `매월 ${r.monthDay || 1}일`;
-  if (r.frequency === 'quarterly') return `분기 ${r.monthDay || 1}일째`;
-  if (r.frequency === 'yearly') return `${r.yearMonth || 1}/${r.monthDay || 1}`;
-  return '—';
-}
-
-function toggleAlbaPanel() {
-  if (getAlbaRoutines().length === 0) return;
-  UI.albaOpen = !UI.albaOpen;
-  renderAlbaPanel();
 }
 
 // 탭 전환
@@ -6326,16 +6098,6 @@ function renderHero() {
     }
   }
 
-  // 오늘 표시 루틴 완료율 (분기/연 포함)
-  const todayRoutines = DATA.routines.filter(r => routineShowToday(r, t));
-  const doneCount = todayRoutines.filter(r => routineCompletedInPeriod(r.id, t)).length;
-  const totalCount = todayRoutines.length;
-  const pct = totalCount > 0 ? Math.round(doneCount/totalCount*100) : 100;
-  $('kpi-routine-pct').textContent = pct;
-  $('kpi-routine-bar').style.width = pct + '%';
-  $('kpi-routine-bar').className = 'hero-kpi-bar-fill' + (pct < 30 ? ' danger' : pct < 70 ? ' warn' : '');
-  $('kpi-routine-detail').textContent = `${doneCount} / ${totalCount}건 완료`;
-
   // 진행 중 업무
   const doing = DATA.tasks.filter(t => t.status === 'doing');
   $('kpi-doing').textContent = doing.length;
@@ -6366,10 +6128,6 @@ function renderHero() {
   $('kpi-weekly-done').textContent = total;
   $('kpi-weekly-bar').style.width = Math.min(100, total * 5) + '%';
   $('kpi-weekly-detail').textContent = `업무 ${weeklyTaskDone}건 + 루틴 ${weeklyRoutineDone}건`;
-
-  // 정체 업무 알림 + 알바 진행 현황 동기화
-  renderStaleBanner();
-  renderAlbaPanel();
 }
 
 // ===== 오늘 탭 =====
@@ -7520,7 +7278,7 @@ function loadSampleData(silent) {
   }
 
   const baseTeams = [
-    { id: 'team_main', name: '서비스운영본부', color: '#1B5E6E', icon: '🏢', kpi: '' }
+    { id: 'team_main', name: DEFAULT_TEAM_NAME, color: '#1B5E6E', icon: '🏢', kpi: '' }
   ];
 
   const baseMembers = [
@@ -7889,13 +7647,14 @@ function renderKpiPage() {
   const plan = DATA.kpiPlan;
   if (!UI.kpiView) UI.kpiView = 'goal';
   $('kpi-updated').textContent = '최종본 · ' + (plan.updatedAt || '');
+  if ($('kpi-page-team')) $('kpi-page-team').textContent = teamName();
 
   // 팀 비전 카드
   const overallPct = kpiOverallPct();
   let indCount = 0; (plan.kpis||[]).forEach(k => indCount += kpiAllInds(k).length);
   let html = `
     <div class="kpi-teamvision">
-      <div class="lbl">서비스운영본부 · 팀 KPI</div>
+      <div class="lbl">${escapeHtml(teamName())} · 팀 KPI</div>
       <div class="txt" contenteditable="true" onblur="kpiEditTeamVision(this)">${escapeHtml(plan.teamKpi)}</div>
       <div class="meta">담당자 ${new Set((plan.kpis||[]).map(k=>k.ownerName)).size}명 · KPI ${(plan.kpis||[]).length}개 · 지표 ${indCount}개 · <b style="opacity:1;">전체 진척률 ${overallPct}%</b></div>
     </div>`;
@@ -8112,7 +7871,7 @@ function kpiDelKpi(kpiId) {
 function exportKpiSummary() {
   const plan = DATA.kpiPlan;
   const fmt = (i) => { const c=(i.cur==null?'-':i.cur), t=(i.tgt==null?'-':i.tgt), u=i.unit||''; return `${i.text} [${c}/${t}${u}, ${indPct(i)}%]`; };
-  let out = `[서비스운영본부 KPI 체계 · ${plan.updatedAt}]  전체 진척률 ${kpiOverallPct()}%\n\n팀 KPI: ${plan.teamKpi}\n`;
+  let out = `[${teamName()} KPI 체계 · ${plan.updatedAt}]  전체 진척률 ${kpiOverallPct()}%\n\n팀 KPI: ${plan.teamKpi}\n`;
   (plan.teamGoals||[]).forEach(g => {
     const st = kpiGoalStats(g.id);
     out += `\n■ 팀 목표 ${g.no}. ${g.title} (진척률 ${st.pct}%)\n  ${g.desc}\n`;
@@ -8130,7 +7889,7 @@ function exportKpiSummary() {
 }
 
 function renderAll() {
-  renderHero();  // renderHero 내부에서 renderStaleBanner도 호출됨
+  renderHero();
   renderTodayPage();
   renderTeamPage();
   renderDetailPage();
