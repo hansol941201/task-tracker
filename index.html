@@ -10,25 +10,25 @@
 <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,400;12..96,600;12..96,800&family=JetBrains+Mono:wght@400;600;800&display=swap" rel="stylesheet">
 <style>
   :root {
-    --bg: #F7F9FD;
+    --bg: #FBFAF6;
     --surface: #FFFFFF;
-    --ink: #1B2740;
-    --ink-2: #3A4A66;
-    --muted: #6E7D95;
-    --line: #E4EAF4;
-    --line-2: #EFF3FA;
-    --accent: #3B5FA8;
-    --accent-soft: #E6EDFA;
-    --accent-2: #5A7FC4;
-    --accent-2-soft: #EAF0FC;
-    --success: #2F8F7A;
-    --success-soft: #E1F4EF;
-    --warn: #C2803A;
-    --warn-soft: #FAEEDD;
-    --danger: #C05B57;
-    --danger-soft: #FBE7E5;
-    --shadow-sm: 0 1px 2px rgba(27,39,64,0.04), 0 1px 3px rgba(27,39,64,0.03);
-    --shadow-md: 0 6px 24px rgba(27,39,64,0.06), 0 2px 6px rgba(27,39,64,0.04);
+    --ink: #18211D;
+    --ink-2: #2D3934;
+    --muted: #6B7570;
+    --line: #E8E5DD;
+    --line-2: #F0EEE7;
+    --accent: #1B5E6E;
+    --accent-soft: #DAEBEE;
+    --accent-2: #B89968;
+    --accent-2-soft: #F4EBD9;
+    --success: #2E7D52;
+    --success-soft: #DCEEDE;
+    --warn: #B4651E;
+    --warn-soft: #F7E6CE;
+    --danger: #B83A2E;
+    --danger-soft: #FADEDA;
+    --shadow-sm: 0 1px 2px rgba(24,33,29,0.04), 0 1px 3px rgba(24,33,29,0.03);
+    --shadow-md: 0 6px 24px rgba(24,33,29,0.06), 0 2px 6px rgba(24,33,29,0.04);
     --radius: 14px;
     --radius-sm: 10px;
     --num: 'JetBrains Mono','Bricolage Grotesque',Pretendard,sans-serif;
@@ -51,7 +51,7 @@
 
   /* ===== Header ===== */
   .topbar {
-    background: linear-gradient(180deg, #FAFCFE, var(--bg));
+    background: linear-gradient(180deg, #FCFBF7, var(--bg));
     border-bottom: 1px solid var(--line);
     padding: 22px 36px 28px;
   }
@@ -84,21 +84,21 @@
     border-color: var(--ink-2);
   }
   .cloud-status.connected {
-    background: linear-gradient(135deg, #E5F5F0, #F0FAF6);
-    border-color: #A6DCCE;
+    background: linear-gradient(135deg, #E8F4EC, #F4FBF7);
+    border-color: #A8D4BC;
     color: var(--success);
   }
   .cloud-status.connected .cloud-icon {
     animation: cloud-pulse 2s infinite;
   }
   .cloud-status.syncing {
-    background: linear-gradient(135deg, #F4F8FD, #F7FAFE);
-    border-color: #BACDEC;
-    color: #2E4C88;
+    background: linear-gradient(135deg, #FDF5E8, #FFFBF0);
+    border-color: #D9C9A3;
+    color: #6E5530;
   }
   .cloud-status.error {
     background: var(--danger-soft);
-    border-color: #E9B9B6;
+    border-color: #E8B5AE;
     color: var(--danger);
   }
   .cloud-icon { font-size: 13px; }
@@ -109,8 +109,8 @@
 
   /* Firebase 설정 모달 */
   .fb-status-card {
-    background: linear-gradient(135deg, #F2F6FD, #F9FBFE);
-    border: 1px solid #C9D8F0;
+    background: linear-gradient(135deg, #F0F7FA, #F8FCFD);
+    border: 1px solid #C5DEE6;
     border-radius: 10px;
     padding: 14px 16px;
   }
@@ -122,7 +122,7 @@
     font-size: 12px;
   }
   .fb-status-line + .fb-status-line {
-    border-top: 1px dashed #C9D8F0;
+    border-top: 1px dashed #C5DEE6;
     padding-top: 8px;
     margin-top: 4px;
   }
@@ -144,7 +144,7 @@
   .fb-help {
     margin-top: 20px;
     padding: 12px 14px;
-    background: #FAFCFE;
+    background: #FCFBF7;
     border: 1px solid var(--line-2);
     border-radius: 8px;
     font-size: 12px;
@@ -181,7 +181,7 @@
     border-radius: 3px;
     font-family: var(--num);
     font-size: 11px;
-    color: #2E4C88;
+    color: #6E5530;
   }
   .fb-help-content a {
     color: var(--accent);
@@ -202,7 +202,7 @@
     border: 1px solid var(--line); border-radius: 99px;
     font-family: var(--num); font-size: 12px; font-weight: 600; color: var(--ink);
   }
-  .today-pill::before { content: none; }
+  .today-pill::before { content: "📅"; }
 
   .hero {
     display: grid; grid-template-columns: 1fr; gap: 20px;
@@ -221,9 +221,9 @@
   /* ===== 팀 KPI 목표 카드 ===== */
   .team-kpi-card {
     margin-top: 16px;
-    background: linear-gradient(135deg, #F2F6FD 0%, #FAFCFE 100%);
-    border: 1px solid #C9D8F0;
-    border-left: 4px solid #5A7FC4;
+    background: linear-gradient(135deg, #FFF8E8 0%, #FCFBF7 100%);
+    border: 1px solid #E5D9B8;
+    border-left: 4px solid #B89968;
     border-radius: 10px;
     padding: 14px 18px;
   }
@@ -239,9 +239,9 @@
     color: var(--ink); letter-spacing: -0.01em;
   }
   .team-kpi-label {
-    font-size: 10px; font-weight: 800; color: #3B5FA8;
+    font-size: 10px; font-weight: 800; color: #8A6E3A;
     text-transform: uppercase; letter-spacing: 0.12em;
-    background: #DFE9F9; padding: 2px 8px; border-radius: 99px;
+    background: #F4E8C8; padding: 2px 8px; border-radius: 99px;
     margin-left: 4px;
   }
   .team-kpi-input {
@@ -258,11 +258,11 @@
     transition: all 0.15s;
   }
   .team-kpi-input:hover {
-    border-color: #C9D8F0;
+    border-color: #E5D9B8;
   }
   .team-kpi-input:focus {
     outline: none;
-    border-color: #5A7FC4;
+    border-color: #B89968;
     box-shadow: 0 0 0 3px rgba(184, 153, 104, 0.15);
   }
   .team-kpi-input::placeholder {
@@ -276,12 +276,12 @@
     align-items: center;
     gap: 8px;
     padding: 6px 10px;
-    background: linear-gradient(180deg, #F7FAFE, #F2F6FD);
-    border: 1px dashed #C9D8F0;
+    background: linear-gradient(180deg, #FFFBF0, #FFF7E5);
+    border: 1px dashed #E5D9B8;
     border-radius: 6px;
     margin-top: 8px;
     font-size: 11px;
-    color: #2E4C88;
+    color: #6B5530;
   }
   .member-kpi-flag {
     font-size: 11px;
@@ -302,24 +302,24 @@
   .member-kpi-input {
     width: 100%;
     padding: 5px 8px;
-    border: 1px solid #C9D8F0;
+    border: 1px solid #E5D9B8;
     background: var(--surface);
     border-radius: 4px;
     font-size: 11px;
     font-weight: 600;
-    color: #2E4C88;
+    color: #6B5530;
     font-family: inherit;
     box-sizing: border-box;
   }
   .member-kpi-input:focus {
     outline: none;
-    border-color: #5A7FC4;
+    border-color: #B89968;
     box-shadow: 0 0 0 2px rgba(184, 153, 104, 0.15);
   }
   .member-kpi-edit-btn {
     background: transparent;
     border: none;
-    color: #3B5FA8;
+    color: #8A6E3A;
     font-size: 11px;
     cursor: pointer;
     padding: 2px 4px;
@@ -353,7 +353,7 @@
   }
   .hero-kpi-bar-fill {
     height: 100%; border-radius: 99px;
-    background: linear-gradient(90deg, var(--accent), #5A7FC4);
+    background: linear-gradient(90deg, var(--accent), #2A8195);
     transition: width 0.5s cubic-bezier(.2,.8,.2,1);
   }
   .hero-kpi-bar-fill.warn { background: var(--warn); }
@@ -413,7 +413,7 @@
   /* + 새 직원 추가 카드 */
   .today-card-add {
     background: transparent;
-    border: 2px dashed #BACDEC;
+    border: 2px dashed #D9C9A3;
     cursor: pointer;
     display: flex;
     align-items: center;
@@ -422,7 +422,7 @@
     transition: all 0.2s;
   }
   .today-card-add:hover {
-    background: #F7FAFE;
+    background: #FFFBF0;
     border-color: var(--accent-2);
     border-style: solid;
     transform: translateY(-2px);
@@ -430,7 +430,7 @@
   }
   .today-card-add-inner {
     text-align: center;
-    color: #3B5FA8;
+    color: #8A6E3A;
     padding: 24px;
   }
   .today-card-add-icon {
@@ -444,7 +444,7 @@
     font-family: var(--display);
     font-size: 14px;
     font-weight: 800;
-    color: #2E4C88;
+    color: #6E5530;
     margin-bottom: 4px;
   }
   .today-card-add-sub {
@@ -454,7 +454,7 @@
   .today-card-head {
     padding: 16px 20px 14px; border-bottom: 1px solid var(--line-2);
     display: flex; justify-content: space-between; align-items: center;
-    background: linear-gradient(180deg, #FAFCFE, var(--surface));
+    background: linear-gradient(180deg, #FCFBF7, var(--surface));
   }
   .member-info { display: flex; align-items: center; gap: 12px; }
   .avatar {
@@ -556,7 +556,7 @@
   .routine-edit-btn:hover {
     background: var(--accent-2-soft);
     border-color: var(--accent-2);
-    color: #2E4C88;
+    color: #6E5530;
   }
   .routine-del-btn {
     font-size: 16px;
@@ -577,7 +577,7 @@
     font-weight: 700; flex-shrink: 0;
   }
   .routine-tag.daily { background: var(--accent-soft); color: var(--accent); }
-  .routine-tag.weekly { background: var(--accent-2-soft); color: #2E4C88; }
+  .routine-tag.weekly { background: var(--accent-2-soft); color: #6E5530; }
   .routine-tag.monthly { background: var(--success-soft); color: var(--success); }
 
   /* 일회성 업무 미니 리스트 — 진행중 프로젝트는 모두 베이지 톤 */
@@ -585,33 +585,33 @@
   .task-mini {
     display: flex; align-items: center; gap: 10px;
     padding: 9px 10px;
-    background: linear-gradient(180deg, #FAFCFE, var(--bg));
+    background: linear-gradient(180deg, #FDFBF5, var(--bg));
     border-radius: 8px;
-    border: 1px solid #C9D8F0;
+    border: 1px solid #E5D9B8;
     border-left: 3px solid var(--accent-2);
     transition: all 0.15s;
     cursor: pointer;
   }
   /* 우선순위는 작은 점으로만 표시 — 좌측 색깔 띠 통일 */
   .task-mini.status-doing {
-    background: linear-gradient(180deg, #F0F5FD, #FAFCFE);
+    background: linear-gradient(180deg, #FCF6E4, #FDFBF5);
   }
   .task-mini.status-done {
-    background: linear-gradient(180deg, #F0F9F6, var(--bg));
-    border-color: #C4E7DD;
+    background: linear-gradient(180deg, #F4F9F2, var(--bg));
+    border-color: #C8E0CD;
     border-left-color: var(--success);
     opacity: 0.7;
   }
   .task-mini.status-hold {
-    background: linear-gradient(180deg, #FDF3F2, var(--bg));
-    border-color: #F3D2CF;
+    background: linear-gradient(180deg, #FDF2EE, var(--bg));
+    border-color: #F5D0C5;
     border-left-color: var(--danger);
   }
   /* 루틴성 task는 보라 톤 유지 (프로젝트와 구분) */
   .task-mini.routine-type {
     background: linear-gradient(180deg, #FBFAFE, var(--bg));
-    border-color: #E0DAF6;
-    border-left-color: #7A6BC4;
+    border-color: #D5CCE8;
+    border-left-color: #5B4B8A;
   }
   .task-mini:hover {
     box-shadow: var(--shadow-sm);
@@ -643,11 +643,11 @@
   }
   .task-mini-progress-fill {
     height: 100%;
-    background: linear-gradient(90deg, #BACDEC, var(--accent-2));
+    background: linear-gradient(90deg, #D9C9A3, var(--accent-2));
     border-radius: 99px;
   }
   .task-mini.routine-type .task-mini-progress-fill {
-    background: linear-gradient(90deg, #D4CDF1, #7A6BC4);
+    background: linear-gradient(90deg, #C9BFDE, #5B4B8A);
   }
   .task-mini-toggle {
     background: transparent;
@@ -667,8 +667,8 @@
   .task-mini-expand {
     margin-top: 4px;
     padding: 10px 12px;
-    background: linear-gradient(180deg, #F7FAFE, #FAFCFE);
-    border: 1px solid #C9D8F0;
+    background: linear-gradient(180deg, #FFFBF0, #FDFBF5);
+    border: 1px solid #E5D9B8;
     border-radius: 8px;
     display: none;
   }
@@ -676,11 +676,11 @@
   .task-mini-expand-head {
     display: flex; align-items: center; gap: 8px;
     padding-bottom: 8px;
-    border-bottom: 1px dashed #C9D8F0;
+    border-bottom: 1px dashed #E5D9B8;
     margin-bottom: 8px;
     font-size: 11px;
     font-weight: 700;
-    color: #2E4C88;
+    color: #6E5530;
   }
   .task-mini-expand-actions {
     margin-left: auto;
@@ -688,21 +688,21 @@
   }
   .task-mini-expand-actions button {
     background: var(--surface);
-    border: 1px solid #C9D8F0;
+    border: 1px solid #E5D9B8;
     border-radius: 5px;
     padding: 3px 8px;
     font-size: 10px;
-    color: #2E4C88;
+    color: #6E5530;
     cursor: pointer;
     transition: all 0.15s;
   }
   .task-mini-expand-actions button:hover {
-    background: #DFE9F9;
+    background: #F4E8C8;
     border-color: var(--accent-2);
   }
   .task-mini-expand-actions button.danger {
     color: var(--danger);
-    border-color: #F3D2CF;
+    border-color: #F5D0C5;
   }
   .task-mini-expand-actions button.danger:hover {
     background: var(--danger-soft);
@@ -743,7 +743,7 @@
     font-family: var(--num);
     font-size: 10px;
     font-weight: 700;
-    color: #2E4C88;
+    color: #6E5530;
   }
   .task-mini-sub-del {
     background: transparent;
@@ -832,7 +832,7 @@
   }
   .panel-head {
     padding: 16px 20px; border-bottom: 1px solid var(--line);
-    background: linear-gradient(180deg, #FAFCFE, var(--surface));
+    background: linear-gradient(180deg, #FCFBF7, var(--surface));
     display: flex; justify-content: space-between; align-items: center;
   }
   .panel-head h3 {
@@ -1008,24 +1008,24 @@
   .table th {
     text-align: left; padding: 10px 16px; font-size: 10px; font-weight: 700;
     text-transform: uppercase; letter-spacing: 0.12em; color: var(--muted);
-    border-bottom: 1px solid var(--line); background: #FAFCFE;
+    border-bottom: 1px solid var(--line); background: #FCFBF7;
   }
   .table td {
     padding: 11px 16px; border-bottom: 1px solid var(--line-2);
     vertical-align: middle;
   }
   .table tr:last-child td { border-bottom: none; }
-  .table tr:hover td { background: #FAFCFE; }
+  .table tr:hover td { background: #FCFBF7; }
 
   .badge {
     display: inline-block; padding: 2px 8px; border-radius: 99px;
     font-size: 10px; font-weight: 700;
   }
   .badge.daily { background: var(--accent-soft); color: var(--accent); }
-  .badge.weekly { background: var(--accent-2-soft); color: #2E4C88; }
+  .badge.weekly { background: var(--accent-2-soft); color: #6E5530; }
   .badge.monthly { background: var(--success-soft); color: var(--success); }
   .badge.priority-high { background: var(--danger-soft); color: var(--danger); }
-  .badge.priority-mid { background: var(--accent-2-soft); color: #2E4C88; }
+  .badge.priority-mid { background: var(--accent-2-soft); color: #6E5530; }
   .badge.priority-low { background: var(--line-2); color: var(--muted); }
   .badge.status-todo { background: var(--line-2); color: var(--muted); }
   .badge.status-doing { background: var(--accent-soft); color: var(--accent); }
@@ -1072,7 +1072,7 @@
     cursor: pointer; user-select: none;
     transition: background 0.15s;
   }
-  .stale-head:hover { background: #FAFCFE; }
+  .stale-head:hover { background: #FCFBF7; }
   .stale-icon {
     width: 32px; height: 32px; border-radius: 8px;
     background: var(--warn-soft); color: var(--warn);
@@ -1105,7 +1105,7 @@
     border-top: 1px solid var(--line-2);
     padding: 14px 18px 18px;
     display: none;
-    background: linear-gradient(180deg, #FAFCFE, var(--surface));
+    background: linear-gradient(180deg, #FCFBF7, var(--surface));
   }
   .stale-banner.open .stale-body { display: block; }
   .stale-list {
@@ -1125,7 +1125,7 @@
     transition: all 0.15s;
   }
   .stale-item[onclick]:hover {
-    background: #F7FAFE;
+    background: #FFFAF0;
     box-shadow: 0 2px 8px rgba(0,0,0,0.06);
     transform: translateY(-1px);
   }
@@ -1153,9 +1153,9 @@
   }
 
   /* ===== 타입 / 알바 뱃지 ===== */
-  .badge.type-routine { background: #EBE8FA; color: #7A6BC4; }
+  .badge.type-routine { background: #E3DCF1; color: #5B4B8A; }
   .badge.type-project { background: var(--accent-soft); color: var(--accent); }
-  .badge.assignee-alba { background: #FAE6D2; color: #C2803A; }
+  .badge.assignee-alba { background: #FFE3D1; color: #B4651E; }
   .badge.assignee-member { background: var(--line-2); color: var(--muted); }
 
   .tag-mini {
@@ -1163,14 +1163,14 @@
     font-size: 9px; font-weight: 800; letter-spacing: 0.04em;
     vertical-align: middle;
   }
-  .tag-mini.alba { background: #FAE6D2; color: #C2803A; }
+  .tag-mini.alba { background: #FFE3D1; color: #B4651E; }
   .tag-mini.project { background: var(--accent-soft); color: var(--accent); }
-  .tag-mini.routine-type { background: #EBE8FA; color: #7A6BC4; }
+  .tag-mini.routine-type { background: #E3DCF1; color: #5B4B8A; }
 
   .routine-item.alba .routine-title::after {
     content: "알바"; margin-left: 6px;
     display: inline-block; padding: 1px 5px; border-radius: 4px;
-    font-size: 9px; font-weight: 800; background: #FAE6D2; color: #C2803A;
+    font-size: 9px; font-weight: 800; background: #FFE3D1; color: #B4651E;
     vertical-align: middle;
   }
 
@@ -1179,7 +1179,7 @@
     margin-top: 12px;
     background: var(--surface);
     border: 1px solid var(--line);
-    border-left: 4px solid #C2803A;
+    border-left: 4px solid #B4651E;
     border-radius: var(--radius);
     overflow: hidden;
   }
@@ -1190,10 +1190,10 @@
     cursor: pointer; user-select: none;
     transition: background 0.15s;
   }
-  .alba-panel-head:hover { background: #FDF6EE; }
+  .alba-panel-head:hover { background: #FFF7F0; }
   .alba-panel-icon {
     width: 32px; height: 32px; border-radius: 8px;
-    background: #FAE6D2; color: #C2803A;
+    background: #FFE3D1; color: #B4651E;
     display: inline-flex; align-items: center; justify-content: center;
     font-size: 16px; flex-shrink: 0;
   }
@@ -1206,7 +1206,7 @@
   .alba-count-badge {
     font-family: var(--num); font-size: 11px; font-weight: 800;
     padding: 2px 8px; border-radius: 99px;
-    background: #C2803A; color: white;
+    background: #B4651E; color: white;
   }
   .alba-panel.none .alba-count-badge { background: var(--muted); }
   .alba-panel-sub {
@@ -1222,7 +1222,7 @@
     border-top: 1px solid var(--line-2);
     padding: 14px 18px 18px;
     display: none;
-    background: linear-gradient(180deg, #FDF9F4, var(--surface));
+    background: linear-gradient(180deg, #FFFAF5, var(--surface));
   }
   .alba-panel.open .alba-panel-body { display: block; }
 
@@ -1267,7 +1267,7 @@
     font-weight: 700;
   }
   .alba-stat-pill.done { background: var(--success-soft); color: var(--success); }
-  .alba-stat-pill.pending { background: #FAE6D2; color: #C2803A; }
+  .alba-stat-pill.pending { background: #FFE3D1; color: #B4651E; }
 
   .alba-task-list {
     display: grid;
@@ -1285,7 +1285,7 @@
     font-size: 12px;
   }
   .alba-task-item.done {
-    background: linear-gradient(180deg, #F0F9F6, var(--bg));
+    background: linear-gradient(180deg, #F4F9F2, var(--bg));
   }
   .alba-task-status {
     font-size: 14px;
@@ -1315,11 +1315,11 @@
     font-size: 10px; font-weight: 700;
     color: var(--muted);
   }
-  .alba-task-freq.daily { background: #DDE5F3; color: #3B5FA8; }
-  .alba-task-freq.weekly { background: #E2EAF7; color: #3B5FA8; }
-  .alba-task-freq.monthly { background: #EBE8FA; color: #7A6BC4; }
-  .alba-task-freq.quarterly { background: #F9E7D4; color: #C2803A; }
-  .alba-task-freq.yearly { background: #FADEDC; color: #C05B57; }
+  .alba-task-freq.daily { background: #DBE5E8; color: #1B5E6E; }
+  .alba-task-freq.weekly { background: #EEE3D0; color: #8A6E3A; }
+  .alba-task-freq.monthly { background: #E3DCF1; color: #5B4B8A; }
+  .alba-task-freq.quarterly { background: #FDE8D8; color: #B4651E; }
+  .alba-task-freq.yearly { background: #FCD9D5; color: #B83A2E; }
   .alba-task-period {
     font-family: var(--num);
     font-size: 10px;
@@ -1329,7 +1329,7 @@
   /* 필터 토글 (관리 탭) */
   .filter-row {
     display: flex; gap: 6px; flex-wrap: wrap;
-    padding: 10px 16px; background: #FAFCFE;
+    padding: 10px 16px; background: #FCFBF7;
     border-bottom: 1px solid var(--line-2);
   }
   .filter-chip {
@@ -1355,14 +1355,14 @@
     padding: 18px 22px;
     border-bottom: 1px solid var(--line);
     display: flex; align-items: center; gap: 14px;
-    background: linear-gradient(180deg, #FAFCFE, var(--surface));
+    background: linear-gradient(180deg, #FCFBF7, var(--surface));
   }
   /* 간소화된 팀 헤더 */
   .team-block-head-simple {
     padding: 14px 20px;
     border-bottom: 1px solid var(--line);
     display: flex; align-items: center; gap: 12px;
-    background: #FAFCFE;
+    background: #FCFBF7;
   }
   .team-icon-box-sm {
     width: 28px; height: 28px; border-radius: 7px;
@@ -1379,13 +1379,13 @@
   .team-members-bar {
     padding: 12px 20px;
     border-bottom: 1px solid var(--line-2);
-    background: linear-gradient(180deg, #FAFCFE, var(--surface));
+    background: linear-gradient(180deg, #FDFBF5, var(--surface));
     display: flex; align-items: flex-start; gap: 12px;
     flex-wrap: wrap;
   }
   .team-members-label {
     font-size: 11px; font-weight: 800;
-    color: #2E4C88;
+    color: #6E5530;
     text-transform: uppercase;
     letter-spacing: 0.06em;
     padding-top: 6px;
@@ -1403,7 +1403,7 @@
     gap: 6px;
     padding: 5px 10px 5px 8px;
     background: var(--surface);
-    border: 1px solid #C9D8F0;
+    border: 1px solid #E5D9B8;
     border-radius: 99px;
     font-size: 12px;
     font-weight: 600;
@@ -1412,7 +1412,7 @@
     position: relative;
   }
   .team-member-chip:hover {
-    background: #EDF2FC;
+    background: #FBF3DA;
     border-color: var(--accent-2);
     transform: translateY(-1px);
     box-shadow: var(--shadow-sm);
@@ -1454,12 +1454,12 @@
     border-radius: 99px;
     font-size: 12px;
     font-weight: 700;
-    color: #2E4C88;
+    color: #6E5530;
     cursor: pointer;
     transition: all 0.15s;
   }
   .team-member-add-btn:hover {
-    background: #EDF2FC;
+    background: #FBF3DA;
     border-style: solid;
     border-color: var(--accent-2);
   }
@@ -1587,7 +1587,7 @@
 
   /* 하위업무 펼침 영역 */
   .subtask-container {
-    background: linear-gradient(180deg, #F6F9FD, var(--bg));
+    background: linear-gradient(180deg, #FAF8F2, var(--bg));
     border: 1px solid var(--line-2);
     border-left: 3px solid var(--accent-2);
     border-radius: 8px;
@@ -1669,7 +1669,7 @@
   }
   .expand-toggle:hover { background: var(--line-2); color: var(--ink); }
   .expand-toggle .sub-count {
-    background: var(--accent-2-soft); color: #2E4C88;
+    background: var(--accent-2-soft); color: #6E5530;
     padding: 1px 6px; border-radius: 99px;
     font-family: var(--num); margin-left: 4px;
   }
@@ -1753,7 +1753,7 @@
   /* 멤버 검색 (관리탭에서 멤버 많아질 때) */
   .search-row {
     display: flex; gap: 8px; align-items: center;
-    padding: 10px 16px; background: #FAFCFE;
+    padding: 10px 16px; background: #FCFBF7;
     border-bottom: 1px solid var(--line-2);
   }
   .search-row input {
@@ -1769,8 +1769,8 @@
     gap: 14px;
   }
   .project-card {
-    background: linear-gradient(180deg, #FAFCFE, var(--surface));
-    border: 1px solid #C9D8F0;
+    background: linear-gradient(180deg, #FDFBF5, var(--surface));
+    border: 1px solid #E5D9B8;
     border-left: 3px solid var(--accent-2);
     border-radius: 12px;
     padding: 14px 16px;
@@ -1785,14 +1785,14 @@
     transform: translateY(-1px);
     border-color: var(--accent-2);
   }
-  .project-card.done { background: linear-gradient(180deg, #F0F9F6, var(--surface)); border-left-color: var(--success); }
-  .project-card.hold { background: linear-gradient(180deg, #FDF3F2, var(--surface)); border-color: #F3D2CF; border-left-color: var(--danger); }
+  .project-card.done { background: linear-gradient(180deg, #F4F9F2, var(--surface)); border-left-color: var(--success); }
+  .project-card.hold { background: linear-gradient(180deg, #FDF2EE, var(--surface)); border-color: #F5D0C5; border-left-color: var(--danger); }
   .project-card.stale { border-left: 4px solid var(--warn); }
   /* 루틴성 task 카드는 보라 톤 (프로젝트와 구분) */
   .project-card.routine-task {
     background: linear-gradient(180deg, #FBFAFE, var(--surface));
-    border-color: #E0DAF6;
-    border-left-color: #7A6BC4;
+    border-color: #D5CCE8;
+    border-left-color: #5B4B8A;
   }
 
   .project-head {
@@ -1804,7 +1804,7 @@
     display: inline-flex; align-items: center; justify-content: center;
     font-size: 14px; flex-shrink: 0;
   }
-  .project-card.routine-task .project-icon { background: #7A6BC4; }
+  .project-card.routine-task .project-icon { background: #5B4B8A; }
   .project-card.done .project-icon { background: var(--success); }
   .project-card.hold .project-icon { background: var(--danger); }
   .project-title-area { flex: 1; min-width: 0; }
@@ -1816,8 +1816,8 @@
     word-break: break-word;
     transition: color 0.15s;
   }
-  .project-title:hover { color: #2E4C88; }
-  .project-card.routine-task .project-title:hover { color: #7A6BC4; }
+  .project-title:hover { color: #6E5530; }
+  .project-card.routine-task .project-title:hover { color: #5B4B8A; }
   .project-owner-badge {
     background: var(--line-2); color: var(--ink-2);
     padding: 3px 9px; border-radius: 99px;
@@ -1841,7 +1841,7 @@
     font-weight: 700;
   }
   .project-meta-status.done { background: var(--success-soft); color: var(--success); }
-  .project-meta-status.doing { background: #EDF2FC; color: #2E4C88; }
+  .project-meta-status.doing { background: #FBF3DA; color: #6E5530; }
   .project-meta-status.todo { background: var(--line-2); color: var(--muted); }
   .project-meta-status.hold { background: var(--warn-soft); color: var(--warn); }
   .project-meta-due.urgent { color: var(--danger); font-weight: 700; }
@@ -1855,7 +1855,7 @@
   }
   .project-progress-bar > div {
     height: 100%;
-    background: linear-gradient(90deg, #BACDEC, var(--accent-2));
+    background: linear-gradient(90deg, #D9C9A3, var(--accent-2));
     border-radius: 99px;
     transition: width 0.3s;
   }
@@ -1863,14 +1863,14 @@
     background: var(--success);
   }
   .project-card.routine-task .project-progress-bar > div {
-    background: linear-gradient(90deg, #D4CDF1, #7A6BC4);
+    background: linear-gradient(90deg, #C9BFDE, #5B4B8A);
   }
   .project-progress-pct {
     font-family: var(--num); font-size: 13px; font-weight: 800;
-    color: #2E4C88;
+    color: #6E5530;
     min-width: 42px; text-align: right;
   }
-  .project-card.routine-task .project-progress-pct { color: #7A6BC4; }
+  .project-card.routine-task .project-progress-pct { color: #5B4B8A; }
   .project-card.done .project-progress-pct { color: var(--success); }
   .project-progress-actions {
     display: flex; gap: 4px;
@@ -1885,7 +1885,7 @@
     font-size: 12px;
     transition: all 0.15s;
   }
-  .project-icon-btn:hover { background: #EDF2FC; border-color: var(--accent-2); }
+  .project-icon-btn:hover { background: #FBF3DA; border-color: var(--accent-2); }
   .project-icon-btn.danger:hover { background: var(--danger-soft); border-color: var(--danger); color: var(--danger); }
 
   .project-subtasks {
@@ -1906,7 +1906,7 @@
     border-color: var(--line);
   }
   .project-subtask.done {
-    background: linear-gradient(180deg, #F0F9F6, var(--bg));
+    background: linear-gradient(180deg, #F4F9F2, var(--bg));
   }
   .project-subtask .sub-status-btn {
     background: transparent; border: none; cursor: pointer;
@@ -1987,7 +1987,7 @@
   /* 보조업무 섹션 헤더 */
   .project-subtasks-section {
     margin-top: 4px;
-    background: linear-gradient(180deg, #F6F9FD, var(--bg));
+    background: linear-gradient(180deg, #FAF8F2, var(--bg));
     border: 1px solid var(--line-2);
     border-left: 3px solid var(--accent-2);
     border-radius: 8px;
@@ -2052,18 +2052,18 @@
     display: inline-block;
   }
   .action-btn.project::before { background: var(--accent); }
-  .action-btn.routine::before { background: #7A6BC4; }
-  .action-btn.alba::before { background: #C2803A; }
+  .action-btn.routine::before { background: #5B4B8A; }
+  .action-btn.alba::before { background: #B4651E; }
 
   /* 진한 베이지 강조 — primary 액션 */
   .action-btn.primary {
-    background: #BACDEC;
-    border-color: #5A7FC4;
-    color: #25406F;
+    background: #D9C9A3;
+    border-color: #B89968;
+    color: #4A3920;
   }
   .action-btn.primary:hover {
-    background: #A9BEE4;
-    border-color: #5A7FC4;
+    background: #C9B58B;
+    border-color: #9B7E4F;
   }
   /* ghost — 화이트 톤 */
   .action-btn.ghost {
@@ -2219,7 +2219,7 @@
     transition: all 0.15s;
   }
   .project-add-subtask-form button:hover {
-    background: linear-gradient(135deg, #2E4C88, #5A7FC4);
+    background: linear-gradient(135deg, #154852, #A67E50);
   }
   .project-add-subtask-form button.cancel {
     background: var(--surface); color: var(--muted);
@@ -2267,19 +2267,19 @@
     box-sizing: border-box;
   }
   .alba-checkbox:hover {
-    border-color: #C2803A;
-    color: #C2803A;
+    border-color: #B4651E;
+    color: #B4651E;
   }
   .alba-checkbox input[type="checkbox"] {
     width: 16px; height: 16px;
-    accent-color: #C2803A;
+    accent-color: #B4651E;
     cursor: pointer;
     margin: 0;
   }
   .alba-checkbox.checked {
-    background: #FAE6D2;
-    border-color: #C2803A;
-    color: #C2803A;
+    background: #FFE3D1;
+    border-color: #B4651E;
+    color: #B4651E;
   }
   .alba-checkbox .alba-icon {
     font-size: 16px;
@@ -2296,8 +2296,8 @@
     transition: all 0.15s;
   }
   .alba-inline-toggle.alba {
-    background: #FAE6D2; color: #C2803A;
-    border: 1px solid #EFCEA8;
+    background: #FFE3D1; color: #B4651E;
+    border: 1px solid #F5C8A8;
   }
   .alba-inline-toggle.member {
     background: var(--line-2); color: var(--muted);
@@ -2308,7 +2308,7 @@
   }
   .alba-inline-toggle input[type="checkbox"] {
     width: 12px; height: 12px;
-    accent-color: #C2803A;
+    accent-color: #B4651E;
     cursor: pointer;
     margin: 0;
   }
@@ -2430,7 +2430,7 @@
   .modal-foot {
     padding: 14px 22px;
     border-top: 1px solid var(--line);
-    background: #FAFCFE;
+    background: #FCFBF7;
     display: flex; gap: 10px; justify-content: flex-end;
     flex-shrink: 0;
   }
@@ -2452,7 +2452,7 @@
     box-shadow: 0 2px 6px rgba(24, 33, 29, 0.1);
   }
   .modal-btn.primary:hover {
-    background: linear-gradient(135deg, #2E4C88, #5A7FC4);
+    background: linear-gradient(135deg, #154852, #A67E50);
     transform: translateY(-1px);
     box-shadow: 0 4px 12px rgba(24, 33, 29, 0.15);
   }
@@ -2549,13 +2549,13 @@
     line-height: 1.5;
   }
   .type-choice.routine:hover {
-    border-color: #7A6BC4;
+    border-color: #5B4B8A;
   }
-  .type-choice.routine:hover .type-choice-title { color: #7A6BC4; }
+  .type-choice.routine:hover .type-choice-title { color: #5B4B8A; }
   .type-choice.project:hover {
     border-color: var(--accent-2);
   }
-  .type-choice.project:hover .type-choice-title { color: #2E4C88; }
+  .type-choice.project:hover .type-choice-title { color: #6E5530; }
 
   /* 빈도 선택 칩 */
   .freq-pick {
@@ -2693,13 +2693,13 @@
   }
   .modal-subtask-add button:hover {
     transform: translateY(-1px);
-    background: linear-gradient(135deg, #2E4C88, #5A7FC4);
+    background: linear-gradient(135deg, #154852, #A67E50);
     box-shadow: 0 4px 8px rgba(0,0,0,0.12);
   }
 
   /* 알바 옵션 */
   .alba-option {
-    color: #C2803A;
+    color: #B4651E;
     font-weight: 800;
   }
 
@@ -2735,12 +2735,12 @@
   .kpi-viewtoggle button.on { background: var(--surface); color: var(--ink); box-shadow: var(--shadow-sm); }
 
   .kpi-teamvision {
-    background: linear-gradient(135deg, #25406F, #3B5FA8);
-    color: #EFF4FD; border-radius: var(--radius); padding: 20px 24px; margin-bottom: 20px;
+    background: linear-gradient(135deg, #12333B, #1B5E6E);
+    color: #EAF6F8; border-radius: var(--radius); padding: 20px 24px; margin-bottom: 20px;
     box-shadow: var(--shadow-md); position: relative; overflow: hidden;
   }
   .kpi-teamvision::after {
-    content: ''; position: absolute; right: 18px; top: 10px; font-size: 60px; opacity: 0;
+    content: '🎯'; position: absolute; right: 18px; top: 10px; font-size: 60px; opacity: .12;
   }
   .kpi-teamvision .lbl { font-size: 10.5px; letter-spacing: .16em; text-transform: uppercase; opacity: .75; font-weight: 700; }
   .kpi-teamvision .txt {
@@ -2824,7 +2824,7 @@
   .kpi-objective .olbl { font-size: 10px; color: var(--accent); font-weight: 800; letter-spacing: .1em; margin-right: 6px; }
 
   .kpi-headline {
-    padding: 9px 14px; font-size: 12.5px; font-weight: 700; color: #2E4C88;
+    padding: 9px 14px; font-size: 12.5px; font-weight: 700; color: #6E5530;
     background: var(--accent-2-soft); border-bottom: 1px solid var(--line-2);
     display: flex; align-items: center; gap: 6px;
   }
@@ -3017,51 +3017,9 @@
     white-space: pre-wrap; word-break: break-word; font-size: 13.5px; line-height: 1.7; color: var(--ink);
     background: var(--bg); border: 1px solid var(--line-2); border-radius: 10px; padding: 16px; max-height: 60vh; overflow: auto;
   }
-  /* ===== Line Icon (Lucide 스타일) ===== */
-  .ic {
-    width: 16px; height: 16px; flex: none;
-    stroke: currentColor; fill: none;
-    stroke-width: 1.75; stroke-linecap: round; stroke-linejoin: round;
-    vertical-align: -3px;
-  }
-  .ic-sm { width: 14px; height: 14px; vertical-align: -2px; }
-  .ic-lg { width: 18px; height: 18px; vertical-align: -4px; }
-  /* 기본은 차콜 — 상태를 뜻할 때만 색을 준다 */
-  .ic-muted  { color: #6E7D95; }
-  .ic-ok     { color: var(--success); }
-  .ic-warn   { color: var(--warn); }
-  .ic-danger { color: var(--danger); }
-  .ic-active { color: var(--accent); }
-
-  /* 아이콘이 들어간 컨테이너 정렬 보정 */
-  .tab { display: inline-flex; align-items: center; gap: 7px; }
-  .action-btn .action-icon,
-  .cloud-status .cloud-icon { display: inline-flex; align-items: center; }
-  .hero-kpi-label, .today-section-label > span:first-child,
-  .team-section-head > span:first-child, .task-group-title,
-  .panel-head h3, .section-title, .project-subtasks-label,
-  .member-kpi-line, .stale-title, .alba-panel-title {
-    display: inline-flex; align-items: center; gap: 6px;
-  }
-  .section-title { display: flex; }
-  .task-group-title { display: flex; }
-  .stale-icon, .alba-panel-icon, .modal-head-icon, .type-choice-icon, .manual-ico {
-    display: inline-flex; align-items: center; justify-content: center;
-  }
-  .empty-emoji, .project-empty-emoji { line-height: 1; }
-  .empty-emoji .ic, .project-empty-emoji .ic { width: 30px; height: 30px; }
-  .type-choice-icon .ic { width: 26px; height: 26px; }
-  .modal-head-icon .ic, .stale-icon .ic, .alba-panel-icon .ic { width: 20px; height: 20px; }
-  .avatar .ic { width: 17px; height: 17px; color: #fff; }
-  .project-icon-btn .ic, .dash-icon-btn .ic, .x-btn .ic,
-  .routine-edit-btn .ic, .routine-del-btn .ic, .member-kpi-edit-btn .ic,
-  .kdel .ic, .kx .ic { width: 13px; height: 13px; }
-  .freq-pick label div { display: flex; align-items: center; justify-content: center; }
-
-  /* 전역 .empty(padding:48px) 규칙이 KPI 텍스트의 empty 수식 클래스에 걸리던 문제 */
-  .member-kpi-text.empty, .team-kpi-input.empty {
-    padding: 0; text-align: left; font-size: inherit;
-  }
+  /* 전역 .empty(padding:48px) 규칙이 KPI 텍스트의 empty 수식 클래스에 걸려
+     KPI를 아직 입력하지 않은 멤버 칸이 부풀던 문제 */
+  .member-kpi-text.empty { padding: 0; text-align: left; font-size: inherit; }
 
 </style>
 </head>
@@ -3078,18 +3036,18 @@
     <div class="topbar-actions">
       <!-- Firebase 클라우드 동기화 상태 -->
       <div class="cloud-status" id="cloud-status" onclick="openFirebaseSettings()" title="클라우드 동기화 설정">
-        <span class="cloud-icon" id="cloud-icon"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M17.5 19H9a7 7 0 1 1 6.71-9h1.79a4.5 4.5 0 1 1 0 9"/></svg></span>
+        <span class="cloud-icon" id="cloud-icon">☁️</span>
         <span class="cloud-text" id="cloud-text">로컬만</span>
       </div>
       <button class="action-btn ghost sm" onclick="exportData()" title="현재 데이터를 JSON 파일로 다운로드">
-        <span class="action-icon"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" x2="12" y1="15" y2="3"/></svg></span><span>내보내기</span>
+        <span class="action-icon">📥</span><span>내보내기</span>
       </button>
       <button class="action-btn ghost sm" onclick="document.getElementById('import-file-top').click()" title="JSON 파일을 업로드하면 즉시 최신 데이터로 교체됩니다">
-        <span class="action-icon"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" x2="12" y1="3" y2="15"/></svg></span><span>가져오기</span>
+        <span class="action-icon">📤</span><span>가져오기</span>
       </button>
       <input type="file" id="import-file-top" accept=".json" style="display:none;" onchange="importData(event)">
       <button class="action-btn project" onclick="openAddMenu()" title="Ctrl+N으로도 열 수 있어요">
-        <span class="action-icon"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14M12 5v14"/></svg></span><span>새 업무 추가</span>
+        <span class="action-icon">＋</span><span>새 업무 추가</span>
       </button>
     </div>
   </div>
@@ -3102,7 +3060,7 @@
       <!-- 팀 KPI 목표 -->
       <div class="team-kpi-card">
         <div class="team-kpi-head">
-          <span class="team-kpi-flag"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="6"/><circle cx="12" cy="12" r="2"/></svg></span>
+          <span class="team-kpi-flag">🎯</span>
           <span class="team-kpi-title" id="team-kpi-team-name">B2B</span>
           <span class="team-kpi-label">팀 KPI 목표</span>
         </div>
@@ -3114,25 +3072,25 @@
     </div>
     <div class="hero-kpis">
       <div class="hero-kpi">
-        <div class="hero-kpi-label"><svg class="ic ic-sm" viewBox="0 0 24 24" aria-hidden="true"><path d="m2 9 3-3 3 3"/><path d="M13 18H7a2 2 0 0 1-2-2V6"/><path d="m22 15-3 3-3-3"/><path d="M11 6h6a2 2 0 0 1 2 2v10"/></svg> 오늘 루틴 완료율</div>
+        <div class="hero-kpi-label">🔄 오늘 루틴 완료율</div>
         <div class="hero-kpi-value"><span id="kpi-routine-pct">0</span><span class="unit">%</span></div>
         <div class="hero-kpi-bar"><div class="hero-kpi-bar-fill" id="kpi-routine-bar" style="width:0%"></div></div>
         <div class="hero-kpi-foot"><span id="kpi-routine-detail">0 / 0건 완료</span></div>
       </div>
       <div class="hero-kpi">
-        <div class="hero-kpi-label"><svg class="ic ic-sm" viewBox="0 0 24 24" aria-hidden="true"><path d="M16 6V4a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v2"/><path d="M22 13a18.15 18.15 0 0 1-20 0"/><rect width="20" height="14" x="2" y="6" rx="2"/></svg> 진행중 프로젝트</div>
+        <div class="hero-kpi-label">🚀 진행중 프로젝트</div>
         <div class="hero-kpi-value"><span id="kpi-doing">0</span><span class="unit">건</span></div>
         <div class="hero-kpi-bar"><div class="hero-kpi-bar-fill" id="kpi-doing-bar" style="width:0%"></div></div>
         <div class="hero-kpi-foot"><span id="kpi-doing-detail">평균 진척률 0%</span></div>
       </div>
       <div class="hero-kpi">
-        <div class="hero-kpi-label"><svg class="ic ic-sm ic-warn" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16.5 12"/></svg> 마감 임박 (3일 내, 루틴성)</div>
+        <div class="hero-kpi-label">⏰ 마감 임박 (3일 내, 루틴성)</div>
         <div class="hero-kpi-value"><span id="kpi-urgent">0</span><span class="unit">건</span></div>
         <div class="hero-kpi-bar"><div class="hero-kpi-bar-fill warn" id="kpi-urgent-bar" style="width:0%"></div></div>
         <div class="hero-kpi-foot"><span id="kpi-urgent-detail">기한 초과 0건 포함</span></div>
       </div>
       <div class="hero-kpi">
-        <div class="hero-kpi-label"><svg class="ic ic-sm ic-ok" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="10"/><path d="m9 12 2 2 4-4"/></svg> 이번 주 완료</div>
+        <div class="hero-kpi-label">✅ 이번 주 완료</div>
         <div class="hero-kpi-value"><span id="kpi-weekly-done">0</span><span class="unit">건</span></div>
         <div class="hero-kpi-bar"><div class="hero-kpi-bar-fill" id="kpi-weekly-bar" style="width:0%"></div></div>
         <div class="hero-kpi-foot"><span id="kpi-weekly-detail">일회성 + 루틴 합계</span></div>
@@ -3142,7 +3100,7 @@
     <!-- ===== 정체 업무 알림 ===== -->
     <div class="stale-banner" id="stale-banner">
       <div class="stale-head" onclick="toggleStaleBanner()">
-        <div class="stale-icon" id="stale-icon"><svg class="ic ic-lg" viewBox="0 0 24 24" aria-hidden="true"><path d="m21.73 18-8-14a2 2 0 0 0-3.48 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.73-3"/><path d="M12 9v4M12 17h.01"/></svg></div>
+        <div class="stale-icon" id="stale-icon">⚠️</div>
         <div class="stale-text">
           <div class="stale-title">
             <span id="stale-title-text">정체된 업무</span>
@@ -3158,7 +3116,7 @@
     <!-- ===== 알바 진행 현황 ===== -->
     <div class="alba-panel" id="alba-panel">
       <div class="alba-panel-head" onclick="toggleAlbaPanel()">
-        <div class="alba-panel-icon"><svg class="ic ic-lg" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="8" r="5"/><path d="M20 21a8 8 0 0 0-16 0"/></svg></div>
+        <div class="alba-panel-icon">🧑‍💼</div>
         <div class="alba-panel-text">
           <div class="alba-panel-title">
             <span>알바 진행 현황</span>
@@ -3176,14 +3134,14 @@
 <!-- ============== TABS ============== -->
 <div class="tabs-wrap">
   <div class="tabs">
-    <button class="tab active" data-page="today"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M8 2v4M16 2v4M3 10h18"/><rect width="18" height="18" x="3" y="4" rx="2"/><path d="M8 14h.01M12 14h.01M16 14h.01M8 18h.01M12 18h.01M16 18h.01"/></svg><span>오늘</span></button>
-    <button class="tab" data-page="team"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87M16 3.13a4 4 0 0 1 0 7.75"/></svg><span>팀별 보기</span></button>
-    <button class="tab" data-page="automation"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><rect width="7" height="9" x="3" y="3" rx="1"/><rect width="7" height="5" x="14" y="3" rx="1"/><rect width="7" height="9" x="14" y="12" rx="1"/><rect width="7" height="5" x="3" y="16" rx="1"/></svg><span>자동화</span></button>
-    <button class="tab" data-page="manuals"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 7v14"/><path d="M3 18a1 1 0 0 1-1-1V4a1 1 0 0 1 1-1h5a4 4 0 0 1 4 4 4 4 0 0 1 4-4h5a1 1 0 0 1 1 1v13a1 1 0 0 1-1 1h-6a3 3 0 0 0-3 3 3 3 0 0 0-3-3z"/></svg><span>매뉴얼</span></button>
-    <button class="tab" data-page="detail"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="8" r="5"/><path d="M20 21a8 8 0 0 0-16 0"/></svg><span>멤버별 상세</span></button>
-    <button class="tab" data-page="kpi"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="6"/><circle cx="12" cy="12" r="2"/></svg><span>KPI 체계</span></button>
-    <button class="tab" data-page="mindmap"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><rect x="16" y="16" width="6" height="6" rx="1"/><rect x="2" y="16" width="6" height="6" rx="1"/><rect x="9" y="2" width="6" height="6" rx="1"/><path d="M5 16v-3a1 1 0 0 1 1-1h12a1 1 0 0 1 1 1v3M12 12V8"/></svg><span>마인드맵</span></button>
-    <button class="tab" data-page="manage"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M12.22 2h-.44a2 2 0 0 0-2 2v.18a2 2 0 0 1-1 1.73l-.43.25a2 2 0 0 1-2 0l-.15-.08a2 2 0 0 0-2.73.73l-.22.38a2 2 0 0 0 .73 2.73l.15.1a2 2 0 0 1 1 1.72v.51a2 2 0 0 1-1 1.74l-.15.09a2 2 0 0 0-.73 2.73l.22.38a2 2 0 0 0 2.73.73l.15-.08a2 2 0 0 1 2 0l.43.25a2 2 0 0 1 1 1.73V20a2 2 0 0 0 2 2h.44a2 2 0 0 0 2-2v-.18a2 2 0 0 1 1-1.73l.43-.25a2 2 0 0 1 2 0l.15.08a2 2 0 0 0 2.73-.73l.22-.39a2 2 0 0 0-.73-2.73l-.15-.08a2 2 0 0 1-1-1.74v-.5a2 2 0 0 1 1-1.74l.15-.09a2 2 0 0 0 .73-2.73l-.22-.38a2 2 0 0 0-2.73-.73l-.15.08a2 2 0 0 1-2 0l-.43-.25a2 2 0 0 1-1-1.73V4a2 2 0 0 0-2-2z"/><circle cx="12" cy="12" r="3"/></svg><span>관리</span></button>
+    <button class="tab active" data-page="today">📅 오늘</button>
+    <button class="tab" data-page="team">👥 팀별 보기</button>
+    <button class="tab" data-page="automation">🚀 자동화</button>
+    <button class="tab" data-page="manuals">📖 매뉴얼</button>
+    <button class="tab" data-page="detail">👤 멤버별 상세</button>
+    <button class="tab" data-page="kpi">🎯 KPI 체계</button>
+    <button class="tab" data-page="mindmap">🗺️ 마인드맵</button>
+    <button class="tab" data-page="manage">⚙️ 관리</button>
   </div>
 </div>
 
@@ -3208,7 +3166,7 @@
     <!-- 선택 멤버 KPI -->
     <div class="team-kpi-card" id="detail-member-kpi-card" style="margin-bottom: 20px;">
       <div class="team-kpi-head">
-        <span class="team-kpi-flag"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="6"/><circle cx="12" cy="12" r="2"/></svg></span>
+        <span class="team-kpi-flag">🎯</span>
         <span class="team-kpi-title" id="detail-member-kpi-name">—</span>
         <span class="team-kpi-label">개인 KPI 목표</span>
       </div>
@@ -3221,7 +3179,7 @@
     <div class="detail-grid">
       <div class="panel">
         <div class="panel-head">
-          <h3><svg class="ic ic-sm" viewBox="0 0 24 24" aria-hidden="true"><path d="m2 9 3-3 3 3"/><path d="M13 18H7a2 2 0 0 1-2-2V6"/><path d="m22 15-3 3-3-3"/><path d="M11 6h6a2 2 0 0 1 2 2v10"/></svg> 루틴 업무 (이번 주)</h3>
+          <h3>🔄 루틴 업무 (이번 주)</h3>
           <div class="panel-head-sub" id="weekrange-text">5월 — 주차</div>
         </div>
         <div class="panel-body">
@@ -3237,7 +3195,7 @@
 
       <div class="panel">
         <div class="panel-head">
-          <h3><svg class="ic ic-sm" viewBox="0 0 24 24" aria-hidden="true"><rect width="8" height="4" x="8" y="2" rx="1"/><path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"/><path d="M12 11h4M12 16h4M8 11h.01M8 16h.01"/></svg> 일회성 업무</h3>
+          <h3>📋 일회성 업무</h3>
           <div class="panel-head-sub" id="detail-task-count">0건</div>
         </div>
         <div class="panel-body" id="detail-task-body"></div>
@@ -3256,7 +3214,7 @@
 
   <!-- ===== PAGE: 매뉴얼 ===== -->
   <div class="page" id="page-manuals">
-    <div class="section-title"><svg class="ic ic-sm" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 7v14"/><path d="M3 18a1 1 0 0 1-1-1V4a1 1 0 0 1 1-1h5a4 4 0 0 1 4 4 4 4 0 0 1 4-4h5a1 1 0 0 1 1 1v13a1 1 0 0 1-1 1h-6a3 3 0 0 0-3 3 3 3 0 0 0-3-3z"/></svg> 담당자별 업무 매뉴얼 <span class="count" id="manual-count">0</span></div>
+    <div class="section-title">📖 담당자별 업무 매뉴얼 <span class="count" id="manual-count">0</span></div>
     <p class="section-sub">담당자마다 다른 업무 매뉴얼을 한곳에 모아 봅니다. 위쪽 <b>담당자 필터</b>로 골라 볼 수 있고, 카드의 <b>열기</b>로 링크된 문서를, <b>내용 보기</b>로 작성된 매뉴얼 본문을 확인할 수 있습니다.</p>
     <div class="dash-toolbar">
       <div class="dash-filter" id="manual-filter"></div>
@@ -3267,7 +3225,7 @@
 
   <!-- ===== PAGE: 자동화 대시보드 ===== -->
   <div class="page" id="page-automation">
-    <div class="section-title"><svg class="ic ic-sm" viewBox="0 0 24 24" aria-hidden="true"><rect width="7" height="9" x="3" y="3" rx="1"/><rect width="7" height="5" x="14" y="3" rx="1"/><rect width="7" height="9" x="14" y="12" rx="1"/><rect width="7" height="5" x="3" y="16" rx="1"/></svg> 자동화 대시보드 <span class="count" id="dash-count">0</span></div>
+    <div class="section-title">🚀 자동화 대시보드 <span class="count" id="dash-count">0</span></div>
     <p class="section-sub">팀원들이 만든 자동화·대시보드 앱을 한곳에 모아 공유합니다. 카드를 클릭하면 앱이 새 탭으로 열립니다.</p>
     <div class="dash-toolbar">
       <div class="dash-filter" id="dash-filter"></div>
@@ -3278,21 +3236,21 @@
 
   <!-- ===== PAGE: KPI 체계 ===== -->
   <div class="page" id="page-kpi">
-    <div class="section-title"><svg class="ic ic-sm" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="6"/><circle cx="12" cy="12" r="2"/></svg> <span id="kpi-page-team">B2B</span> KPI 체계 <span class="count" id="kpi-updated">최종본</span></div>
+    <div class="section-title">🎯 <span id="kpi-page-team">B2B</span> KPI 체계 <span class="count" id="kpi-updated">최종본</span></div>
     <p class="section-sub">팀 목표 2개 아래에 담당자별 KPI를 정렬했습니다. <b>후행지표(성과 목표)</b>가 KPI 진척률의 기준이며, 그 아래 <b>선행지표(실행)</b>가 이를 만들어 냅니다. 각 지표의 <b>현재/목표값</b>을 수시로 입력하면 진척률이 자동 계산되어 KPI·팀 목표율에 연동됩니다.</p>
     <div class="kpi-toolbar">
       <div class="kpi-viewtoggle">
         <button id="kpi-view-goal" class="on" onclick="setKpiView('goal')">목표별 보기</button>
         <button id="kpi-view-owner" onclick="setKpiView('owner')">담당자별 보기</button>
       </div>
-      <button class="btn ghost btn-sm" onclick="exportKpiSummary()" style="margin-left:auto;"><svg class="ic ic-sm" viewBox="0 0 24 24" aria-hidden="true"><rect width="14" height="14" x="8" y="8" rx="2"/><path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"/></svg> 텍스트 복사</button>
+      <button class="btn ghost btn-sm" onclick="exportKpiSummary()" style="margin-left:auto;">📋 텍스트 복사</button>
     </div>
     <div id="kpi-root"></div>
   </div>
 
   <!-- ===== PAGE: 마인드맵 ===== -->
   <div class="page" id="page-mindmap">
-    <div class="section-title"><svg class="ic ic-sm" viewBox="0 0 24 24" aria-hidden="true"><rect x="16" y="16" width="6" height="6" rx="1"/><rect x="2" y="16" width="6" height="6" rx="1"/><rect x="9" y="2" width="6" height="6" rx="1"/><path d="M5 16v-3a1 1 0 0 1 1-1h12a1 1 0 0 1 1 1v3M12 12V8"/></svg> 업무 마인드맵 <span class="count" id="mindmap-count">0건의 업무</span></div>
+    <div class="section-title">🗺️ 업무 마인드맵 <span class="count" id="mindmap-count">0건의 업무</span></div>
     <p class="section-sub">팀별·담당자별 업무 구조를 한눈에 시각화합니다. PNG로 저장하거나 인쇄할 수 있어요.</p>
 
     <div class="mindmap-toolbar">
@@ -3303,14 +3261,14 @@
         </select>
         <select id="mindmap-type-filter" onchange="renderMindmap();">
           <option value="all">전체 업무</option>
-          <option value="project">프로젝트만</option>
-          <option value="routine">루틴성만</option>
+          <option value="project">🚀 프로젝트만</option>
+          <option value="routine">🔁 루틴성만</option>
           <option value="active">진행중·할일만</option>
         </select>
       </div>
       <div class="mindmap-actions">
-        <button class="btn ghost btn-sm" onclick="exportMindmapPNG()"><svg class="ic ic-sm" viewBox="0 0 24 24" aria-hidden="true"><rect width="18" height="18" x="3" y="3" rx="2"/><circle cx="9" cy="9" r="2"/><path d="m21 15-3.1-3.1a2 2 0 0 0-2.8 0L6 21"/></svg> PNG 저장</button>
-        <button class="btn ghost btn-sm" onclick="printMindmap()"><svg class="ic ic-sm" viewBox="0 0 24 24" aria-hidden="true"><path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"/><path d="M6 9V3a1 1 0 0 1 1-1h10a1 1 0 0 1 1 1v6"/><rect width="12" height="8" x="6" y="14" rx="1"/></svg> 인쇄</button>
+        <button class="btn ghost btn-sm" onclick="exportMindmapPNG()">🖼️ PNG 저장</button>
+        <button class="btn ghost btn-sm" onclick="printMindmap()">🖨️ 인쇄</button>
       </div>
     </div>
 
@@ -3318,11 +3276,11 @@
       <svg id="mindmap-svg" xmlns="http://www.w3.org/2000/svg"></svg>
     </div>
     <div class="mindmap-legend">
-      <span style="color:#5A7FC4; font-weight:800;">[프로젝트]</span>
-      <span style="color:#7A6BC4; font-weight:800;">[루틴]</span>
-      <span style="color:#2F8F7A; font-weight:800;">완료</span>
-      <span style="color:#C05B57; font-weight:800;">보류</span>
-      <span style="color:var(--muted); margin-left:auto; font-size:11px;">텍스트 색으로 종류와 상태를 구분합니다</span>
+      <span style="color:#B89968; font-weight:800;">[프로젝트]</span>
+      <span style="color:#5B4B8A; font-weight:800;">[루틴]</span>
+      <span style="color:#2E7D52; font-weight:800;">완료</span>
+      <span style="color:#B83A2E; font-weight:800;">보류</span>
+      <span style="color:var(--muted); margin-left:auto; font-size:11px;">💡 텍스트 색으로 종류와 상태를 구분합니다</span>
     </div>
   </div>
   <div class="page" id="page-manage">
@@ -3335,13 +3293,13 @@
         <input type="text" id="tm-name" placeholder="팀 이름 (예: 연구개발팀)">
         <input type="text" id="tm-icon" placeholder="🔬" maxlength="2" style="text-align:center; font-size:18px;">
         <select id="tm-color">
-          <option value="#3B5FA8">네이비</option>
-          <option value="#5A7FC4">블루</option>
-          <option value="#2F8F7A">민트</option>
-          <option value="#C2803A">앰버</option>
-          <option value="#7A6BC4">퍼플</option>
-          <option value="#C05B57">레드</option>
-          <option value="#41546F">차콜</option>
+          <option value="#1B5E6E">청록</option>
+          <option value="#B89968">골드</option>
+          <option value="#2E7D52">그린</option>
+          <option value="#B4651E">오렌지</option>
+          <option value="#5B4B8A">퍼플</option>
+          <option value="#B83A2E">레드</option>
+          <option value="#2D3934">차콜</option>
         </select>
         <button class="btn accent" onclick="addTeam()">+ 팀 추가</button>
       </div>
@@ -3369,14 +3327,14 @@
         <input type="text" id="m-name" placeholder="이름 (예: 김혜진)">
         <input type="text" id="m-role" placeholder="직책 (예: 연구원)">
         <select id="m-color">
-          <option value="#3B5FA8">네이비</option>
-          <option value="#5A7FC4">블루</option>
-          <option value="#2F8F7A">민트</option>
-          <option value="#C2803A">앰버</option>
-          <option value="#7A6BC4">퍼플</option>
-          <option value="#C05B57">레드</option>
-          <option value="#41546F">차콜</option>
-          <option value="#6E8099">그레이</option>
+          <option value="#1B5E6E">청록</option>
+          <option value="#B89968">골드</option>
+          <option value="#2E7D52">그린</option>
+          <option value="#B4651E">오렌지</option>
+          <option value="#5B4B8A">퍼플</option>
+          <option value="#B83A2E">레드</option>
+          <option value="#2D3934">차콜</option>
+          <option value="#6B7570">그레이</option>
         </select>
         <button class="btn accent" onclick="addMember()">+ 추가</button>
       </div>
@@ -3399,20 +3357,20 @@
     </div>
 
     <!-- 루틴 (모달 안내) -->
-    <div class="section-title"><svg class="ic ic-sm" viewBox="0 0 24 24" aria-hidden="true"><path d="m2 9 3-3 3 3"/><path d="M13 18H7a2 2 0 0 1-2-2V6"/><path d="m22 15-3 3-3-3"/><path d="M11 6h6a2 2 0 0 1 2 2v10"/></svg> 루틴 업무 <span class="count" id="manage-routine-count">0개</span></div>
+    <div class="section-title">🔄 루틴 업무 <span class="count" id="manage-routine-count">0개</span></div>
     <p class="section-sub">매일·매주·매월·분기·연 단위로 반복되는 업무. 빈도 주기 내에 한 번 체크하면 그 주기는 완료로 처리됩니다.</p>
     <div class="action-row">
       <button class="action-btn routine" onclick="openRoutineModal()">
-        <span class="action-icon"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14M12 5v14"/></svg></span><span>루틴 업무 추가</span>
+        <span class="action-icon">＋</span><span>루틴 업무 추가</span>
       </button>
-      <span class="action-hint"><svg class="ic ic-sm" viewBox="0 0 24 24" aria-hidden="true"><path d="M15 14c.2-1 .7-1.7 1.5-2.5 1-.9 1.5-2.2 1.5-3.5A6 6 0 0 0 6 8c0 1 .2 2.2 1.5 3.5.7.7 1.3 1.5 1.5 2.5"/><path d="M9 18h6M10 22h4"/></svg> 단축키 Ctrl+N으로 빠르게 추가</span>
+      <span class="action-hint">💡 단축키 Ctrl+N으로 빠르게 추가</span>
     </div>
     <div class="panel" style="margin-bottom: 24px;">
       <div class="filter-row">
         <span style="font-size:11px; color:var(--muted); font-weight:700; text-transform:uppercase; letter-spacing:0.1em; padding: 4px 0;">필터:</span>
         <button class="filter-chip on" data-r-filter="all" onclick="setRoutineFilter('all')">전체</button>
-        <button class="filter-chip" data-r-filter="member" onclick="setRoutineFilter('member')">본인 수행</button>
-        <button class="filter-chip" data-r-filter="alba" onclick="setRoutineFilter('alba')">알바 의뢰</button>
+        <button class="filter-chip" data-r-filter="member" onclick="setRoutineFilter('member')">👤 본인 수행</button>
+        <button class="filter-chip" data-r-filter="alba" onclick="setRoutineFilter('alba')">🧑‍💼 알바 의뢰</button>
       </div>
       <table class="table">
         <thead>
@@ -3431,14 +3389,14 @@
     </div>
 
     <!-- 일회성 업무 -->
-    <div class="section-title"><svg class="ic ic-sm" viewBox="0 0 24 24" aria-hidden="true"><path d="M16 6V4a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v2"/><path d="M22 13a18.15 18.15 0 0 1-20 0"/><rect width="20" height="14" x="2" y="6" rx="2"/></svg> 프로젝트 · <svg class="ic ic-sm" viewBox="0 0 24 24" aria-hidden="true"><path d="m2 9 3-3 3 3"/><path d="M13 18H7a2 2 0 0 1-2-2V6"/><path d="m22 15-3 3-3-3"/><path d="M11 6h6a2 2 0 0 1 2 2v10"/></svg> 루틴성 업무 <span class="count" id="manage-task-count">0건</span></div>
-    <p class="section-sub"><b>프로젝트</b>는 메인 + 보조 업무로 쪼개서 관리하는 큰 단위, <b>루틴성 업무</b>는 정기 처리 대상의 일회성 작업입니다.</p>
+    <div class="section-title">🚀 프로젝트 · 🔁 루틴성 업무 <span class="count" id="manage-task-count">0건</span></div>
+    <p class="section-sub"><b>🚀 프로젝트</b>는 메인 + 보조 업무로 쪼개서 관리하는 큰 단위, <b>🔁 루틴성 업무</b>는 정기 처리 대상의 일회성 작업입니다.</p>
     <div class="action-row">
       <button class="action-btn project" onclick="openProjectModal()">
-        <span class="action-icon"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14M12 5v14"/></svg></span><span>프로젝트 추가</span>
+        <span class="action-icon">＋</span><span>프로젝트 추가</span>
       </button>
       <button class="action-btn ghost" onclick="quickAddRoutineTask()">
-        <span class="action-icon"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14M12 5v14"/></svg></span><span>루틴성 업무 추가 (간단)</span>
+        <span class="action-icon">＋</span><span>루틴성 업무 추가 (간단)</span>
       </button>
     </div>
     <div class="form-card" style="display:none; margin-bottom: 14px;">
@@ -3446,14 +3404,14 @@
         <select id="t-member"></select>
         <input type="text" id="t-title" placeholder="업무 제목 (예: POUR공법 카탈로그 v3 업데이트)" onkeydown="if(event.key==='Enter')addTask();">
         <select id="t-type">
-          <option value="project">프로젝트</option>
-          <option value="routine">루틴성</option>
+          <option value="project">🚀 프로젝트</option>
+          <option value="routine">🔁 루틴성</option>
         </select>
         <input type="date" id="t-due">
         <select id="t-priority">
-          <option value="high">높음</option>
-          <option value="mid" selected>보통</option>
-          <option value="low">낮음</option>
+          <option value="high">🔴 높음</option>
+          <option value="mid" selected>🟡 보통</option>
+          <option value="low">🟢 낮음</option>
         </select>
         <select id="t-status">
           <option value="todo">할 일</option>
@@ -3468,8 +3426,8 @@
       <div class="filter-row">
         <span style="font-size:11px; color:var(--muted); font-weight:700; text-transform:uppercase; letter-spacing:0.1em; padding: 4px 0;">유형 필터:</span>
         <button class="filter-chip on" data-t-filter="all" onclick="setTaskFilter('all')">전체</button>
-        <button class="filter-chip" data-t-filter="project" onclick="setTaskFilter('project')">프로젝트</button>
-        <button class="filter-chip" data-t-filter="routine" onclick="setTaskFilter('routine')">루틴성</button>
+        <button class="filter-chip" data-t-filter="project" onclick="setTaskFilter('project')">🚀 프로젝트</button>
+        <button class="filter-chip" data-t-filter="routine" onclick="setTaskFilter('routine')">🔁 루틴성</button>
       </div>
       <div style="overflow-x: auto;">
         <table class="table">
@@ -3494,11 +3452,11 @@
     <!-- 데이터 -->
     <div class="section-title" style="margin-top:30px;">데이터 백업</div>
     <div style="display: flex; gap: 10px; flex-wrap: wrap;">
-      <button class="btn ghost" onclick="exportData()"><svg class="ic ic-sm" viewBox="0 0 24 24" aria-hidden="true"><path d="M21 8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16Z"/><path d="m3.3 7 8.7 5 8.7-5M12 22V12"/></svg> JSON 내보내기</button>
-      <button class="btn ghost" onclick="document.getElementById('import-file').click()"><svg class="ic ic-sm" viewBox="0 0 24 24" aria-hidden="true"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" x2="12" y1="15" y2="3"/></svg> JSON 불러오기</button>
+      <button class="btn ghost" onclick="exportData()">📦 JSON 내보내기</button>
+      <button class="btn ghost" onclick="document.getElementById('import-file').click()">📥 JSON 불러오기</button>
       <input type="file" id="import-file" accept=".json" style="display:none;" onchange="importData(event)">
-      <button class="btn ghost" onclick="loadSampleData()"><svg class="ic ic-sm" viewBox="0 0 24 24" aria-hidden="true"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87M16 3.13a4 4 0 0 1 0 7.75"/></svg> 기본 팀 구성 채우기</button>
-      <button class="btn danger" onclick="clearAll()"><svg class="ic ic-sm" viewBox="0 0 24 24" aria-hidden="true"><path d="M3 6h18M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/><line x1="10" x2="10" y1="11" y2="17"/><line x1="14" x2="14" y1="11" y2="17"/></svg> 전체 초기화</button>
+      <button class="btn ghost" onclick="loadSampleData()">👥 기본 팀 구성 채우기</button>
+      <button class="btn danger" onclick="clearAll()">🗑 전체 초기화</button>
     </div>
 
   </div>
@@ -3513,7 +3471,7 @@
 <div class="modal-backdrop" id="modal-manual" onclick="if(event.target===this)closeModal()">
   <div class="modal">
     <div class="modal-head">
-      <div class="modal-head-icon"><svg class="ic ic-lg" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 7v14"/><path d="M3 18a1 1 0 0 1-1-1V4a1 1 0 0 1 1-1h5a4 4 0 0 1 4 4 4 4 0 0 1 4-4h5a1 1 0 0 1 1 1v13a1 1 0 0 1-1 1h-6a3 3 0 0 0-3 3 3 3 0 0 0-3-3z"/></svg></div>
+      <div class="modal-head-icon">📖</div>
       <div>
         <div class="modal-title" id="manual-modal-title">매뉴얼 추가</div>
         <div class="modal-subtitle">담당자별 업무 매뉴얼을 등록·공유하세요</div>
@@ -3564,7 +3522,7 @@
 <div class="modal-backdrop" id="modal-manual-view" onclick="if(event.target===this)closeModal()">
   <div class="modal" style="max-width:720px;">
     <div class="modal-head">
-      <div class="modal-head-icon"><svg class="ic ic-lg" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 7v14"/><path d="M3 18a1 1 0 0 1-1-1V4a1 1 0 0 1 1-1h5a4 4 0 0 1 4 4 4 4 0 0 1 4-4h5a1 1 0 0 1 1 1v13a1 1 0 0 1-1 1h-6a3 3 0 0 0-3 3 3 3 0 0 0-3-3z"/></svg></div>
+      <div class="modal-head-icon">📖</div>
       <div>
         <div class="modal-title" id="manual-view-title">매뉴얼</div>
         <div class="modal-subtitle" id="manual-view-sub"></div>
@@ -3585,7 +3543,7 @@
 <div class="modal-backdrop" id="modal-dash" onclick="if(event.target===this)closeModal()">
   <div class="modal">
     <div class="modal-head">
-      <div class="modal-head-icon"><svg class="ic ic-lg" viewBox="0 0 24 24" aria-hidden="true"><rect width="7" height="9" x="3" y="3" rx="1"/><rect width="7" height="5" x="14" y="3" rx="1"/><rect width="7" height="9" x="14" y="12" rx="1"/><rect width="7" height="5" x="3" y="16" rx="1"/></svg></div>
+      <div class="modal-head-icon">🚀</div>
       <div>
         <div class="modal-title" id="dash-modal-title">대시보드 추가</div>
         <div class="modal-subtitle">자동화 앱·대시보드를 팀에 공유하세요</div>
@@ -3640,7 +3598,7 @@
 <div class="modal-backdrop" id="modal-add-menu" onclick="if(event.target===this)closeModal()">
   <div class="modal">
     <div class="modal-head">
-      <div class="modal-head-icon"><svg class="ic ic-lg" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14M12 5v14"/></svg></div>
+      <div class="modal-head-icon">＋</div>
       <div>
         <div class="modal-title">새 업무 추가</div>
         <div class="modal-subtitle">어떤 종류의 업무를 등록할까요?</div>
@@ -3650,12 +3608,12 @@
     <div class="modal-body">
       <div class="type-choice-grid">
         <div class="type-choice routine" onclick="openRoutineModal()">
-          <div class="type-choice-icon"><svg class="ic ic-lg" viewBox="0 0 24 24" aria-hidden="true"><path d="m2 9 3-3 3 3"/><path d="M13 18H7a2 2 0 0 1-2-2V6"/><path d="m22 15-3 3-3-3"/><path d="M11 6h6a2 2 0 0 1 2 2v10"/></svg></div>
+          <div class="type-choice-icon">🔄</div>
           <div class="type-choice-title">루틴 업무</div>
           <div class="type-choice-desc">매일·매주·매월·분기·연 단위로<br>반복되는 업무</div>
         </div>
         <div class="type-choice project" onclick="openProjectModal()">
-          <div class="type-choice-icon"><svg class="ic ic-lg" viewBox="0 0 24 24" aria-hidden="true"><path d="M16 6V4a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v2"/><path d="M22 13a18.15 18.15 0 0 1-20 0"/><rect width="20" height="14" x="2" y="6" rx="2"/></svg></div>
+          <div class="type-choice-icon">🚀</div>
           <div class="type-choice-title">프로젝트</div>
           <div class="type-choice-desc">메인 + 보조 업무로<br>쪼개서 관리하는 큰 단위</div>
         </div>
@@ -3668,7 +3626,7 @@
 <div class="modal-backdrop" id="modal-routine" onclick="if(event.target===this)closeModal()">
   <div class="modal">
     <div class="modal-head">
-      <div class="modal-head-icon" style="background:#EBE8FA; color:#7A6BC4;"><svg class="ic ic-lg" viewBox="0 0 24 24" aria-hidden="true"><path d="m2 9 3-3 3 3"/><path d="M13 18H7a2 2 0 0 1-2-2V6"/><path d="m22 15-3 3-3-3"/><path d="M11 6h6a2 2 0 0 1 2 2v10"/></svg></div>
+      <div class="modal-head-icon" style="background:#E3DCF1; color:#5B4B8A;">🔄</div>
       <div>
         <div class="modal-title" id="routine-modal-title">루틴 업무 등록</div>
         <div class="modal-subtitle">정기적으로 반복되는 업무 — 빈도에 따라 자동 체크 갱신됩니다</div>
@@ -3698,7 +3656,7 @@
         <label class="modal-field-label">실제 수행</label>
         <label class="alba-checkbox" id="routine-modal-alba-label" style="width:100%; justify-content:flex-start; padding: 10px 14px;">
           <input type="checkbox" id="routine-modal-alba" onchange="this.parentElement.classList.toggle('checked', this.checked);">
-          <span class="alba-icon"><svg class="ic ic-sm" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="8" r="5"/><path d="M20 21a8 8 0 0 0-16 0"/></svg></span>
+          <span class="alba-icon">🧑‍💼</span>
           <span><b>알바에게 의뢰</b> — 담당자가 알바에게 위임하는 루틴입니다</span>
         </label>
       </div>
@@ -3707,15 +3665,15 @@
         <label class="modal-field-label">빈도 *</label>
         <div class="freq-pick" id="routine-modal-freq">
           <label><input type="radio" name="r-modal-freq" value="daily" checked onchange="updateRoutineModalFreqOpts()">
-            <div>매일</div></label>
+            <div><span class="freq-icon">📌</span>매일</div></label>
           <label><input type="radio" name="r-modal-freq" value="weekly" onchange="updateRoutineModalFreqOpts()">
-            <div>매주</div></label>
+            <div><span class="freq-icon">📅</span>매주</div></label>
           <label><input type="radio" name="r-modal-freq" value="monthly" onchange="updateRoutineModalFreqOpts()">
-            <div>매월</div></label>
+            <div><span class="freq-icon">🗓</span>매월</div></label>
           <label><input type="radio" name="r-modal-freq" value="quarterly" onchange="updateRoutineModalFreqOpts()">
-            <div>분기</div></label>
+            <div><span class="freq-icon">📆</span>분기</div></label>
           <label><input type="radio" name="r-modal-freq" value="yearly" onchange="updateRoutineModalFreqOpts()">
-            <div>매년</div></label>
+            <div><span class="freq-icon">🎯</span>매년</div></label>
         </div>
       </div>
 
@@ -3767,12 +3725,12 @@
         </div>
       </div>
 
-      <div style="background:#FAFCFE; border:1px solid var(--line-2); border-radius:8px; padding:10px 12px; font-size:12px; color:var(--ink-2); margin-top:8px;">
-        <svg class="ic ic-sm" viewBox="0 0 24 24" aria-hidden="true"><path d="M15 14c.2-1 .7-1.7 1.5-2.5 1-.9 1.5-2.2 1.5-3.5A6 6 0 0 0 6 8c0 1 .2 2.2 1.5 3.5.7.7 1.3 1.5 1.5 2.5"/><path d="M9 18h6M10 22h4"/></svg> <b>자동 체크 갱신:</b> 지정한 빈도(주기) 안에서 한 번이라도 완료 체크하면 그 주기는 완료로 처리됩니다. 다음 주기가 시작되면 자동으로 미완료 상태가 됩니다.
+      <div style="background:#FCFBF7; border:1px solid var(--line-2); border-radius:8px; padding:10px 12px; font-size:12px; color:var(--ink-2); margin-top:8px;">
+        💡 <b>자동 체크 갱신:</b> 지정한 빈도(주기) 안에서 한 번이라도 완료 체크하면 그 주기는 완료로 처리됩니다. 다음 주기가 시작되면 자동으로 미완료 상태가 됩니다.
       </div>
     </div>
     <div class="modal-foot">
-      <button class="modal-btn danger" id="routine-modal-delete-btn" onclick="deleteRoutineFromModal()" style="display:none; margin-right:auto;"><svg class="ic ic-sm" viewBox="0 0 24 24" aria-hidden="true"><path d="M3 6h18M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/><line x1="10" x2="10" y1="11" y2="17"/><line x1="14" x2="14" y1="11" y2="17"/></svg> 삭제</button>
+      <button class="modal-btn danger" id="routine-modal-delete-btn" onclick="deleteRoutineFromModal()" style="display:none; margin-right:auto;">🗑 삭제</button>
       <button class="modal-btn" onclick="closeModal()">취소</button>
       <button class="modal-btn primary" id="routine-modal-submit-btn" onclick="submitRoutineModal()">등록</button>
     </div>
@@ -3783,7 +3741,7 @@
 <div class="modal-backdrop" id="modal-project" onclick="if(event.target===this)closeModal()">
   <div class="modal modal-lg">
     <div class="modal-head">
-      <div class="modal-head-icon" style="background:var(--accent-2-soft); color:#2E4C88;"><svg class="ic ic-lg" viewBox="0 0 24 24" aria-hidden="true"><path d="M16 6V4a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v2"/><path d="M22 13a18.15 18.15 0 0 1-20 0"/><rect width="20" height="14" x="2" y="6" rx="2"/></svg></div>
+      <div class="modal-head-icon" style="background:var(--accent-2-soft); color:#6E5530;">🚀</div>
       <div>
         <div class="modal-title" id="project-modal-title">프로젝트 등록</div>
         <div class="modal-subtitle">메인 프로젝트와 보조 업무를 한 번에 등록</div>
@@ -3794,7 +3752,7 @@
       <input type="hidden" id="project-edit-id" value="">
 
       <div class="modal-field">
-        <label class="modal-field-label">메인 프로젝트명 *</label>
+        <label class="modal-field-label">📌 메인 프로젝트명 *</label>
         <input type="text" id="project-modal-title-input" placeholder="예: POUR공법 PT제안서" autofocus>
       </div>
 
@@ -3804,22 +3762,22 @@
           <select id="project-modal-member"></select>
         </div>
         <div class="modal-field">
-          <label class="modal-field-label">시작일</label>
+          <label class="modal-field-label">📅 시작일</label>
           <input type="date" id="project-modal-startdate">
         </div>
         <div class="modal-field">
           <label class="modal-field-label">우선순위</label>
           <select id="project-modal-priority">
-            <option value="high">높음</option>
-            <option value="mid" selected>보통</option>
-            <option value="low">낮음</option>
+            <option value="high">🔴 높음</option>
+            <option value="mid" selected>🟡 보통</option>
+            <option value="low">🟢 낮음</option>
           </select>
         </div>
       </div>
 
       <!-- 메인 진척률 (보조업무가 없을 때만 직접 편집 가능) -->
       <div class="modal-field" id="project-modal-main-progress-field">
-        <label class="modal-field-label">메인 진척률</label>
+        <label class="modal-field-label">📊 메인 진척률</label>
         <div style="display:flex; align-items:center; gap:10px; padding: 10px 12px; background: var(--bg); border: 1px solid var(--line); border-radius: 8px;">
           <div style="flex:1; height:8px; background:var(--line-2); border-radius:99px; overflow:hidden;">
             <div id="project-modal-main-bar" style="height:100%; background:linear-gradient(90deg, var(--accent-2), var(--success)); width:0%; transition: width 0.3s;"></div>
@@ -3827,13 +3785,13 @@
           <div id="project-modal-main-spinner-wrap"></div>
         </div>
         <div id="project-modal-avg" style="font-size:11px; color:var(--muted); margin-top:6px; padding: 0 4px;">
-          <svg class="ic ic-sm" viewBox="0 0 24 24" aria-hidden="true"><path d="M15 14c.2-1 .7-1.7 1.5-2.5 1-.9 1.5-2.2 1.5-3.5A6 6 0 0 0 6 8c0 1 .2 2.2 1.5 3.5.7.7 1.3 1.5 1.5 2.5"/><path d="M9 18h6M10 22h4"/></svg> 보조업무가 없으면 메인 진척률을 직접 입력합니다.
+          💡 보조업무가 없으면 메인 진척률을 직접 입력합니다.
         </div>
       </div>
 
       <div class="modal-field">
         <label class="modal-field-label">
-          <svg class="ic ic-sm" viewBox="0 0 24 24" aria-hidden="true"><path d="M13.2 20.3 21 12.3a3.5 3.5 0 0 0-4.9-5l-9.9 9.9a5.5 5.5 0 0 0 7.8 7.8l7-7"/></svg> 보조 업무 <span id="project-modal-sub-count" style="font-family:var(--num); color:var(--accent); margin-left:6px;">0개</span>
+          📎 보조 업무 <span id="project-modal-sub-count" style="font-family:var(--num); color:var(--accent); margin-left:6px;">0개</span>
           <span style="font-size:10px; color:var(--muted); font-weight:600; margin-left:4px; text-transform:none; letter-spacing:0;">— 각 보조업무의 % 평균이 메인 진척률에 반영됩니다</span>
         </label>
         <div class="modal-subtasks-list" id="project-modal-sublist"></div>
@@ -3845,7 +3803,7 @@
       </div>
     </div>
     <div class="modal-foot">
-      <button class="modal-btn danger" id="project-modal-delete-btn" onclick="deleteProjectFromModal()" style="display:none; margin-right:auto;"><svg class="ic ic-sm" viewBox="0 0 24 24" aria-hidden="true"><path d="M3 6h18M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/><line x1="10" x2="10" y1="11" y2="17"/><line x1="14" x2="14" y1="11" y2="17"/></svg> 삭제</button>
+      <button class="modal-btn danger" id="project-modal-delete-btn" onclick="deleteProjectFromModal()" style="display:none; margin-right:auto;">🗑 삭제</button>
       <button class="modal-btn" onclick="closeModal()">취소</button>
       <button class="modal-btn primary" id="project-modal-submit-btn" onclick="submitProjectModal()">프로젝트 등록</button>
     </div>
@@ -3856,7 +3814,7 @@
 <div class="modal-backdrop" id="modal-firebase" onclick="if(event.target===this)closeModal()">
   <div class="modal modal-lg">
     <div class="modal-head">
-      <div class="modal-head-icon" style="background:#E6EDFA; color:#3B5FA8;"><svg class="ic ic-lg" viewBox="0 0 24 24" aria-hidden="true"><path d="M17.5 19H9a7 7 0 1 1 6.71-9h1.79a4.5 4.5 0 1 1 0 9"/></svg></div>
+      <div class="modal-head-icon" style="background:#E3F2FD; color:#1976D2;">☁️</div>
       <div>
         <div class="modal-title">클라우드 동기화 설정</div>
         <div class="modal-subtitle">Firebase Realtime Database로 여러 명이 함께 사용할 수 있어요</div>
@@ -3899,22 +3857,22 @@
 
       <div class="fb-actions">
         <button class="action-btn primary" onclick="connectFirebase()">
-          <span class="action-icon"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M10 13a5 5 0 0 0 7.5.5l3-3a5 5 0 0 0-7-7l-1.8 1.7"/><path d="M14 11a5 5 0 0 0-7.5-.5l-3 3a5 5 0 0 0 7 7l1.7-1.7"/></svg></span><span>연결 / 동기화 시작</span>
+          <span class="action-icon">🔗</span><span>연결 / 동기화 시작</span>
         </button>
         <button class="action-btn ghost" onclick="disconnectFirebase()" id="fb-disconnect-btn" style="display:none;">
-          <span class="action-icon"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="m18.8 12.2 1.7-1.7a5 5 0 0 0-7-7l-1.7 1.7"/><path d="m5.2 11.8-1.7 1.7a5 5 0 0 0 7 7l1.7-1.7"/><line x1="8" x2="8" y1="2" y2="5"/><line x1="2" x2="5" y1="8" y2="8"/><line x1="16" x2="16" y1="19" y2="22"/><line x1="19" x2="22" y1="16" y2="16"/></svg></span><span>연결 해제</span>
+          <span class="action-icon">🔌</span><span>연결 해제</span>
         </button>
         <button class="action-btn ghost" onclick="pullFromFirebase()" id="fb-pull-btn" style="display:none;">
-          <span class="action-icon"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 5v14M19 12l-7 7-7-7"/></svg></span><span>클라우드에서 가져오기</span>
+          <span class="action-icon">⬇️</span><span>클라우드에서 가져오기</span>
         </button>
         <button class="action-btn ghost" onclick="pushToFirebase()" id="fb-push-btn" style="display:none;">
-          <span class="action-icon"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 19V5M5 12l7-7 7 7"/></svg></span><span>현재 데이터 올리기</span>
+          <span class="action-icon">⬆️</span><span>현재 데이터 올리기</span>
         </button>
       </div>
 
       <!-- 사용 안내 -->
       <details class="fb-help">
-        <summary><svg class="ic ic-sm" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 7v14"/><path d="M3 18a1 1 0 0 1-1-1V4a1 1 0 0 1 1-1h5a4 4 0 0 1 4 4 4 4 0 0 1 4-4h5a1 1 0 0 1 1 1v13a1 1 0 0 1-1 1h-6a3 3 0 0 0-3 3 3 3 0 0 0-3-3z"/></svg> Firebase 설정 방법 (처음 사용 시 펼쳐서 확인)</summary>
+        <summary>📖 Firebase 설정 방법 (처음 사용 시 펼쳐서 확인)</summary>
         <div class="fb-help-content">
           <h4>1단계: Firebase 프로젝트 생성</h4>
           <ol>
@@ -3946,7 +3904,7 @@
             <li>한 명이 추가/수정하면 다른 사람 화면에 <b>실시간 반영</b></li>
           </ul>
 
-          <h4>보안 주의</h4>
+          <h4>⚠️ 보안 주의</h4>
           <ul>
             <li>테스트 모드는 30일 후 자동 차단됩니다. Firebase 보안 규칙을 적절히 설정하세요.</li>
             <li>이 URL/팀 ID를 아는 사람은 누구나 데이터를 보고 수정할 수 있으니 공개하지 마세요.</li>
@@ -4039,9 +3997,7 @@ const STORAGE_KEY = 'task_tracker_v19';
 const KPI_PLAN_REV = 4; // KPI 체계 개정 번호 — 올리면 저장된 체계가 새 기본값으로 교체된다
 const DEFAULT_TEAM_NAME = 'B2B';
 const TEAM_NAME_REV = 1; // 기본 팀 이름 일괄 변경 회차
-const COLOR_REV = 2;     // 팔레트 개정 회차 — 저장된 팀·멤버 색을 새 팔레트로 한 번 옮긴다
-// 팀·멤버 아바타 색 (남색 기반 파스텔)
-const PALETTE = ['#3B5FA8', '#5A7FC4', '#2F8F7A', '#C2803A', '#7A6BC4', '#C05B57', '#41546F', '#6E8099'];
+const COLOR_REV = 3;     // 팔레트 개정 회차 — 저장된 팀·멤버 색을 원본 팔레트로 되돌린다
 const FB_CONFIG_KEY = 'task_tracker_fb_config'; // Firebase URL + 팀 ID 저장용
 const STALE_DAYS = 7; // 정체 업무 기준 (일)
 
@@ -4089,14 +4045,14 @@ function updateCloudStatusUI() {
   statusEl.classList.remove('connected', 'syncing', 'error');
   if (FB_STATE.connected) {
     statusEl.classList.add('connected');
-    iconEl.innerHTML = ic('cloud', 'ok');
+    iconEl.textContent = '☁️';
     textEl.textContent = `${FB_STATE.teamId} · 동기화 중`;
   } else if (FB_STATE.dbUrl) {
     statusEl.classList.add('error');
-    iconEl.innerHTML = ic('triangle-alert', 'danger');
+    iconEl.textContent = '⚠️';
     textEl.textContent = '연결 끊김';
   } else {
-    iconEl.innerHTML = ic('cloud', 'muted');
+    iconEl.textContent = '☁️';
     textEl.textContent = '로컬만';
   }
 }
@@ -4110,7 +4066,7 @@ function openFirebaseSettings() {
   document.getElementById('fb-db-url').value = FB_STATE.dbUrl || '';
   document.getElementById('fb-team-id').value = FB_STATE.teamId || '';
   document.getElementById('fb-status-value').textContent =
-    FB_STATE.connected ? '클라우드 동기화 중' : (FB_STATE.dbUrl ? '연결 끊김' : '로컬 전용');
+    FB_STATE.connected ? '✅ 클라우드 동기화 중' : (FB_STATE.dbUrl ? '⚠️ 연결 끊김' : '🔒 로컬 전용');
   document.getElementById('fb-status-team').textContent = FB_STATE.teamId || '—';
   document.getElementById('fb-status-time').textContent = FB_STATE.lastSync
     ? new Date(FB_STATE.lastSync).toLocaleString('ko-KR') : '—';
@@ -4125,33 +4081,33 @@ async function connectFirebase() {
   const dbUrl = document.getElementById('fb-db-url').value.trim();
   const teamId = document.getElementById('fb-team-id').value.trim();
 
-  if (!dbUrl) return toast('Firebase Project URL을 입력하세요');
-  if (!teamId) return toast('팀 ID를 입력하세요');
+  if (!dbUrl) return toast('⚠️ Firebase Project URL을 입력하세요');
+  if (!teamId) return toast('⚠️ 팀 ID를 입력하세요');
   if (!/^https:\/\/.+firebaseio\.com\/?$/.test(dbUrl) && !/^https:\/\/.+firebasedatabase\.app\/?$/.test(dbUrl)) {
-    return toast('Firebase URL 형식이 잘못되었습니다 (예: https://xxx-default-rtdb.firebaseio.com)');
+    return toast('⚠️ Firebase URL 형식이 잘못되었습니다 (예: https://xxx-default-rtdb.firebaseio.com)');
   }
   if (!/^[a-zA-Z0-9_-]+$/.test(teamId)) {
-    return toast('팀 ID는 영문/숫자/하이픈/언더스코어만 사용 가능합니다');
+    return toast('⚠️ 팀 ID는 영문/숫자/하이픈/언더스코어만 사용 가능합니다');
   }
 
   if (!window.FB_READY || !window.FB) {
-    return toast('Firebase SDK 로드 중입니다. 잠시 후 다시 시도해주세요.');
+    return toast('⚠️ Firebase SDK 로드 중입니다. 잠시 후 다시 시도해주세요.');
   }
 
   try {
     window.FB.init(dbUrl, teamId);
 
     // 1) 먼저 원격에 데이터가 있는지 조회
-    toast('클라우드 데이터 확인 중...');
+    toast('☁️ 클라우드 데이터 확인 중...');
     const remote = await window.FB.pull();
 
     if (remote && remote.members && remote.members.length > 0) {
       // 원격에 데이터 있음 — 로컬과 비교
       const localHasData = DATA.members.length > 0 || DATA.routines.length > 0 || DATA.tasks.length > 0;
       if (localHasData) {
-        const msg = `클라우드에 데이터가 있습니다:\n` +
+        const msg = `☁️ 클라우드에 데이터가 있습니다:\n` +
           `  • 멤버 ${(remote.members||[]).length}명, 루틴 ${(remote.routines||[]).length}개, 업무 ${(remote.tasks||[]).length}건\n\n` +
-          `현재 이 PC의 로컬 데이터:\n` +
+          `🖥 현재 이 PC의 로컬 데이터:\n` +
           `  • 멤버 ${DATA.members.length}명, 루틴 ${DATA.routines.length}개, 업무 ${DATA.tasks.length}건\n\n` +
           `어떻게 할까요?\n` +
           `  • [확인]: 클라우드 데이터를 받아와 이 PC를 덮어씁니다 (다른 팀원이 이미 작업 중인 경우 추천)\n` +
@@ -4159,24 +4115,24 @@ async function connectFirebase() {
         if (confirm(msg)) {
           // 원격 → 로컬
           applyRemoteData(remote);
-          toast('클라우드 데이터를 받아왔습니다');
+          toast('✅ 클라우드 데이터를 받아왔습니다');
         } else {
           // 로컬 → 원격
           await window.FB.push(serializeData());
-          toast('로컬 데이터를 클라우드에 올렸습니다');
+          toast('✅ 로컬 데이터를 클라우드에 올렸습니다');
         }
       } else {
         // 로컬은 비어있음 → 그냥 원격 가져오기
         applyRemoteData(remote);
-        toast('클라우드 데이터를 받아왔습니다');
+        toast('✅ 클라우드 데이터를 받아왔습니다');
       }
     } else {
       // 원격 비어있음 → 로컬 데이터 푸시
       if (DATA.members.length === 0) {
-        toast('로컬도 클라우드도 비어있습니다. 멤버를 먼저 추가하세요.');
+        toast('⚠️ 로컬도 클라우드도 비어있습니다. 멤버를 먼저 추가하세요.');
       } else {
         await window.FB.push(serializeData());
-        toast('이 PC의 데이터를 클라우드에 올렸습니다');
+        toast('✅ 이 PC의 데이터를 클라우드에 올렸습니다');
       }
     }
 
@@ -4185,16 +4141,16 @@ async function connectFirebase() {
       if (err) {
         FB_STATE.connected = false;
         updateCloudStatusUI();
-        toast('클라우드 연결 오류 - 자세한 내용은 콘솔 확인');
+        toast('⚠️ 클라우드 연결 오류 - 자세한 내용은 콘솔 확인');
         return;
       }
       if (!data) return;
       // 다른 사람의 변경 사항 적용
-      console.log('원격 변경 감지 — 로컬 갱신');
+      console.log('☁️ 원격 변경 감지 — 로컬 갱신');
       applyRemoteData(data);
       FB_STATE.lastSync = Date.now();
       updateCloudStatusUI();
-      toast('다른 사용자의 변경사항이 반영됨');
+      toast('☁️ 다른 사용자의 변경사항이 반영됨');
     });
 
     FB_STATE.connected = true;
@@ -4208,48 +4164,48 @@ async function connectFirebase() {
     openFirebaseSettings();
   } catch (err) {
     console.error('Firebase 연결 실패:', err);
-    toast('클라우드 연결 실패: ' + (err.message || ''));
+    toast('❌ 클라우드 연결 실패: ' + (err.message || ''));
     FB_STATE.connected = false;
     updateCloudStatusUI();
   }
 }
 
 function disconnectFirebase() {
-  if (!confirm('클라우드 동기화를 끄시겠어요?\n이후 변경사항은 이 PC에만 저장됩니다.')) return;
+  if (!confirm('☁️ 클라우드 동기화를 끄시겠어요?\n이후 변경사항은 이 PC에만 저장됩니다.')) return;
   if (window.FB) window.FB.disconnect();
   FB_STATE.connected = false;
   clearFBConfig();
   updateCloudStatusUI();
   openFirebaseSettings();
-  toast('클라우드 동기화 해제됨');
+  toast('🔌 클라우드 동기화 해제됨');
 }
 
 async function pullFromFirebase() {
-  if (!FB_STATE.connected) return toast('먼저 연결해주세요');
-  if (!confirm('클라우드의 데이터로 이 PC를 덮어쓸까요?\n로컬 변경사항은 사라집니다.')) return;
+  if (!FB_STATE.connected) return toast('⚠️ 먼저 연결해주세요');
+  if (!confirm('☁️ 클라우드의 데이터로 이 PC를 덮어쓸까요?\n로컬 변경사항은 사라집니다.')) return;
   try {
     const remote = await window.FB.pull();
     if (remote) {
       applyRemoteData(remote);
-      toast('클라우드에서 가져왔습니다');
+      toast('✅ 클라우드에서 가져왔습니다');
     } else {
-      toast('클라우드에 데이터가 없습니다');
+      toast('⚠️ 클라우드에 데이터가 없습니다');
     }
   } catch (err) {
-    toast('가져오기 실패: ' + err.message);
+    toast('❌ 가져오기 실패: ' + err.message);
   }
 }
 
 async function pushToFirebase() {
-  if (!FB_STATE.connected) return toast('먼저 연결해주세요');
-  if (!confirm('이 PC의 데이터를 클라우드에 올릴까요?\n클라우드의 기존 데이터는 덮어쓰여집니다.')) return;
+  if (!FB_STATE.connected) return toast('⚠️ 먼저 연결해주세요');
+  if (!confirm('☁️ 이 PC의 데이터를 클라우드에 올릴까요?\n클라우드의 기존 데이터는 덮어쓰여집니다.')) return;
   try {
     await window.FB.push(serializeData());
     FB_STATE.lastSync = Date.now();
     updateCloudStatusUI();
-    toast('클라우드에 올렸습니다');
+    toast('✅ 클라우드에 올렸습니다');
   } catch (err) {
-    toast('업로드 실패: ' + err.message);
+    toast('❌ 업로드 실패: ' + err.message);
   }
 }
 
@@ -4299,7 +4255,7 @@ function scheduleCloudPush() {
       await window.FB.push(serializeData());
       FB_STATE.lastSync = Date.now();
       updateCloudStatusUI();
-      console.log('클라우드 자동 동기화 완료');
+      console.log('☁️ 클라우드 자동 동기화 완료');
     } catch (err) {
       console.error('자동 동기화 실패:', err);
       // 너무 자주 토스트가 뜨지 않게 콘솔만
@@ -4315,10 +4271,12 @@ const FREQ_LABELS = {
   quarterly: '분기',
   yearly: '매년'
 };
-// 빈도별 아이콘 (ICON_PATHS 키)
-const FREQ_ICON = {
-  daily: 'calendar-days', weekly: 'calendar', monthly: 'calendar',
-  quarterly: 'calendar', yearly: 'target'
+const FREQ_EMOJI = {
+  daily: '📌',
+  weekly: '📅',
+  monthly: '🗓',
+  quarterly: '📆',
+  yearly: '🎯'
 };
 
 let DATA = {
@@ -4341,60 +4299,6 @@ let UI = {
   modalOpen: null,
   draftSubtasks: []
 };
-
-
-// ===== Line Icon (Lucide 스타일) =====
-// 단색 · 얇은 선 · stroke 두께 동일. 색은 currentColor 를 따른다.
-const ICON_PATHS = {
-  'calendar-days': '<path d="M8 2v4M16 2v4M3 10h18"/><rect width="18" height="18" x="3" y="4" rx="2"/><path d="M8 14h.01M12 14h.01M16 14h.01M8 18h.01M12 18h.01M16 18h.01"/>',
-  'calendar':      '<path d="M8 2v4M16 2v4M3 10h18"/><rect width="18" height="18" x="3" y="4" rx="2"/>',
-  'users':         '<path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87M16 3.13a4 4 0 0 1 0 7.75"/>',
-  'user-round':    '<circle cx="12" cy="8" r="5"/><path d="M20 21a8 8 0 0 0-16 0"/>',
-  'layout-dashboard': '<rect width="7" height="9" x="3" y="3" rx="1"/><rect width="7" height="5" x="14" y="3" rx="1"/><rect width="7" height="9" x="14" y="12" rx="1"/><rect width="7" height="5" x="3" y="16" rx="1"/>',
-  'book-open':     '<path d="M12 7v14"/><path d="M3 18a1 1 0 0 1-1-1V4a1 1 0 0 1 1-1h5a4 4 0 0 1 4 4 4 4 0 0 1 4-4h5a1 1 0 0 1 1 1v13a1 1 0 0 1-1 1h-6a3 3 0 0 0-3 3 3 3 0 0 0-3-3z"/>',
-  'target':        '<circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="6"/><circle cx="12" cy="12" r="2"/>',
-  'network':       '<rect x="16" y="16" width="6" height="6" rx="1"/><rect x="2" y="16" width="6" height="6" rx="1"/><rect x="9" y="2" width="6" height="6" rx="1"/><path d="M5 16v-3a1 1 0 0 1 1-1h12a1 1 0 0 1 1 1v3M12 12V8"/>',
-  'settings':      '<path d="M12.22 2h-.44a2 2 0 0 0-2 2v.18a2 2 0 0 1-1 1.73l-.43.25a2 2 0 0 1-2 0l-.15-.08a2 2 0 0 0-2.73.73l-.22.38a2 2 0 0 0 .73 2.73l.15.1a2 2 0 0 1 1 1.72v.51a2 2 0 0 1-1 1.74l-.15.09a2 2 0 0 0-.73 2.73l.22.38a2 2 0 0 0 2.73.73l.15-.08a2 2 0 0 1 2 0l.43.25a2 2 0 0 1 1 1.73V20a2 2 0 0 0 2 2h.44a2 2 0 0 0 2-2v-.18a2 2 0 0 1 1-1.73l.43-.25a2 2 0 0 1 2 0l.15.08a2 2 0 0 0 2.73-.73l.22-.39a2 2 0 0 0-.73-2.73l-.15-.08a2 2 0 0 1-1-1.74v-.5a2 2 0 0 1 1-1.74l.15-.09a2 2 0 0 0 .73-2.73l-.22-.38a2 2 0 0 0-2.73-.73l-.15.08a2 2 0 0 1-2 0l-.43-.25a2 2 0 0 1-1-1.73V4a2 2 0 0 0-2-2z"/><circle cx="12" cy="12" r="3"/>',
-  'repeat-2':      '<path d="m2 9 3-3 3 3"/><path d="M13 18H7a2 2 0 0 1-2-2V6"/><path d="m22 15-3 3-3-3"/><path d="M11 6h6a2 2 0 0 1 2 2v10"/>',
-  'briefcase':     '<path d="M16 6V4a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v2"/><path d="M22 13a18.15 18.15 0 0 1-20 0"/><rect width="20" height="14" x="2" y="6" rx="2"/>',
-  'clock-3':       '<circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16.5 12"/>',
-  'circle-check':  '<circle cx="12" cy="12" r="10"/><path d="m9 12 2 2 4-4"/>',
-  'triangle-alert':'<path d="m21.73 18-8-14a2 2 0 0 0-3.48 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.73-3"/><path d="M12 9v4M12 17h.01"/>',
-  'download':      '<path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" x2="12" y1="15" y2="3"/>',
-  'upload':        '<path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" x2="12" y1="3" y2="15"/>',
-  'plus':          '<path d="M5 12h14M12 5v14"/>',
-  'cloud':         '<path d="M17.5 19H9a7 7 0 1 1 6.71-9h1.79a4.5 4.5 0 1 1 0 9"/>',
-  'trash-2':       '<path d="M3 6h18M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/><line x1="10" x2="10" y1="11" y2="17"/><line x1="14" x2="14" y1="11" y2="17"/>',
-  'pencil':        '<path d="M21.2 6.8a2.7 2.7 0 0 0-3.8-3.8L4 16.4 2.6 21.4l5-1.4z"/><path d="m15 5 4 4"/>',
-  'search':        '<circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/>',
-  'folder':        '<path d="M20 20a2 2 0 0 0 2-2V8a2 2 0 0 0-2-2h-7.9a2 2 0 0 1-1.69-.9L9.6 3.9A2 2 0 0 0 7.93 3H4a2 2 0 0 0-2 2v13a2 2 0 0 0 2 2Z"/>',
-  'building':      '<path d="M6 22V4a2 2 0 0 1 2-2h8a2 2 0 0 1 2 2v18Z"/><path d="M6 12H4a2 2 0 0 0-2 2v6a2 2 0 0 0 2 2h2M18 9h2a2 2 0 0 1 2 2v9a2 2 0 0 1-2 2h-2"/><path d="M10 6h4M10 10h4M10 14h4M10 18h4"/>',
-  'paperclip':     '<path d="M13.2 20.3 21 12.3a3.5 3.5 0 0 0-4.9-5l-9.9 9.9a5.5 5.5 0 0 0 7.8 7.8l7-7"/>',
-  'clipboard-list':'<rect width="8" height="4" x="8" y="2" rx="1"/><path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"/><path d="M12 11h4M12 16h4M8 11h.01M8 16h.01"/>',
-  'lightbulb':     '<path d="M15 14c.2-1 .7-1.7 1.5-2.5 1-.9 1.5-2.2 1.5-3.5A6 6 0 0 0 6 8c0 1 .2 2.2 1.5 3.5.7.7 1.3 1.5 1.5 2.5"/><path d="M9 18h6M10 22h4"/>',
-  'bar-chart':     '<path d="M3 3v18h18"/><path d="M18 17V9M13 17V5M8 17v-3"/>',
-  'link':          '<path d="M10 13a5 5 0 0 0 7.5.5l3-3a5 5 0 0 0-7-7l-1.8 1.7"/><path d="M14 11a5 5 0 0 0-7.5-.5l-3 3a5 5 0 0 0 7 7l1.7-1.7"/>',
-  'unlink':        '<path d="m18.8 12.2 1.7-1.7a5 5 0 0 0-7-7l-1.7 1.7"/><path d="m5.2 11.8-1.7 1.7a5 5 0 0 0 7 7l1.7-1.7"/><line x1="8" x2="8" y1="2" y2="5"/><line x1="2" x2="5" y1="8" y2="8"/><line x1="16" x2="16" y1="19" y2="22"/><line x1="19" x2="22" y1="16" y2="16"/>',
-  'lock':          '<rect width="18" height="11" x="3" y="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/>',
-  'monitor':       '<rect width="20" height="14" x="2" y="3" rx="2"/><line x1="8" x2="16" y1="21" y2="21"/><line x1="12" x2="12" y1="17" y2="21"/>',
-  'package':       '<path d="M21 8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16Z"/><path d="m3.3 7 8.7 5 8.7-5M12 22V12"/>',
-  'image':         '<rect width="18" height="18" x="3" y="3" rx="2"/><circle cx="9" cy="9" r="2"/><path d="m21 15-3.1-3.1a2 2 0 0 0-2.8 0L6 21"/>',
-  'printer':       '<path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"/><path d="M6 9V3a1 1 0 0 1 1-1h10a1 1 0 0 1 1 1v6"/><rect width="12" height="8" x="6" y="14" rx="1"/>',
-  'file-text':     '<path d="M15 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7Z"/><path d="M14 2v4a2 2 0 0 0 2 2h4M10 9H8M16 13H8M16 17H8"/>',
-  'x':             '<path d="M18 6 6 18M6 6l12 12"/>',
-  'arrow-down':    '<path d="M12 5v14M19 12l-7 7-7-7"/>',
-  'arrow-up':      '<path d="M12 19V5M5 12l7-7 7 7"/>',
-  'external-link': '<path d="M15 3h6v6M10 14 21 3"/><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/>',
-  'copy':          '<rect width="14" height="14" x="8" y="8" rx="2"/><path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"/>'
-};
-// ic('target')            → 기본(차콜)
-// ic('circle-check','ok') → 상태색
-function ic(name, tone, size) {
-  const d = ICON_PATHS[name];
-  if (!d) return '';
-  const cls = 'ic' + (size ? ' ic-' + size : '') + (tone ? ' ic-' + tone : '');
-  return `<svg class="${cls}" viewBox="0 0 24 24" aria-hidden="true">${d}</svg>`;
-}
 
 const $ = id => document.getElementById(id);
 const fmt = n => new Intl.NumberFormat('ko-KR').format(Math.round(n || 0));
@@ -4460,7 +4364,7 @@ function migrateData() {
 
   // 팀이 하나도 없을 때만 기본 팀을 만든다 — 이미 있는 팀의 이름·색·아이콘은 건드리지 않는다
   if (DATA.teams.length === 0) {
-    DATA.teams.push({ id: 'team_main', name: DEFAULT_TEAM_NAME, color: PALETTE[0], icon: '🏢' });
+    DATA.teams.push({ id: 'team_main', name: DEFAULT_TEAM_NAME, color: '#1B5E6E', icon: '🏢' });
   } else {
     const main = DATA.teams[0];
     if (DATA.teams.length > 1) {
@@ -4540,15 +4444,15 @@ function migrateData() {
     if (t.kpi === undefined) t.kpi = '';
   });
 
-  // 예전 팔레트로 저장된 팀·멤버 색을 새 팔레트로 한 번 옮긴다
+  // 그동안 거쳐 간 팔레트로 저장된 팀·멤버 색을 원본 팔레트로 되돌린다
   if (DATA.colorRev !== COLOR_REV) {
-    // 지금까지 쓰였던 모든 옛 아바타 색 → 현재 팔레트 (키는 반드시 옛 값이어야 한다)
+    const ORIGINAL = ['#1B5E6E','#B89968','#2E7D52','#B4651E','#5B4B8A','#B83A2E','#2D3934','#6B7570'];
     const RECOLOR = {};
-    [[0,['1B5E6E','244A73','2E4C88']], [1,['B89968','3A6EA5']],
-     [2,['2E7D52','17693F']],          [3,['B4651E','9A5B00']],
-     [4,['5B4B8A','6B4E9E','3E6DB5']], [5,['B83A2E','B3261E']],
-     [6,['2D3934','33415C','1B3A5C']], [7,['6B7570','64748B','647389']]
-    ].forEach(([i, olds]) => olds.forEach(h => { RECOLOR['#' + h] = PALETTE[i]; }));
+    [[0,['3B5FA8','244A73','2E4C88']],      [1,['5A7FC4','3A6EA5']],
+     [2,['2F8F7A','17693F']],               [3,['C2803A','9A5B00']],
+     [4,['7A6BC4','6B4E9E','3E6DB5']],      [5,['C05B57','B3261E']],
+     [6,['41546F','33415C','1B3A5C']],      [7,['6E8099','64748B','647389']]
+    ].forEach(([i, olds]) => olds.forEach(h => { RECOLOR['#' + h] = ORIGINAL[i]; }));
     const swap = o => { const n = RECOLOR[String(o.color || '').toUpperCase()]; if (n) o.color = n; };
     DATA.teams.forEach(swap);
     DATA.members.forEach(swap);
@@ -4834,7 +4738,7 @@ function renderStaleBanner() {
     banner.classList.add('none');
     banner.classList.remove('open');
     UI.staleOpen = false;
-    iconEl.innerHTML = ic('circle-check', 'ok', 'lg');
+    iconEl.textContent = '✓';
     titleEl.textContent = '정체된 업무 없음';
     subEl.textContent = '모든 진행중 프로젝트와 루틴성 업무가 최근 7일 내에 업데이트되었습니다.';
     toggleEl.style.display = 'none';
@@ -4843,7 +4747,7 @@ function renderStaleBanner() {
   }
 
   banner.classList.remove('none');
-  iconEl.innerHTML = ic('triangle-alert', 'warn', 'lg');
+  iconEl.textContent = '⚠️';
   titleEl.textContent = '진행이 더딘 업무';
   const severeCount = stale.filter(s => s._staleDays >= 14).length;
   subEl.textContent = `${STALE_DAYS}일 이상 업데이트가 없는 업무입니다${severeCount > 0 ? ` · 14일 이상 ${severeCount}건` : ''}.`;
@@ -4857,21 +4761,21 @@ function renderStaleBanner() {
       ${stale.map(tk => {
         const m = DATA.members.find(x => x.id === tk.memberId);
         const severe = tk._staleDays >= 14;
-        const typeLabel = tk.taskType === 'routine' ? `${ic('repeat-2','','sm')} 루틴성` : `${ic('briefcase','','sm')} 프로젝트`;
+        const typeLabel = tk.taskType === 'routine' ? '🔁 루틴성' : '🚀 프로젝트';
         const statusLabel = { todo:'할일', doing:'진행중', hold:'보류' }[tk.status] || tk.status;
         return `
           <div class="stale-item ${severe ? 'severe' : ''}" ${tk.taskType === 'project' ? `onclick="openProjectModal('${tk.id}')" style="cursor:pointer;"` : ''} title="${tk.taskType === 'project' ? '클릭하여 프로젝트 수정' : escapeHtml(tk.title)}">
             <div class="stale-item-title">${escapeHtml(tk.title)}</div>
             <div class="stale-item-days">${tk._staleDays}일</div>
             <div class="stale-item-meta">
-              <span style="display:inline-block; width:8px; height:8px; border-radius:99px; background:${m ? m.color : '#9DAAC0'};"></span>
+              <span style="display:inline-block; width:8px; height:8px; border-radius:99px; background:${m ? m.color : '#999'};"></span>
               <b style="color:var(--ink-2);">${m ? escapeHtml(m.name) : '—'}</b>
               <span>·</span>
               <span>${typeLabel}</span>
               <span>·</span>
               <span>${statusLabel}</span>
               ${tk.taskType === 'project' && tk.startDate
-                ? `<span>·</span><span>${ic('calendar','','sm')} ${daysBetween(tk.startDate, today())}일째</span>`
+                ? `<span>·</span><span>📅 ${daysBetween(tk.startDate, today())}일째</span>`
                 : tk.dueDate ? `<span>·</span><span>마감 ${tk.dueDate.slice(5)}</span>` : ''}
               <span style="margin-left:auto; font-family:var(--num); font-weight:700;">${tk.progress || 0}%</span>
             </div>
@@ -4881,7 +4785,7 @@ function renderStaleBanner() {
       }).join('')}
     </div>
     <div style="margin-top:12px; font-size:11px; color:var(--muted);">
-      ${ic('lightbulb','','sm')} 진척률을 조정하거나 상태를 변경하면 자동으로 정체 목록에서 제외됩니다.
+      💡 진척률을 조정하거나 상태를 변경하면 자동으로 정체 목록에서 제외됩니다.
     </div>
   `;
 }
@@ -4933,7 +4837,7 @@ function renderAlbaPanel() {
   const totalCompleted = albaRoutines.filter(r => routineCompletedInPeriod(r.id, t)).length;
   const totalPending = albaRoutines.length - totalCompleted;
 
-  subEl.innerHTML = `<b>의뢰자 ${Object.keys(byRequester).length}명</b> · 알바 의뢰 ${albaRoutines.length}건 (현재 주기 ${totalCompleted}건 완료, <b style="color:#C2803A;">${totalPending}건 대기</b>)`;
+  subEl.innerHTML = `<b>의뢰자 ${Object.keys(byRequester).length}명</b> · 알바 의뢰 ${albaRoutines.length}건 (현재 주기 ${totalCompleted}건 완료, <b style="color:#B4651E;">${totalPending}건 대기</b>)`;
   toggleEl.textContent = UI.albaOpen ? '접기 ▴' : '펼치기 ▾';
   if (UI.albaOpen) panel.classList.add('open');
   else panel.classList.remove('open');
@@ -4955,9 +4859,9 @@ function renderAlbaPanel() {
     return `
       <div class="alba-requester-group">
         <div class="alba-requester-head">
-          <div class="alba-requester-avatar" style="background:${m ? m.color : '#9DAAC0'};">${m ? escapeHtml(initials(m.name)) : '?'}</div>
+          <div class="alba-requester-avatar" style="background:${m ? m.color : '#999'};">${m ? escapeHtml(initials(m.name)) : '?'}</div>
           <div>
-            <div class="alba-requester-name">${m ? escapeHtml(m.name) : '—'}<span style="font-size:11px; color:#C2803A; font-weight:700; margin-left:6px;">→ ${ic('user-round','','sm')} 알바</span></div>
+            <div class="alba-requester-name">${m ? escapeHtml(m.name) : '—'}<span style="font-size:11px; color:#B4651E; font-weight:700; margin-left:6px;">→ 🧑‍💼 알바</span></div>
             <div class="alba-requester-team">${team ? escapeHtml(team.icon || '') + ' ' + escapeHtml(team.name) : ''} · ${m ? escapeHtml(m.role || '') : ''}</div>
           </div>
           <div class="alba-requester-stats">
@@ -5043,10 +4947,10 @@ function closeModal() {
 function openRoutineModal(routineId) {
   // 사전 검증 — 멤버가 한 명도 없으면 등록 불가
   if (!routineId && DATA.members.filter(m => !m.isAlba).length === 0) {
-    return toast('먼저 멤버를 추가해주세요 (팀별 보기 탭의 [+ 멤버 추가] 또는 관리 탭에서)');
+    return toast('⚠️ 먼저 멤버를 추가해주세요 (팀별 보기 탭의 [+ 멤버 추가] 또는 관리 탭에서)');
   }
   if (DATA.teams.length === 0) {
-    return toast('먼저 팀을 추가해주세요 (관리 탭에서)');
+    return toast('⚠️ 먼저 팀을 추가해주세요 (관리 탭에서)');
   }
 
   closeModal();
@@ -5123,13 +5027,13 @@ function deleteRoutineFromModal() {
   if (!id) return;
   const r = DATA.routines.find(x => x.id === id);
   if (!r) return closeModal();
-  if (!confirm(`루틴 "${r.title}" 을(를) 정말 삭제하시겠어요?\n\n관련 체크 기록도 함께 사라집니다.`)) return;
+  if (!confirm(`🗑 루틴 "${r.title}" 을(를) 정말 삭제하시겠어요?\n\n관련 체크 기록도 함께 사라집니다.`)) return;
   DATA.routines = DATA.routines.filter(x => x.id !== id);
   DATA.routineChecks = DATA.routineChecks.filter(c => c.routineId !== id);
   save();
   closeModal();
   renderAll();
-  toast('루틴 삭제됨');
+  toast('🗑 루틴 삭제됨');
 }
 
 function updateRoutineModalMembers() {
@@ -5138,7 +5042,7 @@ function updateRoutineModalMembers() {
   // 알바를 마지막으로
   const sorted = members.filter(m => !m.isAlba);
   $('routine-modal-member').innerHTML = sorted.map(m => {
-    return `<option value="${m.id}">${escapeHtml(m.name)}${m.role ? ' — ' + escapeHtml(m.role) : ''}</option>`;
+    return `<option value="${m.id}">👤 ${escapeHtml(m.name)}${m.role ? ' — ' + escapeHtml(m.role) : ''}</option>`;
   }).join('');
 }
 
@@ -5163,7 +5067,7 @@ function submitRoutineModal() {
   // 필수 요소 누락 검증
   if (!titleEl || !memberEl) {
     console.error('루틴 모달 필수 요소 누락', { titleEl, memberEl });
-    return toast('모달이 제대로 로드되지 않았습니다. 새로고침 해주세요.');
+    return toast('⚠️ 모달이 제대로 로드되지 않았습니다. 새로고침 해주세요.');
   }
 
   const title = titleEl.value.trim();
@@ -5175,7 +5079,7 @@ function submitRoutineModal() {
   if (!memberId) {
     // 셀렉트가 비어있는 경우 — 멤버가 한 명도 없으면 추가 안내
     if (DATA.members.filter(m => !m.isAlba).length === 0) {
-      return toast('먼저 멤버를 추가해주세요. 팀별 보기 탭의 [+ 멤버 추가] 또는 관리 탭에서 가능합니다.');
+      return toast('⚠️ 먼저 멤버를 추가해주세요. 팀별 보기 탭의 [+ 멤버 추가] 또는 관리 탭에서 가능합니다.');
     }
     return toast('담당자를 선택하세요');
   }
@@ -5184,7 +5088,7 @@ function submitRoutineModal() {
   const memberExists = DATA.members.find(m => m.id === memberId);
   if (!memberExists) {
     console.error('선택된 담당자가 DATA에 없음:', memberId);
-    return toast('선택된 담당자를 찾을 수 없습니다. 새로고침 해주세요.');
+    return toast('⚠️ 선택된 담당자를 찾을 수 없습니다. 새로고침 해주세요.');
   }
 
   const freq = freqEl?.value || 'daily';
@@ -5229,7 +5133,7 @@ function submitRoutineModal() {
     DATA.routines.push(newRoutine);
     console.log('  → 신규 등록:', newRoutine);
     console.log('  총 루틴 수:', DATA.routines.length);
-    toast(`✓ 루틴 등록됨${isAlba ? ' (알바 의뢰)' : ''}`);
+    toast(`✓ 루틴 등록됨${isAlba ? ' (🧑‍💼 알바 의뢰)' : ''}`);
   }
   save();
   closeModal();
@@ -5295,12 +5199,12 @@ function deleteProjectFromModal() {
   if (!tk) return closeModal();
   const subCount = (tk.subtasks || []).length;
   const subInfo = subCount > 0 ? `\n보조업무 ${subCount}개도 함께 삭제됩니다.` : '';
-  if (!confirm(`프로젝트 "${tk.title}" 을(를) 정말 삭제하시겠어요?${subInfo}`)) return;
+  if (!confirm(`🗑 프로젝트 "${tk.title}" 을(를) 정말 삭제하시겠어요?${subInfo}`)) return;
   DATA.tasks = DATA.tasks.filter(x => x.id !== id);
   save();
   closeModal();
   renderAll();
-  toast('프로젝트 삭제됨');
+  toast('🗑 프로젝트 삭제됨');
 }
 
 function addDraftSubtask() {
@@ -5390,7 +5294,7 @@ function renderDraftSubtasks() {
     if (UI.draftSubtasks.length > 0) {
       // 자동 계산값 - 읽기 전용 표시
       spinnerWrap.innerHTML = `
-        <div style="display:flex; align-items:center; gap:6px; padding: 6px 12px; background: #F1F5FC; border: 1px solid var(--line); border-radius: 6px;">
+        <div style="display:flex; align-items:center; gap:6px; padding: 6px 12px; background: #F4F1E9; border: 1px solid var(--line); border-radius: 6px;">
           <span style="font-family:var(--num); font-size:14px; font-weight:800; color:var(--accent);">${avg}%</span>
         </div>
       `;
@@ -5403,8 +5307,8 @@ function renderDraftSubtasks() {
 
   if (avgEl) {
     avgEl.innerHTML = UI.draftSubtasks.length > 0
-      ? `${ic('repeat-2','','sm')} <b>보조업무 ${UI.draftSubtasks.length}개의 평균(${avg}%)이 메인 진척률에 자동 반영</b>됩니다. 메인 % 직접 입력은 비활성화됩니다.`
-      : `${ic('lightbulb','','sm')} 보조업무가 없을 때는 메인 진척률을 직접 입력하세요. (▲▼ 10%씩 조정)`;
+      ? `🔄 <b>보조업무 ${UI.draftSubtasks.length}개의 평균(${avg}%)이 메인 진척률에 자동 반영</b>됩니다. 메인 % 직접 입력은 비활성화됩니다.`
+      : `💡 보조업무가 없을 때는 메인 진척률을 직접 입력하세요. (▲▼ 10%씩 조정)`;
   }
 
   if (UI.draftSubtasks.length === 0) {
@@ -5535,11 +5439,11 @@ function quickAddRoutineTask() {
   const nonAlba = DATA.members.filter(m => !m.isAlba);
   if (nonAlba.length === 0) return toast('먼저 멤버를 추가하세요');
   const memberOptions = nonAlba.map((m,i) => `${i+1}. ${m.name}`).join('\n');
-  const memberIdx = prompt(`루틴성 업무 담당자를 선택하세요:\n${memberOptions}\n\n번호 입력 (1~${nonAlba.length}):`);
+  const memberIdx = prompt(`🔁 루틴성 업무 담당자를 선택하세요:\n${memberOptions}\n\n번호 입력 (1~${nonAlba.length}):`);
   if (!memberIdx) return;
   const idx = parseInt(memberIdx) - 1;
   if (isNaN(idx) || idx < 0 || idx >= nonAlba.length) return toast('잘못된 번호입니다');
-  const title = prompt('루틴성 업무 제목:');
+  const title = prompt('🔁 루틴성 업무 제목:');
   if (!title || !title.trim()) return;
   const d = new Date(); d.setDate(d.getDate() + 7);
   DATA.tasks.push({
@@ -5549,7 +5453,7 @@ function quickAddRoutineTask() {
     createdAt: today(), lastUpdatedAt: today()
   });
   save(); renderAll();
-  toast('루틴성 업무 추가됨 ✓');
+  toast('🔁 루틴성 업무 추가됨 ✓');
 }
 
 // ===== 프로젝트 카드 (첨부 이미지 스타일) =====
@@ -5618,16 +5522,16 @@ function renderProjectCard(task, memberMap) {
     isStale ? 'stale' : '',
     taskType === 'routine' ? 'routine-task' : ''
   ].filter(Boolean).join(' ');
-  const iconEmoji = taskType === 'routine' ? ic('repeat-2') : ic('briefcase');
+  const iconEmoji = taskType === 'routine' ? '🔁' : '🚀';
 
   // 시작일 + 경과일수
   const startDate = task.startDate || task.createdAt || t;
   const elapsedDays = daysBetween(startDate, t);
   const elapsedLabel = status === 'done'
-    ? `${ic('circle-check','','sm')} ${startDate} 시작 · 완료까지 ${daysBetween(startDate, task.completedAt || t)}일`
+    ? `🏁 ${startDate} 시작 · 완료까지 ${daysBetween(startDate, task.completedAt || t)}일`
     : elapsedDays === 0
-      ? `${ic('calendar','','sm')} ${startDate} 시작 · 오늘 시작`
-      : `${ic('calendar','','sm')} ${startDate} 시작 · <b style="color:#2E4C88; font-weight:800;">${elapsedDays}일 경과</b>`;
+      ? `📅 ${startDate} 시작 · 오늘 시작`
+      : `📅 ${startDate} 시작 · <b style="color:#6E5530; font-weight:800;">${elapsedDays}일 경과</b>`;
 
   return `
     <div class="${cardClass}">
@@ -5637,7 +5541,7 @@ function renderProjectCard(task, memberMap) {
           <div class="project-title">${escapeHtml(task.title)}</div>
         </div>
         <div class="project-owner-badge" title="담당자: ${m ? escapeHtml(m.name) : '미지정'}">
-          <span class="owner-dot" style="background:${m ? m.color : '#9DAAC0'};"></span>
+          <span class="owner-dot" style="background:${m ? m.color : '#999'};"></span>
           ${m ? escapeHtml(m.name) : '미지정'}${m && m.isAlba ? '' : '님'}
         </div>
       </div>
@@ -5653,19 +5557,19 @@ function renderProjectCard(task, memberMap) {
         <div class="project-progress-bar"><div style="width:${task.progress || 0}%"></div></div>
         ${subs.length > 0 ? `
           <div class="project-progress-pct" title="보조업무 ${subs.length}개의 평균">${task.progress || 0}%</div>
-          <span style="font-size:9px; color:#2E4C88; font-weight:700; background:#DFE9F9; padding:2px 6px; border-radius:99px; white-space:nowrap;">${ic('bar-chart','','sm')} 평균</span>
+          <span style="font-size:9px; color:#6E5530; font-weight:700; background:#F4E8C8; padding:2px 6px; border-radius:99px; white-space:nowrap;">📊 평균</span>
         ` : pctSpinnerHTML(task.progress || 0, `updateProgress('${task.id}', __V__)`, 'lg')}
         <div class="project-progress-actions">
           <button class="project-icon-btn" onclick="cycleTaskStatus('${task.id}')" title="상태 변경">${statusIcon}</button>
-          <button class="project-icon-btn" onclick="openProjectModal('${task.id}')" title="프로젝트 수정 (보조업무 포함)">${ic('pencil','','sm')}</button>
-          <button class="project-icon-btn danger" onclick="deleteTask('${task.id}')" title="프로젝트 삭제">${ic('trash-2','','sm')}</button>
+          <button class="project-icon-btn" onclick="openProjectModal('${task.id}')" title="프로젝트 수정 (보조업무 포함)">✏️</button>
+          <button class="project-icon-btn danger" onclick="deleteTask('${task.id}')" title="프로젝트 삭제">🗑</button>
         </div>
       </div>
 
       ${subs.length > 0 ? `
         <div class="project-subtasks-section">
           <div class="project-subtasks-header">
-            <span class="project-subtasks-label">${ic('paperclip','','sm')} 보조 업무</span>
+            <span class="project-subtasks-label">📎 보조 업무</span>
             <span class="project-subtasks-stats">
               <b style="font-family:var(--num); color:var(--success);">${subs.filter(s=>s.status==='done').length}</b>
               <span style="color:var(--muted);">/</span>
@@ -5699,7 +5603,7 @@ function renderProjectCard(task, memberMap) {
         </div>
       ` : `
         <button class="project-add-subtask" onclick="showSubtaskForm('${task.id}')">
-          ${ic('plus','','sm')} 보조 업무 추가
+          ➕ 보조 업무 추가
         </button>
       `}
     </div>
@@ -5713,7 +5617,7 @@ function toggleRoutineAlba(routineId) {
   r.assignee = r.assignee === 'alba' ? 'member' : 'alba';
   save();
   renderAll();
-  toast(r.assignee === 'alba' ? '알바 대체로 변경' : '본인 수행으로 변경');
+  toast(r.assignee === 'alba' ? '🧑‍💼 알바 대체로 변경' : '👤 본인 수행으로 변경');
 }
 
 // ===== 하위업무 HTML 렌더 =====
@@ -5722,7 +5626,7 @@ function renderSubtasksHTML(task) {
   return `
     <div class="subtask-container">
       <div class="subtask-head">
-        <span>${ic('paperclip','','sm')} 하위업무</span>
+        <span>📎 하위업무</span>
         <span style="font-family:var(--num); font-weight:800; color:var(--ink-2);">${subs.filter(s=>s.status==='done').length}/${subs.length}</span>
       </div>
       ${subs.length === 0 ? '<div class="empty-small" style="padding:6px;">아직 하위업무가 없어요. 아래에서 추가하세요.</div>' :
@@ -5762,7 +5666,7 @@ function renderTeamPage() {
   // 팀 칩
   if (!UI.teamFilter) UI.teamFilter = 'all';
   const allChip = `<div class="member-chip ${UI.teamFilter === 'all' ? 'on' : ''}" onclick="setTeamFilter('all')">
-    ${ic('layout-dashboard','','sm')} 전체
+    🌐 전체
     <span class="chip-count">${DATA.members.length}</span>
   </div>`;
   $('team-pick').innerHTML = allChip + DATA.teams.map(team => {
@@ -5821,17 +5725,17 @@ function renderTeamBlock(team) {
         <div class="team-icon-box-sm" style="background:${team.color};">${escapeHtml(team.icon || '📁')}</div>
         <div class="team-block-title">${escapeHtml(team.name)}</div>
         <div class="team-block-counts">
-          <span>${ic('users','','sm')} ${members.filter(m => !m.isAlba).length}</span>
+          <span>👥 ${members.filter(m => !m.isAlba).length}</span>
           <span>·</span>
-          <span>${ic('briefcase','','sm')} ${projectTasks.length}</span>
+          <span>🚀 ${projectTasks.length}</span>
           <span>·</span>
-          <span>${ic('repeat-2','','sm')} ${teamRoutines.length}</span>
+          <span>🔄 ${teamRoutines.length}</span>
         </div>
       </div>
 
       <!-- 팀 멤버 목록 + 추가 버튼 -->
       <div class="team-members-bar">
-        <span class="team-members-label">${ic('users','','sm')} 팀 멤버</span>
+        <span class="team-members-label">👥 팀 멤버</span>
         <div class="team-members-chips">
           ${members.filter(m => !m.isAlba).map(m => `
             <div class="team-member-chip" onclick="setDetailMember('${m.id}'); document.querySelector('[data-page=detail]').click();" title="클릭하여 ${escapeHtml(m.name)}님 상세 페이지로">
@@ -5850,10 +5754,10 @@ function renderTeamBlock(team) {
       <!-- 프로젝트 (카드형, 우선 표시) -->
       <div style="padding: 16px 20px 8px;">
         <div class="team-section-head">
-          <span>${ic('briefcase','','sm')} 프로젝트</span>
+          <span>🚀 프로젝트</span>
           <span class="count-pill">${projectTasks.length}</span>
           <button class="action-btn project xs" style="margin-left:auto;" onclick="quickAddTeamTask('${team.id}', 'project')">
-            <span class="action-icon"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14M12 5v14"/></svg></span><span>프로젝트 추가</span>
+            <span class="action-icon">＋</span><span>프로젝트 추가</span>
           </button>
         </div>
         ${projectTasks.length === 0 ?
@@ -5865,7 +5769,7 @@ function renderTeamBlock(team) {
       <!-- 루틴 업무 (간단 행) -->
       <div style="padding: 8px 20px 4px;">
         <div class="team-section-head">
-          <span>${ic('repeat-2','','sm')} 루틴 업무</span>
+          <span>🔄 루틴 업무</span>
           <span class="count-pill">${teamRoutines.length}</span>
           <button class="action-btn routine xs" style="margin-left:auto;" onclick="quickAddTeamRoutine('${team.id}')">
             <span class="action-icon">＋</span><span>루틴 추가</span>
@@ -5878,11 +5782,11 @@ function renderTeamBlock(team) {
             const isAlba = r.assignee === 'alba';
             return `
               <div class="team-routine-row" style="grid-template-columns: 22px 1fr auto auto ${isAlba ? 'auto' : ''} 22px;">
-                <div class="team-row-avatar" style="background:${m ? m.color : '#9DAAC0'};" title="${m ? m.name : ''}">${m ? escapeHtml(initials(m.name)) : '?'}</div>
+                <div class="team-row-avatar" style="background:${m ? m.color : '#999'};" title="${m ? m.name : ''}">${m ? escapeHtml(initials(m.name)) : '?'}</div>
                 <div class="team-row-title" onclick="openRoutineModal('${r.id}')" title="클릭으로 수정: ${escapeHtml(r.title)}">${escapeHtml(r.title)}</div>
                 <span class="routine-tag ${r.frequency}">${freqLabel}</span>
                 <span class="alba-inline-toggle ${isAlba ? 'alba' : 'member'}" onclick="toggleRoutineAlba('${r.id}')" title="클릭으로 본인↔알바 의뢰 전환">
-                  ${isAlba ? `${ic('user-round','','sm')} 알바` : `${ic('user-round','','sm')} 본인`}
+                  ${isAlba ? '🧑‍💼 알바' : '👤 본인'}
                 </span>
                 <button class="x-btn" onclick="deleteRoutine('${r.id}')">×</button>
               </div>
@@ -5895,7 +5799,7 @@ function renderTeamBlock(team) {
       ${routineTasks.length > 0 ? `
       <div style="padding: 6px 20px 18px;">
         <div class="team-section-head">
-          <span>${ic('repeat-2','','sm')} 루틴성 업무</span>
+          <span>🔁 루틴성 업무</span>
           <span class="count-pill">${routineTasks.length}</span>
           <button class="action-btn ghost xs" style="margin-left:auto;" onclick="quickAddTeamTask('${team.id}', 'routine')">
             <span class="action-icon">＋</span><span>루틴성 추가</span>
@@ -5907,7 +5811,7 @@ function renderTeamBlock(team) {
             const isUrgent = tk.dueDate && new Date(tk.dueDate) < new Date(t) && tk.status !== 'done';
             return `
               <div class="team-task-row">
-                <div class="team-row-avatar" style="background:${m ? m.color : '#9DAAC0'};" title="${m ? m.name : ''}">${m ? escapeHtml(initials(m.name)) : '?'}</div>
+                <div class="team-row-avatar" style="background:${m ? m.color : '#999'};" title="${m ? m.name : ''}">${m ? escapeHtml(initials(m.name)) : '?'}</div>
                 <div class="team-row-title" ondblclick="editTaskTitle('${tk.id}')" title="더블클릭으로 수정">${escapeHtml(tk.title)}</div>
                 <span class="tag-mini ${isUrgent?'alba':'routine-type'}" style="${isUrgent?'background:var(--danger-soft); color:var(--danger);':''}">${tk.dueDate ? tk.dueDate.slice(5) : '—'}</span>
                 <div class="team-row-progress"><div style="width:${tk.progress||0}%"></div></div>
@@ -5944,11 +5848,11 @@ function quickAddTeamTask(teamId, taskType) {
     const members = DATA.members.filter(m => m.teamId === teamId && !m.isAlba);
     if (members.length === 0) return toast('이 팀에 먼저 멤버를 추가하세요');
     const memberOptions = members.map((m,i) => `${i+1}. ${m.name}`).join('\n');
-    const memberIdx = prompt(`루틴성 업무 담당자를 선택하세요:\n${memberOptions}\n\n번호 입력 (1~${members.length}):`);
+    const memberIdx = prompt(`🔁 루틴성 업무 담당자를 선택하세요:\n${memberOptions}\n\n번호 입력 (1~${members.length}):`);
     if (!memberIdx) return;
     const idx = parseInt(memberIdx) - 1;
     if (isNaN(idx) || idx < 0 || idx >= members.length) return toast('잘못된 번호입니다');
-    const title = prompt('루틴성 업무 제목:');
+    const title = prompt('🔁 루틴성 업무 제목:');
     if (!title || !title.trim()) return;
     const d = new Date(); d.setDate(d.getDate() + 7);
     DATA.tasks.push({
@@ -5958,7 +5862,7 @@ function quickAddTeamTask(teamId, taskType) {
       createdAt: today(), lastUpdatedAt: today()
     });
     save(); renderAll();
-    toast('루틴성 업무 추가됨 ✓');
+    toast('🔁 루틴성 업무 추가됨 ✓');
   } else {
     // 프로젝트는 모달 사용
     openProjectModal();
@@ -5983,7 +5887,7 @@ function renderMindmap() {
     const albas = DATA.members.filter(m => m.isAlba);
     filterEl.innerHTML = '<option value="all">전체 팀원</option>' +
       nonAlba.map(m => `<option value="${m.id}">${escapeHtml(m.name)}</option>`).join('') +
-      (albas.length > 0 ? '<optgroup label="알바">' +
+      (albas.length > 0 ? '<optgroup label="🧑‍💼 알바">' +
         albas.map(m => {
           const team = DATA.teams.find(t => t.id === m.teamId);
           return `<option value="${m.id}">${escapeHtml(m.name)} (${team ? team.name : ''})</option>`;
@@ -6022,7 +5926,7 @@ function buildMindmapTree(memberFilter, typeFilter) {
   const root = {
     name: '업무 전체',
     type: 'root',
-    color: '#1B2740',
+    color: '#18211D',
     children: []
   };
 
@@ -6052,9 +5956,9 @@ function buildMindmapTree(memberFilter, typeFilter) {
 
       memberTasks.forEach(tk => {
         taskCount++;
-        const taskColor = tk.status === 'done' ? '#2F8F7A'
-                        : tk.status === 'hold' ? '#C05B57'
-                        : (tk.taskType === 'routine' ? '#7A6BC4' : '#5A7FC4');
+        const taskColor = tk.status === 'done' ? '#2E7D52'
+                        : tk.status === 'hold' ? '#B83A2E'
+                        : (tk.taskType === 'routine' ? '#5B4B8A' : '#B89968');
         const taskNode = {
           name: tk.title,
           type: 'task',
@@ -6066,9 +5970,9 @@ function buildMindmapTree(memberFilter, typeFilter) {
         };
         (tk.subtasks || []).forEach(st => {
           subCount++;
-          const subColor = st.status === 'done' ? '#2F8F7A'
-                         : st.status === 'doing' ? '#3B5FA8'
-                         : '#9DAAC0';
+          const subColor = st.status === 'done' ? '#2E7D52'
+                         : st.status === 'doing' ? '#1B5E6E'
+                         : '#9CA39E';
           taskNode.children.push({
             name: st.title,
             type: 'subtask',
@@ -6105,7 +6009,7 @@ function countLeaves(node) {
 function renderMindmapSVG(root) {
   if (!root.children || root.children.length === 0) {
     return `<svg id="mindmap-svg" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 400">
-      <text x="400" y="200" text-anchor="middle" font-family="Pretendard, sans-serif" font-size="16" fill="#6E7D95">표시할 업무가 없습니다.</text>
+      <text x="400" y="200" text-anchor="middle" font-family="Pretendard, sans-serif" font-size="16" fill="#6B7570">표시할 업무가 없습니다.</text>
     </svg>`;
   }
 
@@ -6167,10 +6071,10 @@ function renderMindmapSVG(root) {
     const kpiFontSize = 10;
     if ((n.type === 'team' || n.type === 'member') && n.kpi) {
       kpiLabel = n.kpi;
-      kpiWidth = estimateWidth(kpiLabel, kpiFontSize);
+      kpiWidth = estimateWidth('🎯 ' + kpiLabel, kpiFontSize);
       while (kpiWidth > colWidth && kpiLabel.length > 4) {
         kpiLabel = kpiLabel.slice(0, kpiLabel.length - 2) + '…';
-        kpiWidth = estimateWidth(kpiLabel, kpiFontSize);
+        kpiWidth = estimateWidth('🎯 ' + kpiLabel, kpiFontSize);
       }
     }
     n._kpiLabel = kpiLabel;
@@ -6249,45 +6153,45 @@ function renderMindmapSVG(root) {
     sortedChildren.forEach(child => {
       pathParts.push(`M ${trunkX} ${child._y} L ${child._x} ${child._y}`);
     });
-    edgesSvg += `<path d="${pathParts.join(' ')}" stroke="#9DAAC0" stroke-width="1" fill="none"/>`;
+    edgesSvg += `<path d="${pathParts.join(' ')}" stroke="#B5BBB7" stroke-width="1" fill="none"/>`;
   });
 
   // 4단계: 노드 박스 + 텍스트
   const nodesSvg = nodes.map(n => {
     // 색상 결정
-    let textColor = '#1B2740';
-    let borderColor = '#CFDAEA';
+    let textColor = '#1A1A1A';
+    let borderColor = '#D8D5CE';
     let bgColor = '#FFFFFF';
     if (n.type === 'task' || n.type === 'subtask') {
       if (n.status === 'done') {
-        textColor = '#2F8F7A';
-        borderColor = '#A6DCCE';
-        bgColor = '#F0FAF6';
+        textColor = '#2E7D52';
+        borderColor = '#A8D4BC';
+        bgColor = '#F4FBF7';
       } else if (n.status === 'hold') {
-        textColor = '#C05B57';
-        borderColor = '#E9B9B6';
-        bgColor = '#FDF6F5';
+        textColor = '#B83A2E';
+        borderColor = '#E8B5AE';
+        bgColor = '#FDF5F4';
       } else if (n.taskType === 'routine') {
-        textColor = '#7A6BC4';
-        borderColor = '#D4CDF1';
+        textColor = '#5B4B8A';
+        borderColor = '#C9BFDE';
         bgColor = '#FBFAFE';
       } else {
-        textColor = '#2E4C88';
-        borderColor = '#BACDEC';
-        bgColor = '#FAFCFE';
+        textColor = '#6E5530';
+        borderColor = '#D9C9A3';
+        bgColor = '#FDFBF5';
       }
     } else if (n.type === 'root') {
       textColor = '#FFFFFF';
-      borderColor = '#1B2740';
-      bgColor = '#1B2740';
+      borderColor = '#18211D';
+      bgColor = '#18211D';
     } else if (n.type === 'team') {
       textColor = '#FFFFFF';
-      borderColor = n.color || '#3B5FA8';
-      bgColor = n.color || '#3B5FA8';
+      borderColor = n.color || '#1B5E6E';
+      bgColor = n.color || '#1B5E6E';
     } else if (n.type === 'member') {
-      textColor = '#1B2740';
-      borderColor = n.color || '#3B5FA8';
-      bgColor = '#FAFCFE';
+      textColor = '#18211D';
+      borderColor = n.color || '#1B5E6E';
+      bgColor = '#FCFBF7';
     }
 
     const boxX = n._x;
@@ -6298,8 +6202,8 @@ function renderMindmapSVG(root) {
 
     let inner = `<text x="${boxX + padX}" y="${textY1}" class="mm-node-text" font-size="${n._fontSize}" font-weight="${n._fontWeight}" fill="${textColor}">${escapeXml(n._label)}</text>`;
     if (n._kpiLabel) {
-      const kpiColor = n.type === 'team' || n.type === 'root' ? '#C9D8F0' : '#3B5FA8';
-      inner += `<text x="${boxX + padX}" y="${textY2}" class="mm-node-text" font-size="${n._kpiFontSize}" font-weight="500" fill="${kpiColor}">${escapeXml(n._kpiLabel)}</text>`;
+      const kpiColor = n.type === 'team' || n.type === 'root' ? '#FFE3B0' : '#8A6E3A';
+      inner += `<text x="${boxX + padX}" y="${textY2}" class="mm-node-text" font-size="${n._kpiFontSize}" font-weight="500" fill="${kpiColor}">🎯 ${escapeXml(n._kpiLabel)}</text>`;
     }
 
     return `
@@ -6318,8 +6222,8 @@ function renderMindmapSVG(root) {
         .mm-node-text { font-family: 'Pretendard', -apple-system, sans-serif; }
       </style>
     </defs>
-    <text x="20" y="28" font-family="Pretendard, sans-serif" font-size="13" font-weight="800" fill="#1B2740">업무 마인드맵</text>
-    <text x="20" y="44" font-family="Pretendard, sans-serif" font-size="10" fill="#6E7D95">${new Date().toLocaleDateString('ko-KR')} 기준 · 업무 ${root._taskCount}건 · 하위업무 ${root._subCount}개 · 색: <tspan fill="#5A7FC4" font-weight="700">[프로젝트]</tspan> <tspan fill="#7A6BC4" font-weight="700">[루틴]</tspan> <tspan fill="#2F8F7A" font-weight="700">완료</tspan> <tspan fill="#C05B57" font-weight="700">보류</tspan></text>
+    <text x="20" y="28" font-family="Pretendard, sans-serif" font-size="13" font-weight="800" fill="#18211D">🗺️ 업무 마인드맵</text>
+    <text x="20" y="44" font-family="Pretendard, sans-serif" font-size="10" fill="#6B7570">${new Date().toLocaleDateString('ko-KR')} 기준 · 업무 ${root._taskCount}건 · 하위업무 ${root._subCount}개 · 색: <tspan fill="#B89968" font-weight="700">[프로젝트]</tspan> <tspan fill="#5B4B8A" font-weight="700">[루틴]</tspan> <tspan fill="#2E7D52" font-weight="700">완료</tspan> <tspan fill="#B83A2E" font-weight="700">보류</tspan></text>
     ${edgesSvg}
     ${nodesSvg}
   </svg>`;
@@ -6413,7 +6317,7 @@ function startMemberKPIEdit(memberId) {
   const m = DATA.members.find(x => x.id === memberId);
   if (!m) return;
   el.innerHTML = `
-    <span class="member-kpi-flag">${ic('target','','sm')}</span>
+    <span class="member-kpi-flag">🎯</span>
     <input type="text" class="member-kpi-input"
       id="member-kpi-input-${memberId}"
       value="${escapeHtml(m.kpi || '')}"
@@ -6509,7 +6413,7 @@ function renderTodayPage() {
   const grid = $('today-grid');
   if (!DATA.members.length) {
     grid.innerHTML = `<div class="empty" style="grid-column:1/-1;">
-      <div class="empty-emoji">${ic('users','muted','lg')}</div>
+      <div class="empty-emoji">👥</div>
       <div>등록된 멤버가 없습니다.</div>
       <div style="margin-top:6px; font-size:12px;">[관리] 탭에서 팀 멤버부터 추가해주세요.</div>
     </div>`;
@@ -6526,7 +6430,7 @@ function renderTodayPage() {
 
   if (visibleMembers.length === 0) {
     grid.innerHTML = `<div class="empty" style="grid-column:1/-1;">
-      <div class="empty-emoji">${ic('users','muted','lg')}</div>
+      <div class="empty-emoji">👥</div>
       <div>표시할 멤버가 없습니다.</div>
     </div>`;
     return;
@@ -6562,17 +6466,17 @@ function renderTodayPage() {
       <div class="today-card">
         <div class="today-card-head">
           <div class="member-info">
-            <div class="avatar" style="background:${m.color || '#3B5FA8'};">${m.isAlba ? ic('user-round') : escapeHtml(initials(m.name))}</div>
+            <div class="avatar" style="background:${m.color || '#1B5E6E'};">${m.isAlba ? '🧑‍💼' : escapeHtml(initials(m.name))}</div>
             <div>
-              <div class="member-name">${escapeHtml(m.name)}${m.isAlba ? ` <span style="font-size:10px; color:#C2803A; background:#FAE6D2; padding:1px 6px; border-radius:99px; font-weight:800; margin-left:4px;">알바</span>` : ''}</div>
+              <div class="member-name">${escapeHtml(m.name)}${m.isAlba ? ` <span style="font-size:10px; color:#B4651E; background:#FFE3D1; padding:1px 6px; border-radius:99px; font-weight:800; margin-left:4px;">알바</span>` : ''}</div>
               <div class="member-role">${m.isAlba ? escapeHtml((DATA.teams.find(t=>t.id===m.teamId)||{}).name || '') + ' • ' : ''}${escapeHtml(m.role || '')}</div>
             </div>
           </div>
           <div class="today-progress">
             <div class="ring">
               <svg width="38" height="38">
-                <circle cx="19" cy="19" r="16" fill="none" stroke="#E4EAF4" stroke-width="3"/>
-                <circle cx="19" cy="19" r="16" fill="none" stroke="${m.color || '#3B5FA8'}" stroke-width="3"
+                <circle cx="19" cy="19" r="16" fill="none" stroke="#E8E5DD" stroke-width="3"/>
+                <circle cx="19" cy="19" r="16" fill="none" stroke="${m.color || '#1B5E6E'}" stroke-width="3"
                   stroke-dasharray="${rCircum}" stroke-dashoffset="${rOffset}" stroke-linecap="round"/>
               </svg>
               <div class="ring-text">${pct}%</div>
@@ -6583,15 +6487,15 @@ function renderTodayPage() {
         <!-- 개인 KPI 한 줄 -->
         ${!m.isAlba ? `
           <div class="member-kpi-line" data-kpi-row="${m.id}" onclick="startMemberKPIEdit('${m.id}')" title="클릭하여 KPI 수정">
-            <span class="member-kpi-flag">${ic('target','','sm')}</span>
+            <span class="member-kpi-flag">🎯</span>
             <span class="member-kpi-text ${m.kpi ? '' : 'empty'}">${m.kpi ? escapeHtml(m.kpi) : '연간 KPI 목표를 입력하세요'}</span>
-            <button class="member-kpi-edit-btn" onclick="event.stopPropagation(); startMemberKPIEdit('${m.id}')">${ic('pencil','','sm')}</button>
+            <button class="member-kpi-edit-btn" onclick="event.stopPropagation(); startMemberKPIEdit('${m.id}')">✏️</button>
           </div>
         ` : ''}
 
         <div class="today-section">
           <div class="today-section-label">
-            <span>${ic('repeat-2','','sm')} 오늘 루틴</span>
+            <span>🔄 오늘 루틴</span>
             <span class="today-section-count">${doneToday}/${totalToday}</span>
           </div>
           ${totalToday === 0 ? `<div class="empty-small">오늘 예정된 루틴이 없어요.</div>` :
@@ -6607,7 +6511,7 @@ function renderTodayPage() {
                   <span class="routine-check" onclick="toggleRoutineCheck('${r.id}','${t}')"></span>
                   <span class="routine-title" onclick="toggleRoutineCheck('${r.id}','${t}')">${escapeHtml(r.title)}</span>
                   ${freqTag}
-                  <button class="routine-edit-btn" onclick="event.stopPropagation(); openRoutineModal('${r.id}')" title="루틴 수정">${ic('pencil','','sm')}</button>
+                  <button class="routine-edit-btn" onclick="event.stopPropagation(); openRoutineModal('${r.id}')" title="루틴 수정">✏️</button>
                   <button class="routine-del-btn" onclick="event.stopPropagation(); deleteRoutineQuick('${r.id}')" title="루틴 삭제">×</button>
                 </div>
               `;
@@ -6617,7 +6521,7 @@ function renderTodayPage() {
 
         <div class="today-section">
           <div class="today-section-label">
-            <span>${ic('briefcase','','sm')} 진행중 프로젝트</span>
+            <span>🚀 진행중 프로젝트</span>
             <span class="today-section-count">${tasks.length}건</span>
           </div>
           ${topTasks.length === 0 ? `<div class="empty-small">진행 중인 프로젝트가 없어요.</div>` :
@@ -6631,21 +6535,21 @@ function renderTodayPage() {
               let rightInfo = '';
               if (taskType === 'project' && tk.startDate) {
                 const days = daysBetween(tk.startDate, t);
-                rightInfo = `<div class="task-mini-due" style="color:#2E4C88; font-weight:800;">+${days}d</div>`;
+                rightInfo = `<div class="task-mini-due" style="color:#6E5530; font-weight:800;">+${days}d</div>`;
               } else if (tk.dueDate) {
                 rightInfo = `<div class="task-mini-due ${isUrgent ? 'urgent' : ''}">${tk.dueDate.slice(5)}</div>`;
               }
-              const subInfo = subs.length > 0 ? `<span style="font-size:10px; color:var(--muted); margin-left:4px;">${ic('paperclip','','sm')}${subs.filter(s=>s.status==='done').length}/${subs.length}</span>` : '';
+              const subInfo = subs.length > 0 ? `<span style="font-size:10px; color:var(--muted); margin-left:4px;">📎${subs.filter(s=>s.status==='done').length}/${subs.length}</span>` : '';
 
               // 보조업무 인라인 펼침 영역
               const expandHtml = `
                 <div class="task-mini-expand ${isExpanded ? 'open' : ''}" id="task-expand-${tk.id}">
                   <div class="task-mini-expand-head">
-                    <span>${ic('paperclip','','sm')} 보조 업무 ${subs.length}개</span>
+                    <span>📎 보조 업무 ${subs.length}개</span>
                     ${subs.length > 0 ? `<span style="font-family:var(--num); color:var(--success);">${subs.filter(s=>s.status==='done').length} 완료</span>` : ''}
                     <div class="task-mini-expand-actions">
-                      <button onclick="event.stopPropagation(); openProjectModal('${tk.id}')">${ic('pencil','','sm')} 상세 수정</button>
-                      <button class="danger" onclick="event.stopPropagation(); deleteTask('${tk.id}')"><svg class="ic ic-sm" viewBox="0 0 24 24" aria-hidden="true"><path d="M3 6h18M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/><line x1="10" x2="10" y1="11" y2="17"/><line x1="14" x2="14" y1="11" y2="17"/></svg> 삭제</button>
+                      <button onclick="event.stopPropagation(); openProjectModal('${tk.id}')">✏️ 상세 수정</button>
+                      <button class="danger" onclick="event.stopPropagation(); deleteTask('${tk.id}')">🗑 삭제</button>
                     </div>
                   </div>
                   <div class="task-mini-sub-list">
@@ -6675,7 +6579,7 @@ function renderTodayPage() {
                     <div class="task-mini-progress">
                       <div class="task-mini-progress-fill" style="width:${tk.progress || 0}%"></div>
                     </div>
-                    <div class="task-mini-title">${taskType==='routine'?ic('repeat-2','','sm')+' ':ic('briefcase','','sm')+' '}${escapeHtml(tk.title)}${subInfo}</div>
+                    <div class="task-mini-title">${taskType==='routine'?'🔁 ':'🚀 '}${escapeHtml(tk.title)}${subInfo}</div>
                     ${rightInfo}
                     <button class="task-mini-toggle" title="${isExpanded ? '접기' : '펼치기'}">▼</button>
                   </div>
@@ -6694,7 +6598,7 @@ function renderTodayPage() {
             </button>
           ` : `
             <button class="action-btn project sm" onclick="openProjectModalForMember('${m.id}')">
-              <span class="action-icon"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14M12 5v14"/></svg></span><span>프로젝트 추가</span>
+              <span class="action-icon">＋</span><span>프로젝트 추가</span>
             </button>
             <button class="action-btn routine sm" onclick="openRoutineModalForMember('${m.id}')">
               <span class="action-icon">＋</span><span>루틴 추가</span>
@@ -6777,8 +6681,8 @@ function renderDetailPage() {
     const team = DATA.teams.find(t => t.id === m.teamId);
     return `
       <div class="member-chip ${UI.detailMember === m.id ? 'on' : ''}" onclick="setDetailMember('${m.id}')" title="${team ? escapeHtml(team.name) : ''}">
-        <span class="chip-dot" style="background:${m.color || '#3B5FA8'};"></span>
-        ${m.isAlba ? ic('user-round','','sm') : (team ? escapeHtml(team.icon || '') : '')} ${escapeHtml(m.name)}${m.isAlba ? ` <span style="font-size:9px; color:#C2803A; font-weight:800;">(${team ? team.name : ''})</span>` : ''}
+        <span class="chip-dot" style="background:${m.color || '#1B5E6E'};"></span>
+        ${m.isAlba ? '🧑‍💼' : (team ? escapeHtml(team.icon || '📁') : '')} ${escapeHtml(m.name)}${m.isAlba ? ` <span style="font-size:9px; color:#B4651E; font-weight:800;">(${team ? team.name : ''})</span>` : ''}
         <span class="chip-count">${activeCount}</span>
       </div>
     `;
@@ -6881,11 +6785,11 @@ function renderDetailTasks() {
   html += `
     <div style="margin-bottom: 18px;">
       <div class="task-group-title" style="margin-bottom:10px;">
-        ${ic('briefcase','','sm')} 프로젝트
+        🚀 프로젝트
         <span style="font-family:var(--num); color:var(--muted); margin-left:auto;">${projects.length}건</span>
       </div>
       ${projects.length === 0 ?
-        `<div class="project-empty"><div class="project-empty-emoji">${ic('briefcase','muted','lg')}</div><div>진행중인 프로젝트가 없어요.</div></div>` :
+        '<div class="project-empty"><div class="project-empty-emoji">🚀</div><div>진행중인 프로젝트가 없어요.</div></div>' :
         `<div class="project-grid">${projects.map(tk => renderProjectCard(tk, memberMap)).join('')}</div>`
       }
     </div>
@@ -6896,7 +6800,7 @@ function renderDetailTasks() {
     html += `
       <div style="margin-bottom: 18px;">
         <div class="task-group-title" style="margin-bottom:10px;">
-          ${ic('repeat-2','','sm')} 루틴성 업무
+          🔁 루틴성 업무
           <span style="font-family:var(--num); color:var(--muted); margin-left:auto;">${routineTasks.length}건</span>
         </div>
         ${routineTasks.map(tk => {
@@ -6908,8 +6812,8 @@ function renderDetailTasks() {
               <div>
                 <div class="task-title-main" ondblclick="editTaskTitle('${tk.id}')" title="더블클릭하여 제목 수정" style="cursor:text;">${escapeHtml(tk.title)}</div>
                 <div class="task-title-sub" style="display:flex; gap:6px; align-items:center; flex-wrap:wrap;">
-                  <span class="tag-mini routine-type">${ic('repeat-2','','sm')} 루틴성</span>
-                  <span>${tk.priority === 'high' ? '높음' : tk.priority === 'low' ? '낮음' : '보통'}</span>
+                  <span class="tag-mini routine-type">🔁 루틴성</span>
+                  <span>${tk.priority === 'high' ? '🔴 높음' : tk.priority === 'low' ? '🟢 낮음' : '🟡 보통'}</span>
                 </div>
               </div>
               <div class="task-due-cell ${isUrgent ? 'urgent' : ''}">${tk.dueDate ? tk.dueDate.slice(5) : '—'}</div>
@@ -6930,7 +6834,7 @@ function renderDetailTasks() {
     html += `
       <div>
         <div class="task-group-title" style="margin-bottom:10px;">
-          ${ic('circle-check','ok','sm')} 완료된 업무
+          ✅ 완료된 업무
           <span style="font-family:var(--num); color:var(--muted); margin-left:auto;">${doneTasks.length}건</span>
         </div>
         ${doneTasks.slice(0, 10).map(tk => {
@@ -6941,7 +6845,7 @@ function renderDetailTasks() {
               <div>
                 <div class="task-title-main" style="text-decoration:line-through; color:var(--muted);">${escapeHtml(tk.title)}</div>
                 <div class="task-title-sub" style="display:flex; gap:6px;">
-                  <span class="tag-mini ${taskType==='routine'?'routine-type':'project'}">${taskType==='routine'?ic('repeat-2','','sm'):ic('briefcase','','sm')}</span>
+                  <span class="tag-mini ${taskType==='routine'?'routine-type':'project'}">${taskType==='routine'?'🔁':'🚀'}</span>
                   <span>완료: ${tk.completedAt || '—'}</span>
                 </div>
               </div>
@@ -7047,7 +6951,7 @@ function renderManagePage() {
 
   // 팀 표
   if (!DATA.teams.length) {
-    $('manage-team-tbody').innerHTML = `<tr><td colspan="5"><div class="empty"><div class="empty-emoji">${ic('folder','muted','lg')}</div><div>등록된 팀 없음</div></div></td></tr>`;
+    $('manage-team-tbody').innerHTML = `<tr><td colspan="5"><div class="empty"><div class="empty-emoji">📁</div><div>등록된 팀 없음</div></div></td></tr>`;
   } else {
     $('manage-team-tbody').innerHTML = DATA.teams.map(team => {
       const memberCount = teamMembers(team.id).length;
@@ -7090,7 +6994,7 @@ function renderManagePage() {
 
   // 멤버 표
   if (!DATA.members.length) {
-    $('manage-member-tbody').innerHTML = `<tr><td colspan="7"><div class="empty"><div class="empty-emoji">${ic('users','muted','lg')}</div><div>등록된 멤버 없음</div></div></td></tr>`;
+    $('manage-member-tbody').innerHTML = `<tr><td colspan="7"><div class="empty"><div class="empty-emoji">👥</div><div>등록된 멤버 없음</div></div></td></tr>`;
   } else {
     // 일반 멤버 먼저, 알바를 마지막에
     const sortedMembers = [
@@ -7101,7 +7005,7 @@ function renderManagePage() {
       const activeCount = DATA.tasks.filter(t => t.memberId === m.id && t.status !== 'done').length;
       const routineCount = DATA.routines.filter(r => r.memberId === m.id && r.active).length;
       const team = DATA.teams.find(t => t.id === m.teamId);
-      const rowStyle = m.isAlba ? 'background: #FDF6EE;' : '';
+      const rowStyle = m.isAlba ? 'background: #FFF7F0;' : '';
       return `
         <tr style="${rowStyle}">
           <td>
@@ -7113,13 +7017,13 @@ function renderManagePage() {
           </td>
           <td>
             <div style="display:flex; align-items:center; gap:10px;">
-              <div class="avatar" style="background:${m.color || '#3B5FA8'}; width:28px; height:28px; font-size:12px;">${m.isAlba ? ic('user-round') : escapeHtml(initials(m.name))}</div>
+              <div class="avatar" style="background:${m.color || '#1B5E6E'}; width:28px; height:28px; font-size:12px;">${m.isAlba ? '🧑‍💼' : escapeHtml(initials(m.name))}</div>
               <span style="font-weight:700;">${escapeHtml(m.name)}</span>
-              ${m.isAlba ? '<span style="font-size:9px; color:#C2803A; background:#FAE6D2; padding:2px 6px; border-radius:99px; font-weight:800;">시스템</span>' : ''}
+              ${m.isAlba ? '<span style="font-size:9px; color:#B4651E; background:#FFE3D1; padding:2px 6px; border-radius:99px; font-weight:800;">시스템</span>' : ''}
             </div>
           </td>
           <td>${escapeHtml(m.role || '—')}</td>
-          <td><span style="display:inline-block; width:14px; height:14px; background:${m.color || '#3B5FA8'}; border-radius:4px; vertical-align: middle;"></span></td>
+          <td><span style="display:inline-block; width:14px; height:14px; background:${m.color || '#1B5E6E'}; border-radius:4px; vertical-align: middle;"></span></td>
           <td><span class="badge status-doing">${activeCount}건</span></td>
           <td><span class="badge daily">${routineCount}개</span></td>
           <td>${m.isAlba ? '<span style="font-size:11px; color:var(--muted);">팀 자동</span>' : `<button class="x-btn" onclick="deleteMember('${m.id}')">×</button>`}</td>
@@ -7134,7 +7038,7 @@ function renderManagePage() {
     return (r.assignee || 'member') === UI.routineFilter;
   });
   if (!filteredRoutines.length) {
-    $('manage-routine-tbody').innerHTML = `<tr><td colspan="7"><div class="empty"><div class="empty-emoji">${ic('repeat-2','muted','lg')}</div><div>${DATA.routines.length === 0 ? '등록된 루틴 없음' : '필터 조건에 맞는 루틴이 없습니다.'}</div></div></td></tr>`;
+    $('manage-routine-tbody').innerHTML = `<tr><td colspan="7"><div class="empty"><div class="empty-emoji">🔄</div><div>${DATA.routines.length === 0 ? '등록된 루틴 없음' : '필터 조건에 맞는 루틴이 없습니다.'}</div></div></td></tr>`;
   } else {
     $('manage-routine-tbody').innerHTML = filteredRoutines.map(r => {
       const m = DATA.members.find(x => x.id === r.memberId);
@@ -7147,20 +7051,20 @@ function renderManagePage() {
       else if (r.frequency === 'quarterly') cycleText = `분기 시작 ${r.monthDay || 1}일째`;
       else if (r.frequency === 'yearly') cycleText = `매년 ${r.yearMonth || 1}월 ${r.monthDay || 1}일`;
       const assignee = r.assignee || 'member';
-      const assigneeLabel = assignee === 'alba' ? '알바' : '본인';
+      const assigneeLabel = assignee === 'alba' ? '🧑‍💼 알바' : '👤 본인';
       return `
         <tr>
           <td>
-            ${m && m.isAlba ? `${ic('user-round','','sm')} ` : ''}${m ? escapeHtml(m.name) : '—'}
-            ${m && m.isAlba ? '<span style="font-size:9px; color:#C2803A; font-weight:800; margin-left:4px;">알바</span>' : ''}
+            ${m && m.isAlba ? '🧑‍💼 ' : ''}${m ? escapeHtml(m.name) : '—'}
+            ${m && m.isAlba ? '<span style="font-size:9px; color:#B4651E; font-weight:800; margin-left:4px;">알바</span>' : ''}
           </td>
           <td style="font-weight:600; cursor:pointer;" onclick="openRoutineModal('${r.id}')" title="클릭으로 수정">${escapeHtml(r.title)}</td>
           <td>
             <label class="alba-inline-toggle ${assignee === 'alba' ? 'alba' : 'member'}" onclick="toggleRoutineAlba('${r.id}')" title="클릭으로 전환">
-              ${assignee === 'alba' ? '알바 의뢰' : '본인 수행'}
+              ${assignee === 'alba' ? '🧑‍💼 알바 의뢰' : '👤 본인 수행'}
             </label>
           </td>
-          <td><span class="badge ${r.frequency}">${ic(FREQ_ICON[r.frequency] || 'calendar','','sm')} ${FREQ_LABELS[r.frequency] || r.frequency}</span></td>
+          <td><span class="badge ${r.frequency}">${FREQ_EMOJI[r.frequency] || ''} ${FREQ_LABELS[r.frequency] || r.frequency}</span></td>
           <td style="font-size:12px; color:var(--muted);">${escapeHtml(cycleText)}</td>
           <td>
             <label style="display:inline-flex; align-items:center; gap:6px; cursor:pointer;">
@@ -7169,7 +7073,7 @@ function renderManagePage() {
             </label>
           </td>
           <td>
-            <button class="project-icon-btn" style="width:24px; height:24px; font-size:11px; display:inline-flex;" onclick="openRoutineModal('${r.id}')" title="수정">${ic('pencil','','sm')}</button>
+            <button class="project-icon-btn" style="width:24px; height:24px; font-size:11px; display:inline-flex;" onclick="openRoutineModal('${r.id}')" title="수정">✏️</button>
             <button class="x-btn" onclick="deleteRoutine('${r.id}')">×</button>
           </td>
         </tr>
@@ -7183,7 +7087,7 @@ function renderManagePage() {
     return (tk.taskType || 'project') === UI.taskFilter;
   });
   if (!filteredTasks.length) {
-    $('manage-task-tbody').innerHTML = `<tr><td colspan="9"><div class="empty"><div class="empty-emoji">${ic('clipboard-list','muted','lg')}</div><div>${DATA.tasks.length === 0 ? '등록된 업무 없음' : '필터 조건에 맞는 업무가 없습니다.'}</div></div></td></tr>`;
+    $('manage-task-tbody').innerHTML = `<tr><td colspan="9"><div class="empty"><div class="empty-emoji">📋</div><div>${DATA.tasks.length === 0 ? '등록된 업무 없음' : '필터 조건에 맞는 업무가 없습니다.'}</div></div></td></tr>`;
   } else {
     const sorted = [...filteredTasks].sort((a,b) => {
       const order = { todo: 0, doing: 1, hold: 2, done: 3 };
@@ -7196,7 +7100,7 @@ function renderManagePage() {
       const statusLabel = { todo:'할일', doing:'진행중', hold:'보류', done:'완료' }[tk.status] || tk.status;
       const priLabel = { high:'높음', mid:'보통', low:'낮음' }[tk.priority] || '보통';
       const taskType = tk.taskType || 'project';
-      const typeLabel = taskType === 'routine' ? `${ic('repeat-2','','sm')} 루틴성` : `${ic('briefcase','','sm')} 프로젝트`;
+      const typeLabel = taskType === 'routine' ? '🔁 루틴성' : '🚀 프로젝트';
       const updRef = tk.lastUpdatedAt || tk.createdAt || t;
       const updDays = daysBetween(updRef, t);
       const isStale = tk.status !== 'done' && updDays >= STALE_DAYS;
@@ -7207,11 +7111,11 @@ function renderManagePage() {
                     : updDays === 0 ? '오늘'
                     : `${updDays}일 전`;
       return `
-        <tr ${isStale ? 'style="background:#FDF7F0;"' : ''}>
+        <tr ${isStale ? 'style="background:#FEF7EE;"' : ''}>
           <td>${m ? escapeHtml(m.name) : '—'}</td>
           <td style="font-weight:600;">
             ${escapeHtml(tk.title)}${isStale ? ' <span class="tag-mini alba" style="background:var(--warn-soft); color:var(--warn);">정체</span>' : ''}
-            ${(tk.subtasks && tk.subtasks.length > 0) ? ` <span class="tag-mini" style="background:var(--accent-2-soft); color:#2E4C88;">${ic('paperclip','','sm')} ${tk.subtasks.filter(s=>s.status==='done').length}/${tk.subtasks.length}</span>` : ''}
+            ${(tk.subtasks && tk.subtasks.length > 0) ? ` <span class="tag-mini" style="background:var(--accent-2-soft); color:#6E5530;">📎 ${tk.subtasks.filter(s=>s.status==='done').length}/${tk.subtasks.length}</span>` : ''}
           </td>
           <td><span class="badge type-${taskType}">${typeLabel}</span></td>
           <td style="font-family:var(--num); font-size:12px;">
@@ -7234,7 +7138,7 @@ function renderManagePage() {
           </td>
           <td style="font-family:var(--num); font-size:11px; color:${updColor}; font-weight:${isStale ? '800' : '600'};">${updText}</td>
           <td>
-            ${taskType === 'project' ? `<button class="project-icon-btn" style="width:24px; height:24px; font-size:11px; display:inline-flex;" onclick="openProjectModal('${tk.id}')" title="수정">${ic('pencil','','sm')}</button>` : ''}
+            ${taskType === 'project' ? `<button class="project-icon-btn" style="width:24px; height:24px; font-size:11px; display:inline-flex;" onclick="openProjectModal('${tk.id}')" title="수정">✏️</button>` : ''}
             <button class="x-btn" onclick="deleteTask('${tk.id}')">×</button>
           </td>
         </tr>
@@ -7281,7 +7185,7 @@ function addTeam() {
     teamId: teamId,
     name: '알바',
     role: '알바 (의뢰)',
-    color: '#C2803A',
+    color: '#B4651E',
     isAlba: true
   });
   save();
@@ -7342,7 +7246,7 @@ function quickAddMember(teamId) {
   const role = (prompt('직책을 입력하세요 (예: 매니저, 수석매니저, 리드매니저). 없으면 빈칸:') || '').trim();
   // 사용 안 한 색상 우선
   const usedColors = new Set(DATA.members.filter(m => m.teamId === teamId).map(m => m.color));
-  const palette = PALETTE.slice();
+  const palette = ['#1B5E6E', '#B89968', '#2E7D52', '#B4651E', '#5B4B8A', '#B83A2E', '#2D3934', '#6B7570'];
   const color = palette.find(c => !usedColors.has(c)) || palette[DATA.members.length % palette.length];
   DATA.members.push({
     id: uid(),
@@ -7364,9 +7268,9 @@ function deleteMemberQuick(id) {
   if (!m) return;
   const myTasks = DATA.tasks.filter(t => t.memberId === id).length;
   const myRoutines = DATA.routines.filter(r => r.memberId === id).length;
-  let msg = `"${m.name}" 멤버를 삭제할까요?`;
+  let msg = `🗑 "${m.name}" 멤버를 삭제할까요?`;
   if (myTasks > 0 || myRoutines > 0) {
-    msg += `\n\n이 멤버에게 할당된 다음 데이터도 함께 삭제됩니다:`;
+    msg += `\n\n⚠️ 이 멤버에게 할당된 다음 데이터도 함께 삭제됩니다:`;
     if (myTasks > 0) msg += `\n  • 프로젝트/업무 ${myTasks}건`;
     if (myRoutines > 0) msg += `\n  • 루틴 ${myRoutines}개`;
   }
@@ -7376,7 +7280,7 @@ function deleteMemberQuick(id) {
   DATA.tasks = DATA.tasks.filter(t => t.memberId !== id);
   save();
   renderAll();
-  toast(`${m.name}님 삭제됨`);
+  toast(`🗑 ${m.name}님 삭제됨`);
 }
 
 function addRoutine() {
@@ -7408,7 +7312,7 @@ function addRoutine() {
   renderDetailPage();
   renderTeamPage();
   renderHero();
-  toast(`루틴 등록됨 ✓ ${isAlba ? '(알바 의뢰)' : '(본인 수행)'}`);
+  toast(`루틴 등록됨 ✓ ${isAlba ? '(🧑‍💼 알바 의뢰)' : '(👤 본인 수행)'}`);
 }
 
 function toggleRoutineActive(id) {
@@ -7435,12 +7339,12 @@ function deleteRoutine(id) {
 function deleteRoutineQuick(id) {
   const r = DATA.routines.find(x => x.id === id);
   if (!r) return;
-  if (!confirm(`루틴 "${r.title}" 을(를) 삭제할까요?\n관련 체크 기록도 함께 사라집니다.`)) return;
+  if (!confirm(`🗑 루틴 "${r.title}" 을(를) 삭제할까요?\n관련 체크 기록도 함께 사라집니다.`)) return;
   DATA.routines = DATA.routines.filter(x => x.id !== id);
   DATA.routineChecks = DATA.routineChecks.filter(c => c.routineId !== id);
   save();
   renderAll();
-  toast('루틴 삭제됨');
+  toast('🗑 루틴 삭제됨');
 }
 
 // ===== 하위업무 CRUD =====
@@ -7609,7 +7513,7 @@ function importData(e) {
       if (!d.members || !d.routines) throw new Error('필수 필드 누락');
 
       // 사용자 확인 — 데이터 교체 경고
-      const stats = `가져올 데이터:\n  • 팀 ${(d.teams||[]).length}개\n  • 멤버 ${(d.members||[]).length}명\n  • 루틴 ${(d.routines||[]).length}개\n  • 업무/프로젝트 ${(d.tasks||[]).length}건\n  • 루틴 체크 ${(d.routineChecks||[]).length}회\n\n현재 저장된 데이터는 모두 교체됩니다. 계속하시겠어요?`;
+      const stats = `📊 가져올 데이터:\n  • 팀 ${(d.teams||[]).length}개\n  • 멤버 ${(d.members||[]).length}명\n  • 루틴 ${(d.routines||[]).length}개\n  • 업무/프로젝트 ${(d.tasks||[]).length}건\n  • 루틴 체크 ${(d.routineChecks||[]).length}회\n\n⚠️ 현재 저장된 데이터는 모두 교체됩니다. 계속하시겠어요?`;
       if (!confirm(stats)) {
         e.target.value = '';
         return;
@@ -7623,9 +7527,9 @@ function importData(e) {
       migrateData();
       save();
       renderAll();
-      toast(`가져오기 완료 — 멤버 ${DATA.members.length}명 · 업무 ${DATA.tasks.length}건 · 루틴 ${DATA.routines.length}개`);
+      toast(`✅ 가져오기 완료 — 멤버 ${DATA.members.length}명 · 업무 ${DATA.tasks.length}건 · 루틴 ${DATA.routines.length}개`);
     } catch (err) {
-      alert('잘못된 파일이거나 형식이 맞지 않습니다.\n\n• JSON 형식인지 확인하세요\n• 이 앱에서 내보낸 파일인지 확인하세요\n\n오류: ' + err.message);
+      alert('❌ 잘못된 파일이거나 형식이 맞지 않습니다.\n\n• JSON 형식인지 확인하세요\n• 이 앱에서 내보낸 파일인지 확인하세요\n\n오류: ' + err.message);
     }
   };
   reader.onerror = () => alert('파일을 읽는 중 오류가 발생했습니다.');
@@ -7647,13 +7551,13 @@ function loadSampleData(silent) {
   }
 
   const baseTeams = [
-    { id: 'team_main', name: DEFAULT_TEAM_NAME, color: PALETTE[0], icon: '🏢', kpi: '' }
+    { id: 'team_main', name: DEFAULT_TEAM_NAME, color: '#1B5E6E', icon: '🏢', kpi: '' }
   ];
 
   const baseMembers = [
-    { id: 'mm1', teamId: 'team_main', name: '신한솔', role: '', color: PALETTE[0], isAlba: false, kpi: '' },
-    { id: 'mm2', teamId: 'team_main', name: '최세혁', role: '', color: PALETTE[1], isAlba: false, kpi: '' },
-    { id: 'mm3', teamId: 'team_main', name: '조재연', role: '', color: PALETTE[2], isAlba: false, kpi: '' }
+    { id: 'mm1', teamId: 'team_main', name: '신한솔', role: '', color: '#1B5E6E', isAlba: false, kpi: '' },
+    { id: 'mm2', teamId: 'team_main', name: '최세혁', role: '', color: '#B4651E', isAlba: false, kpi: '' },
+    { id: 'mm3', teamId: 'team_main', name: '조재연', role: '', color: '#2E7D52', isAlba: false, kpi: '' }
   ];
 
   if (silent) {
@@ -7727,14 +7631,14 @@ function renderManualCard(x) {
   const hasContent = !!(x.content && x.content.trim());
   const m = manualMember(x.owner);
   const ownerName = m ? m.name : '미지정';
-  const ownerColor = m ? (m.color || '#3B5FA8') : '#9DAAC0';
+  const ownerColor = m ? (m.color || '#1B5E6E') : '#9AA5A0';
   const acts = [];
   if (hasUrl) acts.push(`<a class="dash-link app" href="${escapeHtml(normalizeUrl(x.url))}" target="_blank" rel="noopener">▶ 열기</a>`);
-  if (hasContent) acts.push(`<button class="dash-link" onclick="openManualView('${x.id}')">${ic('file-text','','sm')} 내용 보기</button>`);
+  if (hasContent) acts.push(`<button class="dash-link" onclick="openManualView('${x.id}')">📄 내용 보기</button>`);
   return `
     <div class="manual-card">
       <div class="manual-card-top">
-        <div class="manual-ico">${ic('file-text')}</div>
+        <div class="manual-ico">📄</div>
         <div class="manual-head-col">
           <div class="manual-title">${escapeHtml(x.title || '(제목 없음)')}</div>
           ${x.category ? `<div class="manual-cat">${escapeHtml(x.category)}</div>` : ''}
@@ -7746,8 +7650,8 @@ function renderManualCard(x) {
       <div class="manual-actions">
         ${acts.join('')}
         <span class="spacer"></span>
-        <button class="dash-icon-btn" title="수정" onclick="openManualModal('${x.id}')">${ic('pencil','','sm')}</button>
-        <button class="dash-icon-btn del" title="삭제" onclick="deleteManual('${x.id}')">${ic('trash-2','','sm')}</button>
+        <button class="dash-icon-btn" title="수정" onclick="openManualModal('${x.id}')">✏️</button>
+        <button class="dash-icon-btn del" title="삭제" onclick="deleteManual('${x.id}')">🗑</button>
       </div>
     </div>`;
 }
@@ -7786,7 +7690,7 @@ function openManualModal(id) {
 
 function saveManual() {
   const title = $('manual-f-title').value.trim();
-  if (!title) return toast('제목을 입력해주세요');
+  if (!title) return toast('⚠️ 제목을 입력해주세요');
   const tags = $('manual-f-tags').value.split(',').map(s => s.trim()).filter(Boolean);
   const now = Date.now(); const id = $('manual-edit-id').value;
   const payload = {
@@ -7802,7 +7706,7 @@ function saveManual() {
   else { DATA.manuals.push(Object.assign({ id: 'man_' + uid().slice(3), createdAt: now, updatedAt: now }, payload)); }
   try { save(); } catch (e) {}
   closeModal(); renderManualsPage();
-  toast(id ? '수정되었습니다' : '매뉴얼이 추가되었습니다');
+  toast(id ? '✅ 수정되었습니다' : '✅ 매뉴얼이 추가되었습니다');
 }
 function deleteManual(id) {
   const x = (DATA.manuals || []).find(v => v.id === id); if (!x) return;
@@ -7844,7 +7748,7 @@ function renderAutomationPage() {
 function renderDashCard(d) {
   const m = dashMember(d.owner);
   const ownerName = m ? m.name : '미지정';
-  const ownerColor = m ? (m.color || '#3B5FA8') : '#9DAAC0';
+  const ownerColor = m ? (m.color || '#1B5E6E') : '#9AA5A0';
   const openUrl = normalizeUrl(d.appUrl || d.htmlUrl || '');
   const tags = Array.isArray(d.tags) ? d.tags : [];
   const thumb = d.thumbnail
@@ -7869,8 +7773,8 @@ function renderDashCard(d) {
         <div class="dash-actions">
           ${links.join('')}
           <span style="margin-left:auto;"></span>
-          <button class="dash-icon-btn" title="수정" onclick="openDashModal('${d.id}')">${ic('pencil','','sm')}</button>
-          <button class="dash-icon-btn del" title="삭제" onclick="deleteDash('${d.id}')">${ic('trash-2','','sm')}</button>
+          <button class="dash-icon-btn" title="수정" onclick="openDashModal('${d.id}')">✏️</button>
+          <button class="dash-icon-btn del" title="삭제" onclick="deleteDash('${d.id}')">🗑</button>
         </div>
       </div>
     </div>`;
@@ -7905,7 +7809,7 @@ function renderDashThumbPreview() {
 }
 function onDashThumbFile(e) {
   const file = e.target.files && e.target.files[0]; if (!file) return;
-  if (file.size > 3 * 1024 * 1024) { toast('이미지는 3MB 이하로 올려주세요'); e.target.value = ''; return; }
+  if (file.size > 3 * 1024 * 1024) { toast('⚠️ 이미지는 3MB 이하로 올려주세요'); e.target.value = ''; return; }
   const reader = new FileReader();
   reader.onload = ev => { $('dash-f-thumb').value = ev.target.result; renderDashThumbPreview(); };
   reader.readAsDataURL(file);
@@ -7914,7 +7818,7 @@ function clearDashThumb() { $('dash-f-thumb').value = ''; $('dash-f-thumbfile').
 
 function saveDash() {
   const title = $('dash-f-title').value.trim();
-  if (!title) { return toast('제목을 입력해주세요'); }
+  if (!title) { return toast('⚠️ 제목을 입력해주세요'); }
   const tags = $('dash-f-tags').value.split(',').map(s => s.trim()).filter(Boolean);
   const now = Date.now();
   const id = $('dash-edit-id').value;
@@ -7937,7 +7841,7 @@ function saveDash() {
   try { save(); } catch (e) {}
   closeModal();
   renderAutomationPage();
-  toast(id ? '수정되었습니다' : '대시보드가 추가되었습니다');
+  toast(id ? '✅ 수정되었습니다' : '✅ 대시보드가 추가되었습니다');
 }
 function deleteDash(id) {
   const d = (DATA.dashboards || []).find(x => x.id === id); if (!d) return;
@@ -7961,7 +7865,7 @@ function kpiOwnerMember(name) {
 }
 function kpiAvatarHtml(name, size) {
   const m = kpiOwnerMember(name);
-  const color = m ? (m.color || '#3B5FA8') : '#9DAAC0';
+  const color = m ? (m.color || '#1B5E6E') : '#9AA5A0';
   const sz = size || 30;
   return `<div class="avatar" style="background:${color}; width:${sz}px; height:${sz}px; font-size:${Math.round(sz*0.42)}px;">${escapeHtml(initials(name || '?'))}</div>`;
 }
@@ -8116,12 +8020,12 @@ function renderKpiCard(kpi, opts) {
           <div style="font-family:var(--num); font-weight:800; font-size:18px; line-height:1; color:${progColor};">${prog}%</div>
           <div class="kmini">성과 ${lag===null?'–':lag+'%'} · 실행 ${lead===null?'–':lead+'%'}</div>
         </div>
-        <button class="kdel" title="KPI 삭제" onclick="kpiDelKpi('${kpi.id}')">${ic('x','','sm')}</button>
+        <button class="kdel" title="KPI 삭제" onclick="kpiDelKpi('${kpi.id}')">✕</button>
       </div>
 
       <div class="kpi-objective" contenteditable="true" onblur="kpiEditField(this,'${kpi.id}','objective')"><span class="olbl" contenteditable="false">목표</span>${escapeHtml(kpi.objective)}</div>
 
-      ${kpi.headline ? `<div class="kpi-headline">${ic('target','','sm')} <span contenteditable="true" onblur="kpiEditField(this,'${kpi.id}','headline')" style="outline:none;">${escapeHtml(kpi.headline)}</span></div>` : ''}
+      ${kpi.headline ? `<div class="kpi-headline">⭐ <span contenteditable="true" onblur="kpiEditField(this,'${kpi.id}','headline')" style="outline:none;">${escapeHtml(kpi.headline)}</span></div>` : ''}
 
       <div class="kpi-ind-group">
         <div class="kpi-ind-title lag"><span class="tag">후행</span> 후행지표 · 성과 목표 <span style="color:var(--muted); font-weight:600;">(KPI 진척률 측정 기준)</span></div>
@@ -8252,7 +8156,7 @@ function exportKpiSummary() {
     });
   });
   navigator.clipboard?.writeText(out).then(
-    () => toast('KPI 체계를 복사했습니다'),
+    () => toast('📋 KPI 체계를 복사했습니다'),
     () => { prompt('아래 내용을 복사하세요', out); }
   );
 }
@@ -8331,7 +8235,7 @@ async function autoReconnectFirebase() {
     FB_STATE.connected = true;
     FB_STATE.lastSync = Date.now();
     updateCloudStatusUI();
-    console.log('클라우드 자동 재연결 완료:', FB_STATE.teamId);
+    console.log('☁️ 클라우드 자동 재연결 완료:', FB_STATE.teamId);
   } catch (err) {
     console.error('자동 재연결 실패:', err);
     FB_STATE.connected = false;
