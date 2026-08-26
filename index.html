@@ -402,9 +402,22 @@
   /* ===== 오늘 탭: 멤버 카드 ===== */
   .today-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(360px, 1fr));
-    gap: 16px;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 14px;
   }
+  @media (max-width: 1180px) { .today-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+  @media (max-width: 760px)  { .today-grid { grid-template-columns: minmax(0, 1fr); } }
+
+  /* 제목 옆 작은 직원 추가 버튼 */
+  .member-add-btn {
+    width: 30px; height: 30px; margin-left: 8px;
+    border: 1px solid var(--line); background: var(--surface);
+    border-radius: 5px; color: var(--ink-2);
+    font-size: 15px; line-height: 1; font-weight: 700;
+    display: inline-flex; align-items: center; justify-content: center;
+    transition: background .12s, border-color .12s;
+  }
+  .member-add-btn:hover { background: var(--line-2); border-color: var(--muted); color: var(--ink); }
   .today-card {
     background: var(--surface); border: 1px solid var(--line);
     border-radius: var(--radius); overflow: hidden;
@@ -1152,179 +1165,20 @@
     height: 100%; background: var(--accent); border-radius: 99px;
   }
 
-  /* ===== 타입 / 알바 뱃지 ===== */
+  /* ===== 타입 뱃지 ===== */
   .badge.type-routine { background: #E3DCF1; color: #5B4B8A; }
   .badge.type-project { background: var(--accent-soft); color: var(--accent); }
-  .badge.assignee-alba { background: #FFE3D1; color: #B4651E; }
-  .badge.assignee-member { background: var(--line-2); color: var(--muted); }
 
   .tag-mini {
     display: inline-block; padding: 1px 6px; border-radius: 4px;
     font-size: 9px; font-weight: 800; letter-spacing: 0.04em;
     vertical-align: middle;
   }
-  .tag-mini.alba { background: #FFE3D1; color: #B4651E; }
+  .tag-mini.stale-tag { background: var(--warn-soft); color: var(--warn); }
+  .tag-mini.urgent-tag { background: var(--danger-soft); color: var(--danger); }
   .tag-mini.project { background: var(--accent-soft); color: var(--accent); }
   .tag-mini.routine-type { background: #E3DCF1; color: #5B4B8A; }
 
-  .routine-item.alba .routine-title::after {
-    content: "알바"; margin-left: 6px;
-    display: inline-block; padding: 1px 5px; border-radius: 4px;
-    font-size: 9px; font-weight: 800; background: #FFE3D1; color: #B4651E;
-    vertical-align: middle;
-  }
-
-  /* ===== 알바 진행 현황 패널 ===== */
-  .alba-panel {
-    margin-top: 12px;
-    background: var(--surface);
-    border: 1px solid var(--line);
-    border-left: 4px solid #B4651E;
-    border-radius: var(--radius);
-    overflow: hidden;
-  }
-  .alba-panel.none { border-left-color: var(--muted); opacity: 0.7; }
-  .alba-panel-head {
-    padding: 14px 18px;
-    display: flex; align-items: center; gap: 12px;
-    cursor: pointer; user-select: none;
-    transition: background 0.15s;
-  }
-  .alba-panel-head:hover { background: #FFF7F0; }
-  .alba-panel-icon {
-    width: 32px; height: 32px; border-radius: 8px;
-    background: #FFE3D1; color: #B4651E;
-    display: inline-flex; align-items: center; justify-content: center;
-    font-size: 16px; flex-shrink: 0;
-  }
-  .alba-panel-text { flex: 1; }
-  .alba-panel-title {
-    font-family: var(--display); font-size: 14px; font-weight: 800;
-    letter-spacing: -0.01em; color: var(--ink);
-    display: flex; align-items: center; gap: 8px;
-  }
-  .alba-count-badge {
-    font-family: var(--num); font-size: 11px; font-weight: 800;
-    padding: 2px 8px; border-radius: 99px;
-    background: #B4651E; color: white;
-  }
-  .alba-panel.none .alba-count-badge { background: var(--muted); }
-  .alba-panel-sub {
-    font-size: 12px; color: var(--muted); margin-top: 2px;
-  }
-  .alba-panel-toggle {
-    font-size: 12px; color: var(--muted); font-weight: 700;
-    padding: 6px 10px; border-radius: 6px;
-    transition: all 0.15s;
-  }
-  .alba-panel-head:hover .alba-panel-toggle { background: var(--bg); color: var(--ink); }
-  .alba-panel-body {
-    border-top: 1px solid var(--line-2);
-    padding: 14px 18px 18px;
-    display: none;
-    background: linear-gradient(180deg, #FFFAF5, var(--surface));
-  }
-  .alba-panel.open .alba-panel-body { display: block; }
-
-  /* 알바 의뢰자별 그룹 카드 */
-  .alba-requester-group {
-    background: var(--surface);
-    border: 1px solid var(--line-2);
-    border-radius: 8px;
-    padding: 12px 14px;
-    margin-bottom: 8px;
-  }
-  .alba-requester-group:last-child { margin-bottom: 0; }
-  .alba-requester-head {
-    display: flex; align-items: center; gap: 10px;
-    padding-bottom: 8px;
-    border-bottom: 1px dashed var(--line-2);
-    margin-bottom: 8px;
-  }
-  .alba-requester-avatar {
-    width: 28px; height: 28px; border-radius: 99px;
-    display: inline-flex; align-items: center; justify-content: center;
-    color: white; font-size: 12px; font-weight: 800;
-    font-family: var(--display);
-    flex-shrink: 0;
-  }
-  .alba-requester-name {
-    font-family: var(--display); font-size: 14px; font-weight: 800;
-    color: var(--ink);
-  }
-  .alba-requester-team {
-    font-size: 11px; color: var(--muted);
-  }
-  .alba-requester-stats {
-    margin-left: auto;
-    display: flex; gap: 8px;
-    font-family: var(--num); font-size: 11px;
-  }
-  .alba-stat-pill {
-    padding: 2px 8px; border-radius: 99px;
-    background: var(--bg);
-    color: var(--muted);
-    font-weight: 700;
-  }
-  .alba-stat-pill.done { background: var(--success-soft); color: var(--success); }
-  .alba-stat-pill.pending { background: #FFE3D1; color: #B4651E; }
-
-  .alba-task-list {
-    display: grid;
-    grid-template-columns: 1fr;
-    gap: 4px;
-  }
-  .alba-task-item {
-    display: grid;
-    grid-template-columns: 20px 1fr auto auto;
-    gap: 8px;
-    align-items: center;
-    padding: 6px 10px;
-    background: var(--bg);
-    border-radius: 6px;
-    font-size: 12px;
-  }
-  .alba-task-item.done {
-    background: linear-gradient(180deg, #F4F9F2, var(--bg));
-  }
-  .alba-task-status {
-    font-size: 14px;
-    color: var(--muted);
-    text-align: center;
-    cursor: pointer;
-  }
-  .alba-task-status.done { color: var(--success); }
-  .alba-task-title {
-    font-weight: 600;
-    color: var(--ink-2);
-    overflow: hidden;
-    text-overflow: ellipsis;
-    white-space: nowrap;
-  }
-  .alba-task-title:hover {
-    color: var(--accent);
-    text-decoration: underline;
-  }
-  .alba-task-item.done .alba-task-title {
-    color: var(--muted);
-    text-decoration: line-through;
-  }
-  .alba-task-freq {
-    padding: 1px 7px; border-radius: 99px;
-    background: var(--line-2);
-    font-size: 10px; font-weight: 700;
-    color: var(--muted);
-  }
-  .alba-task-freq.daily { background: #DBE5E8; color: #1B5E6E; }
-  .alba-task-freq.weekly { background: #EEE3D0; color: #8A6E3A; }
-  .alba-task-freq.monthly { background: #E3DCF1; color: #5B4B8A; }
-  .alba-task-freq.quarterly { background: #FDE8D8; color: #B4651E; }
-  .alba-task-freq.yearly { background: #FCD9D5; color: #B83A2E; }
-  .alba-task-period {
-    font-family: var(--num);
-    font-size: 10px;
-    color: var(--muted);
-  }
 
   /* 필터 토글 (관리 탭) */
   .filter-row {
@@ -1743,11 +1597,8 @@
 
   /* ===== 레이아웃 개선 (큰 화면에서 더 활용) ===== */
   main { max-width: 1700px; }
-  @media (min-width: 1600px) {
-    .today-grid { grid-template-columns: repeat(auto-fill, minmax(380px, 1fr)); }
-  }
+
   @media (min-width: 1200px) and (max-width: 1599px) {
-    .today-grid { grid-template-columns: repeat(auto-fill, minmax(360px, 1fr)); }
   }
 
   /* 멤버 검색 (관리탭에서 멤버 많아질 때) */
@@ -2044,8 +1895,7 @@
   }
   /* 변형 — 모두 베이지/화이트 톤, 좌측 색상 점으로만 구분 */
   .action-btn.project::before,
-  .action-btn.routine::before,
-  .action-btn.alba::before {
+  .action-btn.routine::before {
     content: "";
     width: 8px; height: 8px;
     border-radius: 99px;
@@ -2053,7 +1903,6 @@
   }
   .action-btn.project::before { background: var(--accent); }
   .action-btn.routine::before { background: #5B4B8A; }
-  .action-btn.alba::before { background: #B4651E; }
 
   /* 진한 베이지 강조 — primary 액션 */
   .action-btn.primary {
@@ -2251,67 +2100,6 @@
     display: flex; gap: 6px; flex-wrap: wrap;
   }
 
-  /* ===== 알바 체크박스 (루틴 등록·수정 시) ===== */
-  .alba-checkbox {
-    display: inline-flex; align-items: center; gap: 8px;
-    padding: 9px 14px;
-    background: var(--bg);
-    border: 1.5px solid var(--line);
-    border-radius: 8px;
-    cursor: pointer;
-    font-size: 13px; font-weight: 700;
-    color: var(--muted);
-    user-select: none;
-    transition: all 0.15s;
-    height: 38px;
-    box-sizing: border-box;
-  }
-  .alba-checkbox:hover {
-    border-color: #B4651E;
-    color: #B4651E;
-  }
-  .alba-checkbox input[type="checkbox"] {
-    width: 16px; height: 16px;
-    accent-color: #B4651E;
-    cursor: pointer;
-    margin: 0;
-  }
-  .alba-checkbox.checked {
-    background: #FFE3D1;
-    border-color: #B4651E;
-    color: #B4651E;
-  }
-  .alba-checkbox .alba-icon {
-    font-size: 16px;
-  }
-
-  /* 루틴 표 내 인라인 알바 체크박스 */
-  .alba-inline-toggle {
-    display: inline-flex; align-items: center; gap: 5px;
-    padding: 3px 8px;
-    border-radius: 99px;
-    font-size: 11px; font-weight: 800;
-    cursor: pointer;
-    user-select: none;
-    transition: all 0.15s;
-  }
-  .alba-inline-toggle.alba {
-    background: #FFE3D1; color: #B4651E;
-    border: 1px solid #F5C8A8;
-  }
-  .alba-inline-toggle.member {
-    background: var(--line-2); color: var(--muted);
-    border: 1px solid var(--line);
-  }
-  .alba-inline-toggle:hover {
-    transform: scale(1.05);
-  }
-  .alba-inline-toggle input[type="checkbox"] {
-    width: 12px; height: 12px;
-    accent-color: #B4651E;
-    cursor: pointer;
-    margin: 0;
-  }
 
   /* ===== 플로팅 추가 버튼 (FAB) ===== */
   .fab-add {
@@ -2695,12 +2483,6 @@
     transform: translateY(-1px);
     background: linear-gradient(135deg, #154852, #A67E50);
     box-shadow: 0 4px 8px rgba(0,0,0,0.12);
-  }
-
-  /* 알바 옵션 */
-  .alba-option {
-    color: #B4651E;
-    font-weight: 800;
   }
 
   /* 메인 추가 버튼 영역 (각 탭 상단) */
@@ -3108,22 +2890,6 @@
       </div>
       <div class="stale-body" id="stale-body"></div>
     </div>
-
-    <!-- ===== 알바 진행 현황 ===== -->
-    <div class="alba-panel" id="alba-panel">
-      <div class="alba-panel-head" onclick="toggleAlbaPanel()">
-        <div class="alba-panel-icon">🧑‍💼</div>
-        <div class="alba-panel-text">
-          <div class="alba-panel-title">
-            <span>알바 진행 현황</span>
-            <span class="alba-count-badge" id="alba-count-badge">0건</span>
-          </div>
-          <div class="alba-panel-sub" id="alba-panel-sub">알바에게 의뢰된 루틴 업무의 의뢰자별 진행 상황입니다.</div>
-        </div>
-        <div class="alba-panel-toggle" id="alba-panel-toggle">펼치기 ▾</div>
-      </div>
-      <div class="alba-panel-body" id="alba-panel-body"></div>
-    </div>
   </div>
 </header>
 
@@ -3149,6 +2915,7 @@
     <div class="section-title">
       팀 멤버별 오늘 할 일
       <span class="count" id="today-day-text">2026년 5월 11일 (월요일)</span>
+      <button class="member-add-btn" id="today-add-member" title="새 직원 추가" onclick="quickAddMemberDefault()">＋</button>
     </div>
     <div class="today-grid" id="today-grid"></div>
   </div>
@@ -3362,18 +3129,11 @@
       <span class="action-hint">💡 단축키 Ctrl+N으로 빠르게 추가</span>
     </div>
     <div class="panel" style="margin-bottom: 24px;">
-      <div class="filter-row">
-        <span style="font-size:11px; color:var(--muted); font-weight:700; text-transform:uppercase; letter-spacing:0.1em; padding: 4px 0;">필터:</span>
-        <button class="filter-chip on" data-r-filter="all" onclick="setRoutineFilter('all')">전체</button>
-        <button class="filter-chip" data-r-filter="member" onclick="setRoutineFilter('member')">👤 본인 수행</button>
-        <button class="filter-chip" data-r-filter="alba" onclick="setRoutineFilter('alba')">🧑‍💼 알바 의뢰</button>
-      </div>
       <table class="table">
         <thead>
           <tr>
             <th>담당자</th>
             <th>루틴 제목</th>
-            <th>수행 주체</th>
             <th>빈도</th>
             <th>주기</th>
             <th>활성</th>
@@ -3646,15 +3406,6 @@
           <label class="modal-field-label">팀</label>
           <select id="routine-modal-team" onchange="updateRoutineModalMembers()"></select>
         </div>
-      </div>
-
-      <div class="modal-field">
-        <label class="modal-field-label">실제 수행</label>
-        <label class="alba-checkbox" id="routine-modal-alba-label" style="width:100%; justify-content:flex-start; padding: 10px 14px;">
-          <input type="checkbox" id="routine-modal-alba" onchange="this.parentElement.classList.toggle('checked', this.checked);">
-          <span class="alba-icon">🧑‍💼</span>
-          <span><b>알바에게 의뢰</b> — 담당자가 알바에게 위임하는 루틴입니다</span>
-        </label>
       </div>
 
       <div class="modal-field">
@@ -4277,16 +4028,14 @@ const FREQ_EMOJI = {
 
 let DATA = {
   teams: [],
-  members: [],         // {id, teamId, name, role, color, isAlba}
-  routines: [],        // {id, memberId, title, frequency, weekdays, monthDay, active, assignee, createdAt}
+  members: [],         // {id, teamId, name, role, color}
+  routines: [],        // {id, memberId, title, frequency, weekdays, monthDay, active, createdAt}
   routineChecks: [],   // {id, routineId, date, doneAt}
   tasks: []
 };
 let UI = {
   detailMember: null,
   staleOpen: false,
-  albaOpen: false,
-  routineFilter: 'all',
   taskFilter: 'all',
   teamFilter: 'all',
   mindmapMember: 'all',
@@ -4370,24 +4119,33 @@ function migrateData() {
       DATA.members.forEach(m => {
         if (otherIds.includes(m.teamId)) m.teamId = main.id;
       });
-      // 알바 가상 멤버는 다른 팀 것은 제거 (본부 알바만 유지)
-      DATA.members = DATA.members.filter(m => !(m.isAlba && otherIds.includes(m.teamId)));
       DATA.teams = [main];
     }
   }
   const mainTeamId = DATA.teams[0].id;
 
-  DATA.members.forEach(m => {
-    if (!m.teamId) m.teamId = mainTeamId;
-    if (m.isAlba === undefined) m.isAlba = false;
-  });
+  DATA.members.forEach(m => { if (!m.teamId) m.teamId = mainTeamId; });
+
+  // 알바 기능 폐지 — 알바 가상 멤버가 남아 있으면 담당 루틴·업무를 같은 팀의
+  // 일반 멤버로 넘기고 멤버 자체를 제거한다
+  const albaMembers = DATA.members.filter(m => m.isAlba);
+  if (albaMembers.length > 0) {
+    albaMembers.forEach(alba => {
+      const fallback = DATA.members.find(m => m.teamId === alba.teamId && !m.isAlba);
+      if (fallback) {
+        DATA.routines.forEach(r => { if (r.memberId === alba.id) r.memberId = fallback.id; });
+        DATA.tasks.forEach(tk => { if (tk.memberId === alba.id) tk.memberId = fallback.id; });
+      }
+    });
+    DATA.members = DATA.members.filter(m => !m.isAlba);
+  }
+  DATA.members.forEach(m => { delete m.isAlba; });
 
   // 직책은 사용자가 관리 탭에서 입력한 값을 그대로 유지한다 (자동 덮어쓰기 없음)
   DATA.members.forEach(m => { if (m.role === undefined || m.role === null) m.role = ''; });
 
-  DATA.routines.forEach(r => {
-    if (!r.assignee) r.assignee = 'member';
-  });
+  // 알바 기능 폐지 — 루틴에 남아 있는 수행 주체 표시를 제거한다
+  DATA.routines.forEach(r => { delete r.assignee; });
   DATA.tasks.forEach(tk => {
     if (!tk.taskType) tk.taskType = 'project';
     if (!tk.subtasks) tk.subtasks = [];
@@ -4407,30 +4165,6 @@ function migrateData() {
       if (!st.lastUpdatedAt) st.lastUpdatedAt = st.createdAt;
     });
   });
-
-  // v8→v9: 알바 가상 멤버 폐지
-  // 알바 멤버에 할당된 루틴은 같은 팀의 첫 번째 일반 멤버로 이관 + assignee:'alba' 유지
-  const albaMembers = DATA.members.filter(m => m.isAlba);
-  if (albaMembers.length > 0) {
-    albaMembers.forEach(alba => {
-      const fallbackMember = DATA.members.find(m => m.teamId === alba.teamId && !m.isAlba);
-      if (fallbackMember) {
-        DATA.routines.forEach(r => {
-          if (r.memberId === alba.id) {
-            r.memberId = fallbackMember.id;
-            r.assignee = 'alba'; // 알바 의뢰 플래그 유지
-          }
-        });
-        DATA.tasks.forEach(tk => {
-          if (tk.memberId === alba.id) {
-            tk.memberId = fallbackMember.id;
-          }
-        });
-      }
-    });
-    // 알바 가상 멤버 모두 제거
-    DATA.members = DATA.members.filter(m => !m.isAlba);
-  }
 
   // v11→v12: KPI 필드 보강
   DATA.members.forEach(m => {
@@ -4792,120 +4526,6 @@ function toggleStaleBanner() {
   renderStaleBanner();
 }
 
-// ===== 알바 진행 현황 패널 =====
-function getAlbaRoutines() {
-  return DATA.routines.filter(r => r.assignee === 'alba' && r.active);
-}
-
-function renderAlbaPanel() {
-  const panel = $('alba-panel');
-  if (!panel) return;
-  const albaRoutines = getAlbaRoutines();
-  const countBadge = $('alba-count-badge');
-  const subEl = $('alba-panel-sub');
-  const toggleEl = $('alba-panel-toggle');
-  const bodyEl = $('alba-panel-body');
-
-  countBadge.textContent = albaRoutines.length + '건';
-
-  if (albaRoutines.length === 0) {
-    panel.classList.add('none');
-    panel.classList.remove('open');
-    UI.albaOpen = false;
-    subEl.textContent = '알바에게 의뢰된 루틴 업무가 없습니다.';
-    toggleEl.style.display = 'none';
-    bodyEl.innerHTML = '';
-    return;
-  }
-
-  panel.classList.remove('none');
-  toggleEl.style.display = 'inline-block';
-
-  // 의뢰자별 그룹핑
-  const byRequester = {};
-  const t = today();
-  albaRoutines.forEach(r => {
-    if (!byRequester[r.memberId]) byRequester[r.memberId] = [];
-    const completedThisPeriod = routineCompletedInPeriod(r.id, t);
-    byRequester[r.memberId].push({ ...r, _completed: completedThisPeriod });
-  });
-
-  const totalCompleted = albaRoutines.filter(r => routineCompletedInPeriod(r.id, t)).length;
-  const totalPending = albaRoutines.length - totalCompleted;
-
-  subEl.innerHTML = `<b>의뢰자 ${Object.keys(byRequester).length}명</b> · 알바 의뢰 ${albaRoutines.length}건 (현재 주기 ${totalCompleted}건 완료, <b style="color:#B4651E;">${totalPending}건 대기</b>)`;
-  toggleEl.textContent = UI.albaOpen ? '접기 ▴' : '펼치기 ▾';
-  if (UI.albaOpen) panel.classList.add('open');
-  else panel.classList.remove('open');
-
-  // 의뢰자별 카드
-  const requesterIds = Object.keys(byRequester).sort((a,b) => {
-    const ma = DATA.members.find(x => x.id === a);
-    const mb = DATA.members.find(x => x.id === b);
-    return (ma?.name || '').localeCompare(mb?.name || '');
-  });
-
-  bodyEl.innerHTML = requesterIds.map(memberId => {
-    const m = DATA.members.find(x => x.id === memberId);
-    const team = m ? DATA.teams.find(t => t.id === m.teamId) : null;
-    const routines = byRequester[memberId];
-    const doneCnt = routines.filter(r => r._completed).length;
-    const pendingCnt = routines.length - doneCnt;
-
-    return `
-      <div class="alba-requester-group">
-        <div class="alba-requester-head">
-          <div class="alba-requester-avatar" style="background:${m ? m.color : '#999'};">${m ? escapeHtml(initials(m.name)) : '?'}</div>
-          <div>
-            <div class="alba-requester-name">${m ? escapeHtml(m.name) : '—'}<span style="font-size:11px; color:#B4651E; font-weight:700; margin-left:6px;">→ 🧑‍💼 알바</span></div>
-            <div class="alba-requester-team">${team ? escapeHtml(team.icon || '') + ' ' + escapeHtml(team.name) : ''} · ${m ? escapeHtml(m.role || '') : ''}</div>
-          </div>
-          <div class="alba-requester-stats">
-            ${doneCnt > 0 ? `<span class="alba-stat-pill done">완료 ${doneCnt}</span>` : ''}
-            ${pendingCnt > 0 ? `<span class="alba-stat-pill pending">대기 ${pendingCnt}</span>` : ''}
-            <span class="alba-stat-pill">총 ${routines.length}</span>
-          </div>
-        </div>
-        <div class="alba-task-list">
-          ${routines.map(r => {
-            const freqLabel = FREQ_LABELS[r.frequency] || r.frequency;
-            const periodInfo = albaPeriodInfo(r);
-            return `
-              <div class="alba-task-item ${r._completed ? 'done' : ''}">
-                <div class="alba-task-status ${r._completed ? 'done' : ''}" onclick="toggleRoutineCheck('${r.id}','${t}')" title="${r._completed ? '체크 해제' : '완료 체크'}">
-                  ${r._completed ? '✓' : '○'}
-                </div>
-                <div class="alba-task-title" onclick="openRoutineModal('${r.id}')" title="클릭하여 수정: ${escapeHtml(r.title)}" style="cursor:pointer;">${escapeHtml(r.title)}</div>
-                <span class="alba-task-freq ${r.frequency}">${freqLabel}</span>
-                <span class="alba-task-period">${periodInfo}</span>
-              </div>
-            `;
-          }).join('')}
-        </div>
-      </div>
-    `;
-  }).join('');
-}
-
-function albaPeriodInfo(r) {
-  const t = today();
-  if (r.frequency === 'daily') return '오늘';
-  if (r.frequency === 'weekly') {
-    const days = (r.weekdays || []).map(d => weekDays[d]).join('·');
-    return days + '요일';
-  }
-  if (r.frequency === 'monthly') return `매월 ${r.monthDay || 1}일`;
-  if (r.frequency === 'quarterly') return `분기 ${r.monthDay || 1}일째`;
-  if (r.frequency === 'yearly') return `${r.yearMonth || 1}/${r.monthDay || 1}`;
-  return '—';
-}
-
-function toggleAlbaPanel() {
-  if (getAlbaRoutines().length === 0) return;
-  UI.albaOpen = !UI.albaOpen;
-  renderAlbaPanel();
-}
-
 // 탭 전환
 document.querySelectorAll('.tab').forEach(btn => {
   btn.onclick = () => {
@@ -4942,7 +4562,7 @@ function closeModal() {
 // ===== 루틴 모달 =====
 function openRoutineModal(routineId) {
   // 사전 검증 — 멤버가 한 명도 없으면 등록 불가
-  if (!routineId && DATA.members.filter(m => !m.isAlba).length === 0) {
+  if (!routineId && DATA.members.length === 0) {
     return toast('⚠️ 먼저 멤버를 추가해주세요 (팀별 보기 탭의 [+ 멤버 추가] 또는 관리 탭에서)');
   }
   if (DATA.teams.length === 0) {
@@ -4974,11 +4594,6 @@ function openRoutineModal(routineId) {
     updateRoutineModalMembers();
     $('routine-modal-member').value = r.memberId;
 
-    // 알바 의뢰 체크박스
-    const albaCheck = $('routine-modal-alba');
-    albaCheck.checked = r.assignee === 'alba';
-    albaCheck.parentElement.classList.toggle('checked', albaCheck.checked);
-
     // 빈도
     const freqRadio = document.querySelector(`input[name="r-modal-freq"][value="${r.frequency}"]`);
     if (freqRadio) freqRadio.checked = true;
@@ -5005,11 +4620,6 @@ function openRoutineModal(routineId) {
     if (teamSelect.options.length > 0) teamSelect.selectedIndex = 0;
     updateRoutineModalMembers();
 
-    // 알바 체크박스 초기화
-    const albaCheck = $('routine-modal-alba');
-    albaCheck.checked = false;
-    albaCheck.parentElement.classList.remove('checked');
-
     document.querySelector('input[name="r-modal-freq"][value="daily"]').checked = true;
     updateRoutineModalFreqOpts();
   }
@@ -5035,8 +4645,7 @@ function deleteRoutineFromModal() {
 function updateRoutineModalMembers() {
   const teamId = $('routine-modal-team').value;
   const members = DATA.members.filter(m => m.teamId === teamId);
-  // 알바를 마지막으로
-  const sorted = members.filter(m => !m.isAlba);
+  const sorted = members.slice();
   $('routine-modal-member').innerHTML = sorted.map(m => {
     return `<option value="${m.id}">👤 ${escapeHtml(m.name)}${m.role ? ' — ' + escapeHtml(m.role) : ''}</option>`;
   }).join('');
@@ -5056,7 +4665,6 @@ function submitRoutineModal() {
 
   const titleEl = $('routine-modal-title-input');
   const memberEl = $('routine-modal-member');
-  const albaEl = $('routine-modal-alba');
   const editIdEl = $('routine-edit-id');
   const freqEl = document.querySelector('input[name="r-modal-freq"]:checked');
 
@@ -5074,7 +4682,7 @@ function submitRoutineModal() {
   console.log('  담당자 ID:', memberId);
   if (!memberId) {
     // 셀렉트가 비어있는 경우 — 멤버가 한 명도 없으면 추가 안내
-    if (DATA.members.filter(m => !m.isAlba).length === 0) {
+    if (DATA.members.length === 0) {
       return toast('⚠️ 먼저 멤버를 추가해주세요. 팀별 보기 탭의 [+ 멤버 추가] 또는 관리 탭에서 가능합니다.');
     }
     return toast('담당자를 선택하세요');
@@ -5088,13 +4696,11 @@ function submitRoutineModal() {
   }
 
   const freq = freqEl?.value || 'daily';
-  const isAlba = albaEl?.checked || false;
 
   const data = {
     memberId,
     title,
     frequency: freq,
-    assignee: isAlba ? 'alba' : 'member',
     active: true
   };
 
@@ -5129,7 +4735,7 @@ function submitRoutineModal() {
     DATA.routines.push(newRoutine);
     console.log('  → 신규 등록:', newRoutine);
     console.log('  총 루틴 수:', DATA.routines.length);
-    toast(`✓ 루틴 등록됨${isAlba ? ' (🧑‍💼 알바 의뢰)' : ''}`);
+    toast('✓ 루틴 등록됨');
   }
   save();
   closeModal();
@@ -5143,11 +4749,10 @@ function openProjectModal(taskId) {
   UI.modalOpen = 'add-project';
   UI.draftSubtasks = [];
 
-  // 멤버 셀렉트 — 알바 제외 (프로젝트는 사람이 담당)
   const memberSelect = $('project-modal-member');
   const teams = DATA.teams;
   memberSelect.innerHTML = teams.map(team => {
-    const teamMembers = DATA.members.filter(m => m.teamId === team.id && !m.isAlba);
+    const teamMembers = DATA.members.filter(m => m.teamId === team.id);
     if (teamMembers.length === 0) return '';
     return `<optgroup label="${escapeHtml(team.icon||'📁')} ${escapeHtml(team.name)}">
       ${teamMembers.map(m => `<option value="${m.id}">${escapeHtml(m.name)}${m.role ? ' — ' + escapeHtml(m.role) : ''}</option>`).join('')}
@@ -5432,18 +5037,18 @@ document.addEventListener('keydown', e => {
 
 // 관리 탭의 "루틴성 업무 추가 (간단)" — prompt 기반 빠른 입력
 function quickAddRoutineTask() {
-  const nonAlba = DATA.members.filter(m => !m.isAlba);
-  if (nonAlba.length === 0) return toast('먼저 멤버를 추가하세요');
-  const memberOptions = nonAlba.map((m,i) => `${i+1}. ${m.name}`).join('\n');
-  const memberIdx = prompt(`🔁 루틴성 업무 담당자를 선택하세요:\n${memberOptions}\n\n번호 입력 (1~${nonAlba.length}):`);
+  const pickable = DATA.members.slice();
+  if (pickable.length === 0) return toast('먼저 멤버를 추가하세요');
+  const memberOptions = pickable.map((m,i) => `${i+1}. ${m.name}`).join('\n');
+  const memberIdx = prompt(`🔁 루틴성 업무 담당자를 선택하세요:\n${memberOptions}\n\n번호 입력 (1~${pickable.length}):`);
   if (!memberIdx) return;
   const idx = parseInt(memberIdx) - 1;
-  if (isNaN(idx) || idx < 0 || idx >= nonAlba.length) return toast('잘못된 번호입니다');
+  if (isNaN(idx) || idx < 0 || idx >= pickable.length) return toast('잘못된 번호입니다');
   const title = prompt('🔁 루틴성 업무 제목:');
   if (!title || !title.trim()) return;
   const d = new Date(); d.setDate(d.getDate() + 7);
   DATA.tasks.push({
-    id: uid(), memberId: nonAlba[idx].id, title: title.trim(),
+    id: uid(), memberId: pickable[idx].id, title: title.trim(),
     taskType: 'routine', dueDate: d.toISOString().slice(0,10),
     priority: 'mid', status: 'todo', progress: 0, subtasks: [],
     createdAt: today(), lastUpdatedAt: today()
@@ -5538,7 +5143,7 @@ function renderProjectCard(task, memberMap) {
         </div>
         <div class="project-owner-badge" title="담당자: ${m ? escapeHtml(m.name) : '미지정'}">
           <span class="owner-dot" style="background:${m ? m.color : '#999'};"></span>
-          ${m ? escapeHtml(m.name) : '미지정'}${m && m.isAlba ? '' : '님'}
+          ${m ? escapeHtml(m.name) : '미지정'}님
         </div>
       </div>
 
@@ -5546,7 +5151,7 @@ function renderProjectCard(task, memberMap) {
         <span style="font-family:var(--num);">${elapsedLabel}</span>
         ${subs.length > 0 ? `<span>· 보조 ${subs.filter(s=>s.status==='done').length}/${subs.length}</span>` : ''}
         <span class="project-meta-status ${status}">${statusIcon} ${statusLabel}</span>
-        ${isStale ? `<span class="tag-mini alba" style="background:var(--warn-soft); color:var(--warn);">⏱ ${updDays}일 정체</span>` : ''}
+        ${isStale ? `<span class="tag-mini stale-tag" style="background:var(--warn-soft); color:var(--warn);">⏱ ${updDays}일 정체</span>` : ''}
       </div>
 
       <div class="project-progress-row">
@@ -5606,17 +5211,6 @@ function renderProjectCard(task, memberMap) {
   `;
 }
 
-// 루틴 알바 토글
-function toggleRoutineAlba(routineId) {
-  const r = DATA.routines.find(x => x.id === routineId);
-  if (!r) return;
-  r.assignee = r.assignee === 'alba' ? 'member' : 'alba';
-  save();
-  renderAll();
-  toast(r.assignee === 'alba' ? '🧑‍💼 알바 대체로 변경' : '👤 본인 수행으로 변경');
-}
-
-// ===== 하위업무 HTML 렌더 =====
 function renderSubtasksHTML(task) {
   const subs = task.subtasks || [];
   return `
@@ -5721,7 +5315,7 @@ function renderTeamBlock(team) {
         <div class="team-icon-box-sm" style="background:${team.color};">${escapeHtml(team.icon || '📁')}</div>
         <div class="team-block-title">${escapeHtml(team.name)}</div>
         <div class="team-block-counts">
-          <span>👥 ${members.filter(m => !m.isAlba).length}</span>
+          <span>👥 ${members.length}</span>
           <span>·</span>
           <span>🚀 ${projectTasks.length}</span>
           <span>·</span>
@@ -5733,7 +5327,7 @@ function renderTeamBlock(team) {
       <div class="team-members-bar">
         <span class="team-members-label">👥 팀 멤버</span>
         <div class="team-members-chips">
-          ${members.filter(m => !m.isAlba).map(m => `
+          ${members.map(m => `
             <div class="team-member-chip" onclick="setDetailMember('${m.id}'); document.querySelector('[data-page=detail]').click();" title="클릭하여 ${escapeHtml(m.name)}님 상세 페이지로">
               <span class="team-member-chip-dot" style="background:${m.color};"></span>
               <span class="team-member-chip-name">${escapeHtml(m.name)}</span>
@@ -5775,15 +5369,11 @@ function renderTeamBlock(team) {
           `<div style="display:grid; grid-template-columns: repeat(auto-fill, minmax(280px,1fr)); gap:5px;">${teamRoutines.map(r => {
             const m = memberMap[r.memberId];
             const freqLabel = FREQ_LABELS[r.frequency] || r.frequency;
-            const isAlba = r.assignee === 'alba';
             return `
-              <div class="team-routine-row" style="grid-template-columns: 22px 1fr auto auto ${isAlba ? 'auto' : ''} 22px;">
+              <div class="team-routine-row" style="grid-template-columns: 22px 1fr auto 22px;">
                 <div class="team-row-avatar" style="background:${m ? m.color : '#999'};" title="${m ? m.name : ''}">${m ? escapeHtml(initials(m.name)) : '?'}</div>
                 <div class="team-row-title" onclick="openRoutineModal('${r.id}')" title="클릭으로 수정: ${escapeHtml(r.title)}">${escapeHtml(r.title)}</div>
                 <span class="routine-tag ${r.frequency}">${freqLabel}</span>
-                <span class="alba-inline-toggle ${isAlba ? 'alba' : 'member'}" onclick="toggleRoutineAlba('${r.id}')" title="클릭으로 본인↔알바 의뢰 전환">
-                  ${isAlba ? '🧑‍💼 알바' : '👤 본인'}
-                </span>
                 <button class="x-btn" onclick="deleteRoutine('${r.id}')">×</button>
               </div>
             `;
@@ -5809,7 +5399,7 @@ function renderTeamBlock(team) {
               <div class="team-task-row">
                 <div class="team-row-avatar" style="background:${m ? m.color : '#999'};" title="${m ? m.name : ''}">${m ? escapeHtml(initials(m.name)) : '?'}</div>
                 <div class="team-row-title" ondblclick="editTaskTitle('${tk.id}')" title="더블클릭으로 수정">${escapeHtml(tk.title)}</div>
-                <span class="tag-mini ${isUrgent?'alba':'routine-type'}" style="${isUrgent?'background:var(--danger-soft); color:var(--danger);':''}">${tk.dueDate ? tk.dueDate.slice(5) : '—'}</span>
+                <span class="tag-mini ${isUrgent?'urgent-tag':'routine-type'}" style="${isUrgent?'background:var(--danger-soft); color:var(--danger);':''}">${tk.dueDate ? tk.dueDate.slice(5) : '—'}</span>
                 <div class="team-row-progress"><div style="width:${tk.progress||0}%"></div></div>
                 <button class="expand-toggle" onclick="cycleTaskStatus('${tk.id}')">${{todo:'○',doing:'▶',hold:'⏸',done:'✓'}[tk.status]||'○'}</button>
                 <button class="x-btn" onclick="deleteTask('${tk.id}')">×</button>
@@ -5841,7 +5431,7 @@ function quickAddTeamRoutine(teamId) {
 function quickAddTeamTask(teamId, taskType) {
   if (taskType === 'routine') {
     // 루틴성 일회 업무는 기존 빠른 입력
-    const members = DATA.members.filter(m => m.teamId === teamId && !m.isAlba);
+    const members = DATA.members.filter(m => m.teamId === teamId);
     if (members.length === 0) return toast('이 팀에 먼저 멤버를 추가하세요');
     const memberOptions = members.map((m,i) => `${i+1}. ${m.name}`).join('\n');
     const memberIdx = prompt(`🔁 루틴성 업무 담당자를 선택하세요:\n${memberOptions}\n\n번호 입력 (1~${members.length}):`);
@@ -5863,8 +5453,7 @@ function quickAddTeamTask(teamId, taskType) {
     // 프로젝트는 모달 사용
     openProjectModal();
     setTimeout(() => {
-      // 해당 팀의 첫 번째 비-알바 멤버 자동 선택
-      const firstMember = DATA.members.find(m => m.teamId === teamId && !m.isAlba);
+      const firstMember = DATA.members.find(m => m.teamId === teamId);
       if (firstMember) $('project-modal-member').value = firstMember.id;
     }, 50);
   }
@@ -5875,19 +5464,13 @@ function quickAddTeamTask(teamId, taskType) {
 function renderMindmap() {
   if (!$('mindmap-svg')) return;
 
-  // 멤버 필터 옵션 갱신 (알바 분리 표시)
+  // 멤버 필터 옵션 갱신
   const filterEl = $('mindmap-member-filter');
   if (filterEl) {
     const current = filterEl.value;
-    const nonAlba = DATA.members.filter(m => !m.isAlba);
-    const albas = DATA.members.filter(m => m.isAlba);
+  
     filterEl.innerHTML = '<option value="all">전체 팀원</option>' +
-      nonAlba.map(m => `<option value="${m.id}">${escapeHtml(m.name)}</option>`).join('') +
-      (albas.length > 0 ? '<optgroup label="🧑‍💼 알바">' +
-        albas.map(m => {
-          const team = DATA.teams.find(t => t.id === m.teamId);
-          return `<option value="${m.id}">${escapeHtml(m.name)} (${team ? team.name : ''})</option>`;
-        }).join('') + '</optgroup>' : '');
+      DATA.members.map(m => `<option value="${m.id}">${escapeHtml(m.name)}</option>`).join('');
     if (current && DATA.members.find(m => m.id === current)) filterEl.value = current;
     else filterEl.value = 'all';
     UI.mindmapMember = filterEl.value;
@@ -6394,9 +5977,8 @@ function renderHero() {
   $('kpi-weekly-bar').style.width = Math.min(100, total * 5) + '%';
   $('kpi-weekly-detail').textContent = `업무 ${weeklyTaskDone}건 + 루틴 ${weeklyRoutineDone}건`;
 
-  // 정체 업무 알림 + 알바 진행 현황 동기화
+  // 정체 업무 알림 동기화
   renderStaleBanner();
-  renderAlbaPanel();
 }
 
 // ===== 오늘 탭 =====
@@ -6416,13 +5998,8 @@ function renderTodayPage() {
     return;
   }
 
-  // 일반 멤버 + (담당 루틴/업무가 있는 알바)만 카드로 표시
-  const visibleMembers = DATA.members.filter(m => {
-    if (!m.isAlba) return true;
-    const hasContent = DATA.routines.some(r => r.memberId === m.id && r.active)
-                    || DATA.tasks.some(tk => tk.memberId === m.id && tk.status !== 'done');
-    return hasContent;
-  });
+  // 화면 표시 순서만 뒤집는다 (저장 순서는 그대로) — 조재연 → 최세혁 → 신한솔
+  const visibleMembers = DATA.members.slice().reverse();
 
   if (visibleMembers.length === 0) {
     grid.innerHTML = `<div class="empty" style="grid-column:1/-1;">
@@ -6462,10 +6039,10 @@ function renderTodayPage() {
       <div class="today-card">
         <div class="today-card-head">
           <div class="member-info">
-            <div class="avatar" style="background:${m.color || '#1B5E6E'};">${m.isAlba ? '🧑‍💼' : escapeHtml(initials(m.name))}</div>
+            <div class="avatar" style="background:${m.color || '#1B5E6E'};">${escapeHtml(initials(m.name))}</div>
             <div>
-              <div class="member-name">${escapeHtml(m.name)}${m.isAlba ? ` <span style="font-size:10px; color:#B4651E; background:#FFE3D1; padding:1px 6px; border-radius:99px; font-weight:800; margin-left:4px;">알바</span>` : ''}</div>
-              <div class="member-role">${m.isAlba ? escapeHtml((DATA.teams.find(t=>t.id===m.teamId)||{}).name || '') + ' • ' : ''}${escapeHtml(m.role || '')}</div>
+              <div class="member-name">${escapeHtml(m.name)}</div>
+              <div class="member-role">${escapeHtml(m.role || '')}</div>
             </div>
           </div>
           <div class="today-progress">
@@ -6481,13 +6058,11 @@ function renderTodayPage() {
         </div>
 
         <!-- 개인 KPI 한 줄 -->
-        ${!m.isAlba ? `
-          <div class="member-kpi-line" data-kpi-row="${m.id}" onclick="startMemberKPIEdit('${m.id}')" title="클릭하여 KPI 수정">
-            <span class="member-kpi-flag">🎯</span>
-            <span class="member-kpi-text ${m.kpi ? '' : 'empty'}">${m.kpi ? escapeHtml(m.kpi) : '연간 KPI 목표를 입력하세요'}</span>
-            <button class="member-kpi-edit-btn" onclick="event.stopPropagation(); startMemberKPIEdit('${m.id}')">✏️</button>
-          </div>
-        ` : ''}
+        <div class="member-kpi-line" data-kpi-row="${m.id}" onclick="startMemberKPIEdit('${m.id}')" title="클릭하여 KPI 수정">
+          <span class="member-kpi-flag">🎯</span>
+          <span class="member-kpi-text ${m.kpi ? '' : 'empty'}">${m.kpi ? escapeHtml(m.kpi) : '연간 KPI 목표를 입력하세요'}</span>
+          <button class="member-kpi-edit-btn" onclick="event.stopPropagation(); startMemberKPIEdit('${m.id}')">✏️</button>
+        </div>
 
         <div class="today-section">
           <div class="today-section-label">
@@ -6497,13 +6072,12 @@ function renderTodayPage() {
           ${totalToday === 0 ? `<div class="empty-small">오늘 예정된 루틴이 없어요.</div>` :
             `<div class="routine-list">${todayRoutines.map(r => {
               const isDone = doneIds.has(r.id);
-              const isAlba = r.assignee === 'alba';
               const freqTag = `<span class="routine-tag ${r.frequency}">${
                 r.frequency === 'daily' ? '매일' :
                 r.frequency === 'weekly' ? '주간' : '월간'
               }</span>`;
               return `
-                <div class="routine-item ${isDone ? 'done' : ''} ${isAlba ? 'alba' : ''}">
+                <div class="routine-item ${isDone ? 'done' : ''}">
                   <span class="routine-check" onclick="toggleRoutineCheck('${r.id}','${t}')"></span>
                   <span class="routine-title" onclick="toggleRoutineCheck('${r.id}','${t}')">${escapeHtml(r.title)}</span>
                   ${freqTag}
@@ -6587,31 +6161,23 @@ function renderTodayPage() {
           ${tasks.length > 5 ? `<div style="font-size: 11px; color: var(--muted); margin-top: 8px; text-align: center;">외 ${tasks.length - 5}건</div>` : ''}
         </div>
 
-        <div style="margin-top: 10px; display:grid; grid-template-columns: ${m.isAlba ? '1fr' : '1fr 1fr'}; gap:8px;">
-          ${m.isAlba ? `
-            <button class="action-btn alba sm" onclick="openRoutineModalForMember('${m.id}')">
-              <span class="action-icon">＋</span><span>알바 루틴 추가</span>
-            </button>
-          ` : `
-            <button class="action-btn project sm" onclick="openProjectModalForMember('${m.id}')">
-              <span class="action-icon">＋</span><span>프로젝트 추가</span>
-            </button>
-            <button class="action-btn routine sm" onclick="openRoutineModalForMember('${m.id}')">
-              <span class="action-icon">＋</span><span>루틴 추가</span>
-            </button>
-          `}
+        <div style="margin-top: 10px; display:grid; grid-template-columns: 1fr 1fr; gap:8px;">
+          <button class="action-btn project sm" onclick="openProjectModalForMember('${m.id}')">
+            <span class="action-icon">＋</span><span>프로젝트 추가</span>
+          </button>
+          <button class="action-btn routine sm" onclick="openRoutineModalForMember('${m.id}')">
+            <span class="action-icon">＋</span><span>루틴 추가</span>
+          </button>
         </div>
       </div>
     `;
-  }).join('') + (DATA.teams.length > 0 ? `
-    <div class="today-card today-card-add" onclick="quickAddMember('${DATA.teams[0].id}')" title="새 직원을 추가합니다">
-      <div class="today-card-add-inner">
-        <div class="today-card-add-icon">＋</div>
-        <div class="today-card-add-title">새 직원 추가</div>
-        <div class="today-card-add-sub">팀에 새 멤버를 추가합니다</div>
-      </div>
-    </div>
-  ` : '');
+  }).join('');
+}
+
+// 제목 옆 작은 ＋ 버튼 — 첫 번째 팀에 멤버를 추가한다
+function quickAddMemberDefault() {
+  if (!DATA.teams.length) return toast('먼저 팀을 추가해주세요 (관리 탭에서)');
+  quickAddMember(DATA.teams[0].id);
 }
 
 // 멤버 컨텍스트에서 모달 열기 (담당자 미리 선택)
@@ -6664,11 +6230,7 @@ function renderDetailPage() {
     UI.detailMember = DATA.members[0].id;
   }
 
-  // 일반 먼저, 알바 마지막
-  const sortedMembers = [
-    ...DATA.members.filter(m => !m.isAlba),
-    ...DATA.members.filter(m => m.isAlba)
-  ];
+  const sortedMembers = DATA.members.slice();
   if (!sortedMembers.find(m => m.id === UI.detailMember)) {
     UI.detailMember = sortedMembers[0].id;
   }
@@ -6678,7 +6240,7 @@ function renderDetailPage() {
     return `
       <div class="member-chip ${UI.detailMember === m.id ? 'on' : ''}" onclick="setDetailMember('${m.id}')" title="${team ? escapeHtml(team.name) : ''}">
         <span class="chip-dot" style="background:${m.color || '#1B5E6E'};"></span>
-        ${m.isAlba ? '🧑‍💼' : (team ? escapeHtml(team.icon || '📁') : '')} ${escapeHtml(m.name)}${m.isAlba ? ` <span style="font-size:9px; color:#B4651E; font-weight:800;">(${team ? team.name : ''})</span>` : ''}
+        ${team ? escapeHtml(team.icon || '📁') : ''} ${escapeHtml(m.name)}
         <span class="chip-count">${activeCount}</span>
       </div>
     `;
@@ -6917,16 +6479,8 @@ function updateFreqOptions() {
 }
 
 // 필터 상태
-UI.routineFilter = 'all';
 UI.taskFilter = 'all';
 
-function setRoutineFilter(f) {
-  UI.routineFilter = f;
-  document.querySelectorAll('[data-r-filter]').forEach(b => {
-    b.classList.toggle('on', b.dataset.rFilter === f);
-  });
-  renderManagePage();
-}
 function setTaskFilter(f) {
   UI.taskFilter = f;
   document.querySelectorAll('[data-t-filter]').forEach(b => {
@@ -6973,7 +6527,7 @@ function renderManagePage() {
   // 멤버 셀렉트 (루틴/업무 등록용) — 폼이 hidden이지만 element는 존재할 수도 있어 안전하게
   const memberOptions = DATA.members.map(m => {
     const team = DATA.teams.find(t => t.id === m.teamId);
-    return `<option value="${m.id}">${team ? escapeHtml(team.icon||'📁') : ''} ${escapeHtml(m.name)}${m.isAlba ? ' (알바)' : ''}</option>`;
+    return `<option value="${m.id}">${team ? escapeHtml(team.icon||'📁') : ''} ${escapeHtml(m.name)}</option>`;
   }).join('');
   if ($('r-member')) $('r-member').innerHTML = memberOptions;
   if ($('t-member')) $('t-member').innerHTML = memberOptions;
@@ -6992,49 +6546,38 @@ function renderManagePage() {
   if (!DATA.members.length) {
     $('manage-member-tbody').innerHTML = `<tr><td colspan="7"><div class="empty"><div class="empty-emoji">👥</div><div>등록된 멤버 없음</div></div></td></tr>`;
   } else {
-    // 일반 멤버 먼저, 알바를 마지막에
-    const sortedMembers = [
-      ...DATA.members.filter(m => !m.isAlba),
-      ...DATA.members.filter(m => m.isAlba)
-    ];
+    const sortedMembers = DATA.members.slice();
     $('manage-member-tbody').innerHTML = sortedMembers.map(m => {
       const activeCount = DATA.tasks.filter(t => t.memberId === m.id && t.status !== 'done').length;
       const routineCount = DATA.routines.filter(r => r.memberId === m.id && r.active).length;
       const team = DATA.teams.find(t => t.id === m.teamId);
-      const rowStyle = m.isAlba ? 'background: #FFF7F0;' : '';
       return `
-        <tr style="${rowStyle}">
+        <tr>
           <td>
-            ${m.isAlba ? `<span style="font-size:12px; color:var(--muted);">${escapeHtml(team ? team.icon||'📁' : '')} ${escapeHtml(team ? team.name : '—')}</span>` :
-              `<select onchange="updateMemberTeam('${m.id}', this.value)" style="font-size:12px; padding:4px 6px;">
-                ${DATA.teams.map(t => `<option value="${t.id}" ${t.id === m.teamId ? 'selected' : ''}>${escapeHtml(t.icon||'📁')} ${escapeHtml(t.name)}</option>`).join('')}
-              </select>`
-            }
+            <select onchange="updateMemberTeam('${m.id}', this.value)" style="font-size:12px; padding:4px 6px;">
+              ${DATA.teams.map(t => `<option value="${t.id}" ${t.id === m.teamId ? 'selected' : ''}>${escapeHtml(t.icon||'📁')} ${escapeHtml(t.name)}</option>`).join('')}
+            </select>
           </td>
           <td>
             <div style="display:flex; align-items:center; gap:10px;">
-              <div class="avatar" style="background:${m.color || '#1B5E6E'}; width:28px; height:28px; font-size:12px;">${m.isAlba ? '🧑‍💼' : escapeHtml(initials(m.name))}</div>
+              <div class="avatar" style="background:${m.color || '#1B5E6E'}; width:28px; height:28px; font-size:12px;">${escapeHtml(initials(m.name))}</div>
               <span style="font-weight:700;">${escapeHtml(m.name)}</span>
-              ${m.isAlba ? '<span style="font-size:9px; color:#B4651E; background:#FFE3D1; padding:2px 6px; border-radius:99px; font-weight:800;">시스템</span>' : ''}
             </div>
           </td>
           <td>${escapeHtml(m.role || '—')}</td>
           <td><span style="display:inline-block; width:14px; height:14px; background:${m.color || '#1B5E6E'}; border-radius:4px; vertical-align: middle;"></span></td>
           <td><span class="badge status-doing">${activeCount}건</span></td>
           <td><span class="badge daily">${routineCount}개</span></td>
-          <td>${m.isAlba ? '<span style="font-size:11px; color:var(--muted);">팀 자동</span>' : `<button class="x-btn" onclick="deleteMember('${m.id}')">×</button>`}</td>
+          <td><button class="x-btn" onclick="deleteMember('${m.id}')">×</button></td>
         </tr>
       `;
     }).join('');
   }
 
   // 루틴 표
-  const filteredRoutines = DATA.routines.filter(r => {
-    if (UI.routineFilter === 'all') return true;
-    return (r.assignee || 'member') === UI.routineFilter;
-  });
+  const filteredRoutines = DATA.routines;
   if (!filteredRoutines.length) {
-    $('manage-routine-tbody').innerHTML = `<tr><td colspan="7"><div class="empty"><div class="empty-emoji">🔄</div><div>${DATA.routines.length === 0 ? '등록된 루틴 없음' : '필터 조건에 맞는 루틴이 없습니다.'}</div></div></td></tr>`;
+    $('manage-routine-tbody').innerHTML = `<tr><td colspan="6"><div class="empty"><div class="empty-emoji">🔄</div><div>등록된 루틴 없음</div></div></td></tr>`;
   } else {
     $('manage-routine-tbody').innerHTML = filteredRoutines.map(r => {
       const m = DATA.members.find(x => x.id === r.memberId);
@@ -7046,20 +6589,10 @@ function renderManagePage() {
       else if (r.frequency === 'monthly') cycleText = `매월 ${r.monthDay || 1}일`;
       else if (r.frequency === 'quarterly') cycleText = `분기 시작 ${r.monthDay || 1}일째`;
       else if (r.frequency === 'yearly') cycleText = `매년 ${r.yearMonth || 1}월 ${r.monthDay || 1}일`;
-      const assignee = r.assignee || 'member';
-      const assigneeLabel = assignee === 'alba' ? '🧑‍💼 알바' : '👤 본인';
       return `
         <tr>
-          <td>
-            ${m && m.isAlba ? '🧑‍💼 ' : ''}${m ? escapeHtml(m.name) : '—'}
-            ${m && m.isAlba ? '<span style="font-size:9px; color:#B4651E; font-weight:800; margin-left:4px;">알바</span>' : ''}
-          </td>
+          <td>${m ? escapeHtml(m.name) : '—'}</td>
           <td style="font-weight:600; cursor:pointer;" onclick="openRoutineModal('${r.id}')" title="클릭으로 수정">${escapeHtml(r.title)}</td>
-          <td>
-            <label class="alba-inline-toggle ${assignee === 'alba' ? 'alba' : 'member'}" onclick="toggleRoutineAlba('${r.id}')" title="클릭으로 전환">
-              ${assignee === 'alba' ? '🧑‍💼 알바 의뢰' : '👤 본인 수행'}
-            </label>
-          </td>
           <td><span class="badge ${r.frequency}">${FREQ_EMOJI[r.frequency] || ''} ${FREQ_LABELS[r.frequency] || r.frequency}</span></td>
           <td style="font-size:12px; color:var(--muted);">${escapeHtml(cycleText)}</td>
           <td>
@@ -7110,7 +6643,7 @@ function renderManagePage() {
         <tr ${isStale ? 'style="background:#FEF7EE;"' : ''}>
           <td>${m ? escapeHtml(m.name) : '—'}</td>
           <td style="font-weight:600;">
-            ${escapeHtml(tk.title)}${isStale ? ' <span class="tag-mini alba" style="background:var(--warn-soft); color:var(--warn);">정체</span>' : ''}
+            ${escapeHtml(tk.title)}${isStale ? ' <span class="tag-mini stale-tag" style="background:var(--warn-soft); color:var(--warn);">정체</span>' : ''}
             ${(tk.subtasks && tk.subtasks.length > 0) ? ` <span class="tag-mini" style="background:var(--accent-2-soft); color:#6E5530;">📎 ${tk.subtasks.filter(s=>s.status==='done').length}/${tk.subtasks.length}</span>` : ''}
           </td>
           <td><span class="badge type-${taskType}">${typeLabel}</span></td>
@@ -7153,7 +6686,6 @@ function addMember() {
     name,
     role: $('m-role').value.trim(),
     color: $('m-color').value,
-    isAlba: false
   });
   save();
   $('m-name').value = ''; $('m-role').value = '';
@@ -7175,26 +6707,17 @@ function addTeam() {
     color: $('tm-color').value,
     icon: $('tm-icon').value || '📁'
   });
-  // 팀별 알바 가상 멤버 자동 생성
-  DATA.members.push({
-    id: 'alba_' + teamId,
-    teamId: teamId,
-    name: '알바',
-    role: '알바 (의뢰)',
-    color: '#B4651E',
-    isAlba: true
-  });
   save();
   $('tm-name').value = '';
   if ($('tm-icon')) $('tm-icon').value = '';
   renderAll();
-  toast('팀 추가됨 ✓ (알바 자동 생성)');
+  toast('팀 추가됨 ✓');
 }
 
 function deleteTeam(id) {
   const team = DATA.teams.find(t => t.id === id);
   if (!team) return;
-  const realMembers = DATA.members.filter(m => m.teamId === id && !m.isAlba);
+  const realMembers = DATA.members.filter(m => m.teamId === id);
   if (realMembers.length > 0) {
     if (!confirm(`'${team.name}' 팀에는 ${realMembers.length}명의 멤버가 있습니다. 팀을 삭제하면 멤버들은 다른 팀으로 이동해야 합니다. 계속하시겠어요?`)) return;
     const other = DATA.teams.find(t => t.id !== id);
@@ -7203,8 +6726,6 @@ function deleteTeam(id) {
   } else {
     if (!confirm(`'${team.name}' 팀을 삭제할까요?`)) return;
   }
-  // 이 팀의 알바 가상 멤버도 함께 삭제
-  DATA.members = DATA.members.filter(m => !(m.teamId === id && m.isAlba));
   DATA.teams = DATA.teams.filter(t => t.id !== id);
   save();
   renderAll();
@@ -7223,9 +6744,6 @@ function updateMemberTeam(memberId, teamId) {
 function deleteMember(id) {
   const m = DATA.members.find(x => x.id === id);
   if (!m) return;
-  if (m.isAlba) {
-    return toast('알바는 팀에 자동 추가되는 시스템 멤버입니다. 삭제할 수 없어요.');
-  }
   if (!confirm(`${m.name}님을 삭제할까요? 관련 루틴/업무도 함께 삭제됩니다.`)) return;
   DATA.members = DATA.members.filter(x => x.id !== id);
   DATA.routines = DATA.routines.filter(r => r.memberId !== id);
@@ -7250,7 +6768,6 @@ function quickAddMember(teamId) {
     name,
     role,
     color,
-    isAlba: false,
     kpi: ''
   });
   save();
@@ -7285,11 +6802,9 @@ function addRoutine() {
   if (!memberId) return toast('담당자를 먼저 추가하세요');
   if (!title) return toast('루틴 제목을 입력하세요');
   const freq = $('r-freq').value;
-  const isAlba = $('r-alba').checked;
   const routine = {
     id: uid(), memberId, title,
     frequency: freq, active: true,
-    assignee: isAlba ? 'alba' : 'member',
     createdAt: today()
   };
   if (freq === 'weekly') {
@@ -7302,13 +6817,12 @@ function addRoutine() {
   DATA.routines.push(routine);
   save();
   $('r-title').value = '';
-  // 알바 체크박스는 유지 (연속 등록 편의)
   renderManagePage();
   renderTodayPage();
   renderDetailPage();
   renderTeamPage();
   renderHero();
-  toast(`루틴 등록됨 ✓ ${isAlba ? '(🧑‍💼 알바 의뢰)' : '(👤 본인 수행)'}`);
+  toast('루틴 등록됨 ✓');
 }
 
 function toggleRoutineActive(id) {
@@ -7551,9 +7065,9 @@ function loadSampleData(silent) {
   ];
 
   const baseMembers = [
-    { id: 'mm1', teamId: 'team_main', name: '신한솔', role: '', color: '#1B5E6E', isAlba: false, kpi: '' },
-    { id: 'mm2', teamId: 'team_main', name: '최세혁', role: '', color: '#B4651E', isAlba: false, kpi: '' },
-    { id: 'mm3', teamId: 'team_main', name: '조재연', role: '', color: '#2E7D52', isAlba: false, kpi: '' }
+    { id: 'mm1', teamId: 'team_main', name: '신한솔', role: '', color: '#1B5E6E', kpi: '' },
+    { id: 'mm2', teamId: 'team_main', name: '최세혁', role: '', color: '#B4651E', kpi: '' },
+    { id: 'mm3', teamId: 'team_main', name: '조재연', role: '', color: '#2E7D52', kpi: '' }
   ];
 
   if (silent) {
@@ -7592,7 +7106,7 @@ function renderManualsPage() {
   if (!UI.manualFilter) UI.manualFilter = 'all';
 
   const ownerIds = [];
-  DATA.members.filter(m => !m.isAlba).forEach(m => { if (all.some(x => x.owner === m.id)) ownerIds.push(m.id); });
+  DATA.members.forEach(m => { if (all.some(x => x.owner === m.id)) ownerIds.push(m.id); });
   const noneList = all.filter(x => !x.owner || !manualMember(x.owner));
   const filterEl = $('manual-filter');
   if (filterEl) {
@@ -7669,7 +7183,7 @@ function openManualView(id) {
 function openManualModal(id) {
   closeModal();
   const sel = $('manual-f-owner');
-  sel.innerHTML = `<option value="">— 담당자 없음 —</option>` + DATA.members.filter(m => !m.isAlba).map(m => `<option value="${m.id}">${escapeHtml(m.name)}</option>`).join('');
+  sel.innerHTML = `<option value="">— 담당자 없음 —</option>` + DATA.members.map(m => `<option value="${m.id}">${escapeHtml(m.name)}</option>`).join('');
   const x = id ? (DATA.manuals || []).find(v => v.id === id) : null;
   $('manual-edit-id').value = x ? x.id : '';
   $('manual-modal-title').textContent = x ? '매뉴얼 수정' : '매뉴얼 추가';
@@ -7783,7 +7297,7 @@ function openDashModal(id) {
   closeModal();
   const ownerSel = $('dash-f-owner');
   ownerSel.innerHTML = `<option value="">— 담당자 없음 —</option>` +
-    DATA.members.filter(m => !m.isAlba).map(m => `<option value="${m.id}">${escapeHtml(m.name)}</option>`).join('');
+    DATA.members.map(m => `<option value="${m.id}">${escapeHtml(m.name)}</option>`).join('');
   const d = id ? (DATA.dashboards || []).find(x => x.id === id) : null;
   $('dash-edit-id').value = d ? d.id : '';
   $('dash-modal-title').textContent = d ? '대시보드 수정' : '대시보드 추가';
@@ -7857,7 +7371,7 @@ const KPI_STATUS = {
 };
 
 function kpiOwnerMember(name) {
-  return DATA.members.find(m => !m.isAlba && m.name === name) || null;
+  return DATA.members.find(m => m.name === name) || null;
 }
 function kpiAvatarHtml(name, size) {
   const m = kpiOwnerMember(name);
@@ -7965,7 +7479,7 @@ function renderKpiOwnerView() {
   const plan = DATA.kpiPlan;
   // 담당자 순서: 멤버 목록 순서 → 그 외
   const names = [];
-  DATA.members.filter(m=>!m.isAlba).forEach(m => { if ((plan.kpis||[]).some(k=>k.ownerName===m.name)) names.push(m.name); });
+  DATA.members.forEach(m => { if ((plan.kpis||[]).some(k=>k.ownerName===m.name)) names.push(m.name); });
   (plan.kpis||[]).forEach(k => { if (!names.includes(k.ownerName)) names.push(k.ownerName); });
 
   return names.map(name => {
@@ -7992,7 +7506,7 @@ function renderKpiCard(kpi, opts) {
   const lead = kpiLeadPct(kpi), lag = kpiLagPct(kpi);
   const prog = kpiProgress(kpi);
   const goal = (DATA.kpiPlan.teamGoals||[]).find(g => g.id === kpi.goalId);
-  const memberNames = DATA.members.filter(m=>!m.isAlba).map(m=>m.name);
+  const memberNames = DATA.members.map(m=>m.name);
   const ownerNames = memberNames.includes(kpi.ownerName) ? memberNames : [kpi.ownerName, ...memberNames];
   const ownerOptions = ownerNames
     .map(nm => `<option value="${escapeHtml(nm)}" ${nm===kpi.ownerName?'selected':''}>${escapeHtml(nm)}</option>`).join('');
@@ -8122,7 +7636,7 @@ function kpiAddInd(kpiId, kind) {
 function kpiAddKpi(goalId) {
   const title = prompt('새 KPI 제목을 입력하세요');
   if (!title || !title.trim()) return;
-  const firstManager = DATA.members.find(m => !m.isAlba);
+  const firstManager = DATA.members[0];
   DATA.kpiPlan.kpis.push({
     id: uid(), goalId, ownerName: firstManager ? firstManager.name : '',
     title: title.trim(), objective: '',
