@@ -367,6 +367,16 @@
     font-family: var(--display); font-weight: 800; font-size: 15px;
     color: var(--surface); letter-spacing: -0.02em;
   }
+  /* 이니셜 대신 브랜드 마크를 넣는 아바타 */
+  .avatar.avatar-brand {
+    box-sizing: border-box;
+    background: var(--surface);
+    border: 1px solid var(--line);
+    padding: 6px;
+  }
+  .avatar.avatar-brand svg {
+    width: 100%; height: 100%; display: block;
+  }
   .member-name { font-size: 15px; font-weight: 800; letter-spacing: -0.01em; }
   .member-role { font-size: 11px; color: var(--muted); margin-top: 1px; }
 
@@ -2384,6 +2394,20 @@
 </style>
 </head>
 <body>
+
+<!-- 브랜드 마크 — 아래에서 <use href="#brand-n"> 으로 가져다 쓴다 -->
+<svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false">
+  <defs>
+    <linearGradient id="brand-n-grad" x1="370" y1="112" x2="645" y2="528" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#8A8D91"/>
+      <stop offset="1" stop-color="#C6C8CB"/>
+    </linearGradient>
+    <symbol id="brand-n" viewBox="125 90 557 588">
+      <path fill="url(#brand-n-grad)" d="M565 112 H645 V528 L370 277 H478 L565 365 Z"/>
+      <path fill="#171C33" d="M135 100 L672 668 H560 L218 285 V668 H135 Z"/>
+    </symbol>
+  </defs>
+</svg>
 
 <!-- ============== HEADER ============== -->
 <header class="topbar">
@@ -4886,7 +4910,9 @@ function renderTodayPage() {
       <div class="today-card">
         <div class="today-card-head">
           <div class="member-info">
-            <div class="avatar" style="background:${m.color || '#3A3D42'};">${escapeHtml(initials(m.name))}</div>
+            <div class="avatar avatar-brand" title="${escapeHtml(m.name)}">
+              <svg viewBox="0 0 557 588" aria-hidden="true" focusable="false"><use href="#brand-n"/></svg>
+            </div>
             <div>
               <div class="member-name">${escapeHtml(m.name)}</div>
               <div class="member-role">${escapeHtml(m.role || '')}</div>
