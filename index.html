@@ -3115,11 +3115,17 @@
           <span class="fb-status-label">마지막 동기화</span>
           <span class="fb-status-value" id="sync-time-value">—</span>
         </div>
+        <div class="fb-status-line">
+          <span class="fb-status-label">자동 백업</span>
+          <span class="fb-status-value" id="sync-backup-value">—</span>
+        </div>
         <div class="fb-status-line" id="sync-error-row" style="display:none;">
           <span class="fb-status-label">오류</span>
           <span class="fb-status-value" id="sync-error-value" style="color:var(--danger); text-align:right; word-break:break-all;"></span>
         </div>
       </div>
+
+      <div id="sync-backup-list" style="margin-top:14px;"></div>
 
       <details class="fb-help">
         <summary>어떻게 동작하나요?</summary>
@@ -3130,6 +3136,9 @@
                 (실시간 연결이 막힌 환경에서는 2초마다 자동으로 맞춥니다.)</li>
             <li>새로고침하면 항상 팀의 최신 데이터가 먼저 표시됩니다.</li>
             <li>두 사람이 거의 동시에 저장해도, 서로 다른 항목을 고쳤다면 양쪽 변경이 모두 남습니다.</li>
+            <li>같은 항목이 두 번 들어오면 항상 하나로 합칩니다 — 중복이 쌓이지 않습니다.</li>
+            <li>지웠다는 기록이 없는데 항목이 사라지려 하면 자동으로 되살립니다.</li>
+            <li>무언가 줄어들기 직전마다 이 브라우저에 자동 백업을 남깁니다 (최근 12개).</li>
             <li>인터넷이 끊기면 <b>연결 오류</b> 로 바뀌고, 그동안의 변경은 이 PC에 저장됐다가
                 연결이 돌아오면 다시 올라갑니다.</li>
           </ul>
@@ -3159,6 +3168,153 @@ const DEFAULT_TEAM_NAME = 'B2B';
 const TEAM_NAME_REV = 1; // 기본 팀 이름 일괄 변경 회차
 const COLOR_REV = 5;     // 팔레트 개정 회차 — 저장된 팀·멤버 색을 현재 팔레트로 맞춘다
 const STALE_DAYS = 7; // 정체 업무 기준 (일)
+
+// ===== 데이터 보호 장치 =====
+// 규칙: 한 번 기입된 정보는 누락·삭제·중복되지 않는다.
+// 이 규칙을 주석이 아니라 코드로 강제한다.
+//  1) 중복 방지 — 같은 id 는 언제나 하나만 남긴다 (보조업무까지)
+//  2) 근거 없는 삭제 방지 — "지웠다" 는 기록이 없으면 되살린다
+//  3) 되돌리기 — 무언가 사라지기 직전에 자동 백업을 남긴다
+
+const BACKUP_KEY  = 'task_tracker_backups';
+const BACKUP_KEEP = 12;                 // 최근 12개까지 보관
+
+// ---- 1) 중복 제거 — 나중 것이 이기되, 순서는 처음 나온 자리를 지킨다 ----
+function dedupeById(arr) {
+  if (!Array.isArray(arr)) return [];
+  const out = [], at = new Map();
+  arr.forEach(it => {
+    if (!it || typeof it !== 'object') return;
+    if (it.id == null) { out.push(it); return; }
+    const key = String(it.id);
+    if (!at.has(key)) { at.set(key, out.length); out.push(it); return; }
+    const i = at.get(key);
+    out[i] = fbNewer(it, out[i]) ? it : out[i];   // 같은 id 는 최신본 하나만, 자리는 그대로
+  });
+  return out;
+}
+
+// DATA 전체에서 중복을 없앤다 (보조업무 포함). 저장·불러오기·병합마다 지나간다.
+function enforceNoDuplicates() {
+  FB_COLS.forEach(col => { DATA[col] = dedupeById(DATA[col]); });
+  DATA.tasks.forEach(t => {
+    if (Array.isArray(t.subtasks)) t.subtasks = dedupeById(t.subtasks);
+  });
+}
+
+// ---- 3) 자동 백업 ----
+function loadBackups() {
+  try { const a = JSON.parse(localStorage.getItem(BACKUP_KEY) || '[]'); return Array.isArray(a) ? a : []; }
+  catch (e) { return []; }
+}
+function countItems(d) {
+  let n = 0;
+  FB_COLS.forEach(c => { n += (Array.isArray(d[c]) ? d[c].length : 0); });
+  (d.tasks || []).forEach(t => { n += (t.subtasks || []).length; });
+  return n;
+}
+function makeBackup(reason) {
+  try {
+    const list = loadBackups();
+    const snap = { at: Date.now(), reason: reason || '자동', items: countItems(DATA), data: DATA };
+    list.unshift(snap);
+    while (list.length > BACKUP_KEEP) list.pop();
+    let s = JSON.stringify(list);
+    while (s.length > 3000000 && list.length > 1) { list.pop(); s = JSON.stringify(list); }
+    localStorage.setItem(BACKUP_KEY, s);
+  } catch (e) { console.warn('백업 저장 실패:', e && e.message); }
+}
+// 지우기 직전 상태는 localStorage 에 아직 남아 있다 — 그걸 그대로 백업한다
+function makeBackupFromStored(reason) {
+  try {
+    const raw = localStorage.getItem(STORAGE_KEY);
+    if (!raw) return;
+    const prev = JSON.parse(raw);
+    const list = loadBackups();
+    if (list.length && list[0].reason === reason && Date.now() - list[0].at < 1500) return; // 연속 삭제는 한 번만
+    list.unshift({ at: Date.now(), reason: reason || '자동', items: countItems(prev), data: prev });
+    while (list.length > BACKUP_KEEP) list.pop();
+    let str = JSON.stringify(list);
+    while (str.length > 3000000 && list.length > 1) { list.pop(); str = JSON.stringify(list); }
+    localStorage.setItem(BACKUP_KEY, str);
+  } catch (e) { console.warn('백업 저장 실패:', e && e.message); }
+}
+
+function restoreBackup(idx) {
+  const list = loadBackups();
+  const b = list[idx];
+  if (!b || !b.data) return toast('복구할 백업이 없습니다');
+  const when = new Date(b.at).toLocaleString('ko-KR');
+  if (!confirm(`${when} 시점(항목 ${b.items}개)으로 되돌릴까요?\n\n지금 화면의 내용은 되돌리기 전에 한 번 더 백업됩니다.`)) return;
+  makeBackup('복구 직전');
+  FB_COLS.forEach(c => { DATA[c] = Array.isArray(b.data[c]) ? JSON.parse(JSON.stringify(b.data[c])) : []; });
+  migrateData();
+  save();
+  renderAll();
+  toast(`${when} 시점으로 되돌렸습니다`);
+  if (UI.modalOpen === 'sync') renderSyncPanel();
+}
+
+// 상태 패널에 백업 목록과 복구 버튼을 그린다
+function renderBackupList() {
+  const val = $('sync-backup-value'), box = $('sync-backup-list');
+  if (!val || !box) return;
+  const list = loadBackups();
+  val.textContent = list.length ? `${list.length}개 · ${new Date(list[0].at).toLocaleTimeString('ko-KR')}` : '없음';
+  if (!list.length) {
+    box.innerHTML = '<div style="font-size:11px; color:var(--muted); padding:4px 2px;">'
+      + '아직 백업이 없습니다. 항목이 줄어드는 일이 생기면 그 직전 상태가 여기에 남습니다.</div>';
+    return;
+  }
+  box.innerHTML = '<div style="font-size:11px; font-weight:700; color:var(--ink-2); margin-bottom:6px;">되돌리기</div>'
+    + list.map((b, i) => `
+      <div style="display:flex; align-items:center; gap:8px; padding:6px 8px; border:1px solid var(--line);
+                  border-radius:6px; margin-bottom:4px; font-size:11px;">
+        <span style="flex:1; color:var(--ink-2);">
+          ${escapeHtml(new Date(b.at).toLocaleString('ko-KR'))}
+          <span style="color:var(--muted);"> · 항목 ${b.items}개 · ${escapeHtml(b.reason || '')}</span>
+        </span>
+        <button class="modal-btn" style="padding:3px 10px; font-size:11px;"
+          onclick="restoreBackup(${i})">이 상태로</button>
+      </div>`).join('');
+}
+
+// ---- 2) 근거 없는 삭제 되살리기 ----
+// 병합 결과에서 항목이 사라졌는데 "지웠다" 는 기록이 없으면 되돌려 놓는다.
+// 어떤 버그가 있어도 기입된 정보가 조용히 없어지지 않게 하는 마지막 방어선이다.
+function rescueMissing(col, out, before, gone) {
+  const have = new Set();
+  out.forEach(x => { if (x && x.id != null) have.add(String(x.id)); });
+  let rescued = 0;
+  (Array.isArray(before) ? before : []).forEach(it => {
+    if (!it || it.id == null) return;
+    const id = String(it.id);
+    if (have.has(id)) return;
+    if (gone(`${col}/${id}`)) return;                 // 실제로 지운 것 — 존중한다
+    out.push(JSON.parse(JSON.stringify(it)));
+    have.add(id); rescued++;
+  });
+  if (col === 'tasks') {
+    const beforeById = {};
+    (Array.isArray(before) ? before : []).forEach(t => { if (t && t.id != null) beforeById[t.id] = t; });
+    out.forEach(t => {
+      const was = beforeById[t.id];
+      if (!was || !Array.isArray(was.subtasks)) return;
+      if (!Array.isArray(t.subtasks)) t.subtasks = [];
+      const ids = new Set(t.subtasks.map(s => s && s.id != null ? String(s.id) : null));
+      was.subtasks.forEach(s => {
+        if (!s || s.id == null) return;
+        const sid = String(s.id);
+        if (ids.has(sid)) return;
+        if (gone(`tasks/${t.id}/subtasks/${sid}`)) return;
+        t.subtasks.push(JSON.parse(JSON.stringify(s)));
+        ids.add(sid); rescued++;
+      });
+    });
+  }
+  if (rescued) console.warn(`[보호] ${col}: 근거 없이 사라질 뻔한 항목 ${rescued}개를 되살렸습니다`);
+  return rescued;
+}
 
 // ===== Firebase Realtime Database — 항목 단위 실시간 공동 저장 =====
 // 전체 DATA 를 통째로 덮어쓰지 않는다. 바뀐 항목만 그 항목의 경로에 쓰고,
@@ -3393,7 +3549,10 @@ function fbRecordDeletions() {
       Object.keys(was).forEach(sid => { if (!is[sid]) mark(`${col}/${id}/subtasks/${sid}`); });
     });
   });
-  if (touched) fbSaveTombs(tombs);
+  if (touched) {
+    makeBackupFromStored('삭제 전');   // 되돌릴 수 있게 지우기 직전 상태를 남긴다
+    fbSaveTombs(tombs);
+  }
   FB.seen = now;
 }
 function fbMarkSeen() { FB.seen = fbLocalSnap(); }
@@ -3505,7 +3664,19 @@ function fbMergeInto(remote, opts) {
         if (!gone(`${col}/${id}`)) { out.push(fbToItem(col, R)); changed = true; }
       }
     }
-    if (!fbEq(out, DATA[col])) { DATA[col] = out; changed = true; }
+    // 마지막 방어선 — 근거 없이 사라지는 항목이 있으면 되돌려 놓는다
+    rescueMissing(col, out, DATA[col], gone);
+    const deduped = dedupeById(out);
+    if (!fbEq(deduped, DATA[col])) {
+      // 무언가 줄어드는 병합이면 먼저 백업을 남긴다
+      const beforeN = (DATA[col] || []).length + (col === 'tasks'
+        ? (DATA.tasks || []).reduce((a, t) => a + ((t.subtasks || []).length), 0) : 0);
+      const afterN = deduped.length + (col === 'tasks'
+        ? deduped.reduce((a, t) => a + ((t.subtasks || []).length), 0) : 0);
+      if (afterN < beforeN) makeBackup(`${col} 정리 전`);
+      DATA[col] = deduped;
+      changed = true;
+    }
   });
 
   FB.deferred = deferred;
@@ -3876,6 +4047,7 @@ function openSyncPanel() {
 function renderSyncPanel() {
   const label = FB.state === 'synced' ? '팀 데이터 동기화' : FB.state === 'error' ? '연결 오류' : '연결 중';
   $('sync-state-value').textContent = label;
+  renderBackupList();
   $('sync-mode-value').textContent =
     FB.mode === 'sdk' ? '실시간 리스너' : FB.mode === 'rest' ? '2초 주기 동기화' : '연결 준비 중';
   $('sync-path-value').textContent = FB.path;
@@ -3956,6 +4128,7 @@ function save() {
   // 2) 이 PC에 저장한 뒤
   // 3) 같은 브라우저의 다른 탭에 알리고
   // 4) 바뀐 항목만 팀 데이터에 올린다.
+  enforceNoDuplicates();
   fbRecordDeletions();
   fbStampChanges();
   localStorage.setItem(STORAGE_KEY, JSON.stringify(DATA));
@@ -4091,6 +4264,9 @@ function migrateData() {
     if (DATA.teams[0] && DATA.teams[0].name === '서비스운영본부') DATA.teams[0].name = DEFAULT_TEAM_NAME;
     DATA.teamNameRev = TEAM_NAME_REV;
   }
+
+  // 마지막으로 중복을 걷어낸다 — 불러오기·병합·복구 어느 경로로 들어와도 지나간다
+  enforceNoDuplicates();
 }
 function escapeHtml(s) {
   return String(s || '').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#039;'}[c]));
@@ -6380,6 +6556,7 @@ function exportMemberReport(memberId) {
 function importData(e) {
   const f = e.target.files[0];
   if (!f) return;
+  makeBackup('가져오기 전');
   const reader = new FileReader();
   reader.onload = ev => {
     try {
@@ -6414,6 +6591,7 @@ function importData(e) {
 function clearAll() {
   if (!confirm('모든 데이터를 삭제하시겠습니까?')) return;
   if (!confirm('정말 삭제하시겠어요? 마지막 확인입니다.')) return;
+  makeBackup('전체 초기화 전');
   localStorage.removeItem(STORAGE_KEY);
   location.reload();
 }
