@@ -3052,7 +3052,8 @@
         <div class="modal-subtasks-list" id="project-modal-sublist"></div>
         <div class="modal-subtask-add">
           <input type="text" id="project-modal-sub-input" placeholder="보조 업무 추가 — 예: 도면 5건 재작업"
-            onkeydown="if(event.key==='Enter')addDraftSubtask();">
+            autocomplete="off"
+            onkeydown="if(event.key==='Enter'){event.preventDefault();event.stopPropagation();addDraftSubtask();}">
           <button onclick="addDraftSubtask()">+ 추가</button>
         </div>
       </div>
@@ -3139,30 +3140,546 @@ const TEAM_NAME_REV = 1; // 기본 팀 이름 일괄 변경 회차
 const COLOR_REV = 5;     // 팔레트 개정 회차 — 저장된 팀·멤버 색을 현재 팔레트로 맞춘다
 const STALE_DAYS = 7; // 정체 업무 기준 (일)
 
-// ===== Firebase Realtime Database — 팀 실시간 공동 저장 =====
-// 팀 전원이 같은 노드(shared/taskTracker)를 원본으로 보고 쓴다.
+// ===== Firebase Realtime Database — 항목 단위 실시간 공동 저장 =====
+// 전체 DATA 를 통째로 덮어쓰지 않는다. 바뀐 항목만 그 항목의 경로에 쓰고,
+// 항목마다 revision / updatedAt / updatedBy 를 붙여 오래된 값이 최신 값을
+// 덮어쓰지 못하게 막는다.
+//
+//   shared/taskTracker/tasks/{taskId}
+//   shared/taskTracker/tasks/{taskId}/subtasks/{subtaskId}
+//   shared/taskTracker/routines/{routineId}   ... (컬렉션마다 동일)
+//
 // 로그인 없이 누구나 읽고 쓰는 공개 DB 이므로 아래 값은 코드에 그대로 둔다.
 // 비밀번호나 토큰 같은 비밀값은 절대 여기에 넣지 않는다.
 const FB_URL  = 'https://b2b-task-tracker-39144-default-rtdb.asia-southeast1.firebasedatabase.app';
 const FB_PATH = 'shared/taskTracker';
 const FB_SDK_VER  = '10.12.5';
 const FB_COLS     = ['teams', 'members', 'routines', 'routineChecks', 'tasks', 'dashboards', 'manuals'];
-const FB_POLL_MS  = 2000;  // SDK 를 못 쓸 때의 폴링 주기
-const FB_PUSH_MS  = 700;   // 연속 편집을 모아서 한 번에 올리는 간격
-const FB_BASE_KEY = 'task_tracker_fb_base'; // 마지막으로 주고받은 원격 스냅샷 (3-way 병합 기준점)
+const FB_META     = ['revision', 'updatedAt', 'updatedBy'];
+const FB_POLL_MS  = 2000;   // SDK 를 못 쓸 때의 폴링 주기
+const FB_PUSH_MS  = 500;    // 연속 편집을 모아서 한 번에 올리는 간격
+const FB_BASE_KEY = 'task_tracker_fb_base';   // 마지막으로 확인한 원격 상태 (탭 공용)
+const FB_TAB_KEY  = 'task_tracker_tab_id';    // 탭마다 다른 id (sessionStorage)
+const FB_CHANNEL  = 'task_tracker_sync';
+const FB_TOMB_KEY = 'task_tracker_fb_tombs';  // 실제로 삭제한 항목 기록 (탭 공용)
+const FB_TOMB_TTL = 24 * 60 * 60 * 1000;      // 하루 지나면 정리
 
 let FB = {
   url: FB_URL, path: FB_PATH,
   mode: null,           // 'sdk' | 'rest' | null
   state: 'connecting',  // connecting | synced | error
-  sdk: null, ref: null,
-  base: null,           // 기준점 — 이게 있어야 "누가 무엇을 바꿨는지" 구분된다
-  etag: null,           // REST 조건부 쓰기(CAS)용
-  applying: false,      // 원격 반영 중 — 되올리기 루프 차단
+  sdk: null, db: null, root: null,
+  clientId: '',         // 이 탭 고유 id — 내가 쓴 값을 되받아 다시 쓰지 않기 위해
+  base: null,           // {col: {id: {fields, meta, subs}}} — 마지막으로 확인한 원격 상태
+  applying: false,      // 원격 반영 중 — 되올리기 차단
   pushing: false, dirty: false,
   pushTimer: null, pollTimer: null, offlineTimer: null,
-  online: true, lastSync: null, lastError: '', etagWarned: false
+  channel: null, online: true,
+  lastSync: null, lastError: '', etagWarned: false,
+  deferred: false,      // 편집 중이라 미뤄둔 원격 변경이 있는가
+  seen: null            // 이 탭이 마지막으로 알고 있던 항목들 — 삭제와 '아직 못 받음'을 구분한다
 };
+
+// ---- 탭 고유 id ----
+function fbClientId() {
+  if (FB.clientId) return FB.clientId;
+  let id = null;
+  try { id = sessionStorage.getItem(FB_TAB_KEY); } catch (e) {}
+  if (!id) {
+    id = 'tab-' + Math.random().toString(36).slice(2, 10) + '-' + (Date.now() % 100000);
+    try { sessionStorage.setItem(FB_TAB_KEY, id); } catch (e) {}
+  }
+  FB.clientId = id;
+  return id;
+}
+
+// ---- 정규화 ----
+// Firebase 는 null 을 버리고 키 순서를 보장하지 않는다. 비교가 흔들리지 않게 맞춘다.
+function fbClean(v) {
+  if (Array.isArray(v)) return v.map(fbClean).filter(x => x !== null && x !== undefined);
+  if (v && typeof v === 'object') {
+    const o = {};
+    Object.keys(v).sort().forEach(k => {
+      const c = fbClean(v[k]);
+      if (c !== null && c !== undefined) o[k] = c;
+    });
+    return o;
+  }
+  return v === undefined ? null : v;
+}
+function fbFields(item) {                       // 메타를 뺀 실제 내용
+  const o = {};
+  Object.keys(item || {}).forEach(k => { if (!FB_META.includes(k)) o[k] = item[k]; });
+  return fbClean(o);
+}
+function fbMeta(item) {
+  return {
+    revision:  Number((item || {}).revision)  || 0,
+    updatedAt: Number((item || {}).updatedAt) || 0,
+    updatedBy: (item || {}).updatedBy || ''
+  };
+}
+function fbEq(a, b) { return JSON.stringify(a) === JSON.stringify(b); }
+
+// 더 최신인가 — revision 우선, 같으면 updatedAt, 그래도 같으면 updatedBy 로 결정
+function fbNewer(a, b) {
+  const A = fbMeta(a), B = fbMeta(b);
+  if (A.revision !== B.revision) return A.revision > B.revision;
+  if (A.updatedAt !== B.updatedAt) return A.updatedAt > B.updatedAt;
+  return A.updatedBy > B.updatedBy;
+}
+
+// ---- 스냅샷: 로컬 배열 ↔ {id: 항목} 맵 ----
+function fbEntry(col, item) {
+  if (col !== 'tasks') return { fields: fbFields(item), meta: fbMeta(item), subs: null };
+  const rest = {}; let subtasks = [];
+  Object.keys(item).forEach(k => { if (k === 'subtasks') subtasks = item[k] || []; else rest[k] = item[k]; });
+  const subs = {};
+  (Array.isArray(subtasks) ? subtasks : []).forEach(s => {
+    if (s && s.id != null) subs[s.id] = { fields: fbFields(s), meta: fbMeta(s) };
+  });
+  return { fields: fbFields(rest), meta: fbMeta(item), subs };
+}
+function fbLocalSnap() {
+  const snap = {};
+  FB_COLS.forEach(col => {
+    snap[col] = {};
+    (Array.isArray(DATA[col]) ? DATA[col] : []).forEach(item => {
+      if (item && item.id != null) snap[col][item.id] = fbEntry(col, item);
+    });
+  });
+  return snap;
+}
+function fbRemoteSnap(raw) {
+  const snap = {};
+  FB_COLS.forEach(col => {
+    snap[col] = {};
+    const node = raw && raw[col];
+    if (!node || typeof node !== 'object') return;
+    Object.keys(node).forEach(id => {
+      const v = node[id];
+      if (!v || typeof v !== 'object') return;
+      if (col === 'tasks') {
+        const rest = {}; let subNode = null;
+        Object.keys(v).forEach(k => { if (k === 'subtasks') subNode = v[k]; else rest[k] = v[k]; });
+        const subs = {};
+        if (subNode && typeof subNode === 'object') {
+          Object.keys(subNode).forEach(sid => {
+            const sv = subNode[sid];
+            if (sv && typeof sv === 'object') subs[sid] = { fields: fbFields(sv), meta: fbMeta(sv) };
+          });
+        }
+        snap[col][id] = { fields: fbFields(rest), meta: fbMeta(v), subs };
+      } else {
+        snap[col][id] = { fields: fbFields(v), meta: fbMeta(v), subs: null };
+      }
+    });
+  });
+  return snap;
+}
+function fbEmptySnap() { const s = {}; FB_COLS.forEach(c => s[c] = {}); return s; }
+function fbSnapEmpty(s) { return FB_COLS.every(c => Object.keys(s[c] || {}).length === 0); }
+
+// 항목(+보조업무)을 다시 로컬 형태로
+function fbToItem(col, entry) {
+  const o = Object.assign({}, entry.fields, entry.meta);
+  if (col === 'tasks') {
+    o.subtasks = Object.keys(entry.subs || {}).map(sid =>
+      Object.assign({}, entry.subs[sid].fields, entry.subs[sid].meta, { id: sid }));
+  }
+  return o;
+}
+
+// ---- 기준점 (탭 공용, localStorage) ----
+function fbLoadBase() {
+  try {
+    const raw = localStorage.getItem(FB_BASE_KEY);
+    FB.base = raw ? JSON.parse(raw) : null;
+  } catch (e) { FB.base = null; }
+  if (FB.base) FB_COLS.forEach(c => { if (!FB.base[c]) FB.base[c] = {}; });
+  return FB.base;
+}
+function fbSaveBase() {
+  try { localStorage.setItem(FB_BASE_KEY, JSON.stringify(FB.base)); } catch (e) {}
+}
+function fbBaseEntry(col, id) {
+  return FB.base && FB.base[col] ? FB.base[col][id] : undefined;
+}
+function fbSetBaseEntry(col, id, entry) {
+  if (!FB.base) FB.base = fbEmptySnap();
+  if (!FB.base[col]) FB.base[col] = {};
+  if (entry === null) delete FB.base[col][id];
+  else FB.base[col][id] = JSON.parse(JSON.stringify(entry));
+}
+
+// ---- 삭제 기록 ----
+// "로컬에 없다" 를 곧바로 삭제로 보면, 아직 최신 내용을 못 받은 탭이 남의 최신 항목을
+// 지워버린다. 그래서 이 탭이 실제로 지운 것만 따로 적어 두고, 그것만 원격에서 지운다.
+function fbLoadTombs() {
+  let t = {};
+  try { t = JSON.parse(localStorage.getItem(FB_TOMB_KEY) || '{}') || {}; } catch (e) { t = {}; }
+  const now = Date.now();
+  Object.keys(t).forEach(k => { if (!t[k] || now - (t[k].at || 0) > FB_TOMB_TTL) delete t[k]; });
+  return t;
+}
+function fbSaveTombs(t) {
+  try { localStorage.setItem(FB_TOMB_KEY, JSON.stringify(t)); } catch (e) {}
+}
+function fbHasTomb(path) { return !!fbLoadTombs()[path]; }
+function fbClearTomb(path) { const t = fbLoadTombs(); delete t[path]; fbSaveTombs(t); }
+
+// save() 직전에 호출 — 이 탭이 직접 지운 항목을 기록한다
+function fbRecordDeletions() {
+  const now = fbLocalSnap();
+  if (!FB.seen) { FB.seen = now; return; }
+  const tombs = fbLoadTombs(), at = Date.now(), by = fbClientId();
+  let touched = false;
+  const mark = path => { tombs[path] = { at, by }; touched = true; };
+  FB_COLS.forEach(col => {
+    Object.keys(FB.seen[col] || {}).forEach(id => {
+      if (!now[col][id]) { mark(`${col}/${id}`); return; }
+      if (col !== 'tasks') return;
+      const was = (FB.seen[col][id].subs) || {}, is = (now[col][id].subs) || {};
+      Object.keys(was).forEach(sid => { if (!is[sid]) mark(`${col}/${id}/subtasks/${sid}`); });
+    });
+  });
+  if (touched) fbSaveTombs(tombs);
+  FB.seen = now;
+}
+function fbMarkSeen() { FB.seen = fbLocalSnap(); }
+
+// ---- 변경 항목 도장 찍기 ----
+// save() 때 기준점과 비교해 실제로 바뀐 항목에만 revision+1 / updatedAt / updatedBy 를 찍는다.
+// 이 도장이 있어야 다른 탭·다른 PC 가 "누구 것이 최신인지" 판단할 수 있다.
+function fbStampChanges() {
+  if (FB.applying) return;
+  fbLoadBase();
+  const now = Date.now(), by = fbClientId();
+  FB_COLS.forEach(col => {
+    (Array.isArray(DATA[col]) ? DATA[col] : []).forEach(item => {
+      if (!item || item.id == null) return;
+      const cur = fbEntry(col, item);
+      const base = fbBaseEntry(col, item.id);
+      if (col === 'tasks') {
+        (item.subtasks || []).forEach(s => {
+          if (!s || s.id == null) return;
+          const bs = base && base.subs ? base.subs[s.id] : undefined;
+          if (!bs || !fbEq(fbFields(s), bs.fields)) {
+            s.revision  = Math.max(fbMeta(s).revision, bs ? bs.meta.revision : 0) + 1;
+            s.updatedAt = now;
+            s.updatedBy = by;
+          }
+        });
+      }
+      if (!base || !fbEq(cur.fields, base.fields)) {
+        item.revision  = Math.max(cur.meta.revision, base ? base.meta.revision : 0) + 1;
+        item.updatedAt = now;
+        item.updatedBy = by;
+      }
+    });
+  });
+}
+
+// ---- 편집 중 보호 ----
+// 지금 사용자가 모달에서 손대고 있는 항목은 원격 값으로 덮지 않고 미뤄둔다.
+function fbLockedTaskId() {
+  if (UI.modalOpen !== 'add-project') return null;
+  const el = $('project-edit-id');
+  return el && el.value ? el.value : null;
+}
+function fbLockedRoutineId() {
+  if (UI.modalOpen !== 'add-routine') return null;
+  const el = $('routine-edit-id');
+  return el && el.value ? el.value : null;
+}
+function fbIsLocked(col, id) {
+  if (col === 'tasks') return fbLockedTaskId() === id;
+  if (col === 'routines') return fbLockedRoutineId() === id;
+  return false;
+}
+
+// ---- 원격/타 탭 → 로컬 병합 (ID 기준, 최신본 우선) ----
+// remote 스냅샷을 통째로 갈아끼우지 않는다. 항목마다 최신인 쪽을 고른다.
+function fbMergeInto(remote, opts) {
+  const firstEver = !FB.base;                       // 기준점이 없으면 어느 쪽도 지우지 않는다
+  const local = fbLocalSnap();
+  let changed = false, deferred = false;
+
+  FB_COLS.forEach(col => {
+    const out = [];
+    const ids = new Set([...Object.keys(local[col]), ...Object.keys(remote[col] || {})]);
+    // 로컬 순서를 유지하고, 원격에만 있는 것은 뒤에 붙인다
+    const order = [...Object.keys(local[col]), ...Object.keys(remote[col] || {})];
+    const seen = new Set();
+    for (const id of order) {
+      if (seen.has(id) || !ids.has(id)) continue;
+      seen.add(id);
+      const L = local[col][id], R = (remote[col] || {})[id], B = fbBaseEntry(col, id);
+
+      if (L && R) {
+        if (fbIsLocked(col, id)) { out.push(fbToItem(col, L)); deferred = true; continue; }
+        const win = fbNewer(R.meta, L.meta) ? R : L;
+        const entry = { fields: win.fields, meta: win.meta, subs: null };
+        if (col === 'tasks') {
+          // 보조업무는 한 건씩 따로 비교한다 — 한쪽이 통째로 날아가지 않게
+          const subs = {};
+          const sids = [...Object.keys(L.subs || {}), ...Object.keys(R.subs || {})];
+          const sseen = new Set();
+          for (const sid of sids) {
+            if (sseen.has(sid)) continue;
+            sseen.add(sid);
+            const ls = (L.subs || {})[sid], rs = (R.subs || {})[sid];
+            const bs = B && B.subs ? B.subs[sid] : undefined;
+            if (ls && rs)      subs[sid] = fbNewer(rs.meta, ls.meta) ? rs : ls;
+            else if (ls)       { if (firstEver || !bs || !fbEq(ls.fields, bs.fields) || fbNewer(ls.meta, bs.meta)) subs[sid] = ls; }
+            else if (rs)       { if (!fbHasTomb(`${col}/${id}/subtasks/${sid}`)) subs[sid] = rs; }
+          }
+          entry.subs = subs;
+        }
+        out.push(fbToItem(col, entry));
+        if (!fbEq(fbToItem(col, L), fbToItem(col, entry))) changed = true;
+      } else if (L && !R) {
+        // 원격에 없다 — 기준점에 있었고 내가 손댄 적이 없으면 남이 지운 것
+        const mine = firstEver || !B || !fbEq(L.fields, B.fields) || fbNewer(L.meta, B.meta);
+        if (mine || fbIsLocked(col, id)) out.push(fbToItem(col, L));
+        else changed = true;                       // 삭제 반영
+      } else if (R && !L) {
+        // 로컬에 없다 — 내가 실제로 지운 경우에만 지운 채로 두고,
+        // 그냥 아직 못 받은 것이라면 원격 것을 가져온다
+        if (!fbHasTomb(`${col}/${id}`)) { out.push(fbToItem(col, R)); changed = true; }
+      }
+    }
+    if (!fbEq(out, DATA[col])) { DATA[col] = out; changed = true; }
+  });
+
+  FB.deferred = deferred;
+  if (changed) {
+    FB.applying = true;
+    try {
+      migrateData();
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(DATA));
+      renderAll();
+    } finally { FB.applying = false; }
+    fbMarkSeen();
+  }
+  return changed;
+}
+
+// ---- 바뀐 항목만 골라 쓰기 목록 만들기 ----
+function fbBuildOps() {
+  fbLoadBase();
+  const local = fbLocalSnap();
+  const ops = [];
+  FB_COLS.forEach(col => {
+    Object.keys(local[col]).forEach(id => {
+      const L = local[col][id], B = fbBaseEntry(col, id);
+      if (!B || !fbEq(L.fields, B.fields)) {
+        ops.push({ col, id, kind: 'item', path: `${col}/${id}`,
+                   value: Object.assign({}, L.fields, L.meta, { id }), meta: L.meta });
+      }
+      if (col === 'tasks') {
+        const bs = (B && B.subs) || {};
+        Object.keys(L.subs || {}).forEach(sid => {
+          const s = L.subs[sid];
+          if (!bs[sid] || !fbEq(s.fields, bs[sid].fields)) {
+            ops.push({ col, id, sid, kind: 'sub', path: `${col}/${id}/subtasks/${sid}`,
+                       value: Object.assign({}, s.fields, s.meta, { id: sid }), meta: s.meta });
+          }
+        });
+      }
+    });
+  });
+  // 삭제는 이 브라우저가 실제로 지운 것만 — 아직 최신 내용을 못 받은 탭이
+  // 남의 항목을 지우는 일이 없게 한다
+  const tombs = fbLoadTombs();
+  Object.keys(tombs).forEach(path => {
+    const parts = path.split('/');
+    if (parts.length === 2 && FB_COLS.includes(parts[0])) {
+      if (!local[parts[0]][parts[1]]) ops.push({ kind: 'item-del', col: parts[0], id: parts[1], path });
+    } else if (parts.length === 4 && parts[0] === 'tasks' && parts[2] === 'subtasks') {
+      const t = local.tasks[parts[1]];
+      if (!t || !(t.subs || {})[parts[3]]) ops.push({ kind: 'sub-del', col: 'tasks', id: parts[1], sid: parts[3], path });
+    }
+  });
+  return ops;
+}
+
+// ---- 쓰기 ----
+function fbPushSoon() {
+  if (!FB.mode || FB.applying) return;   // 원격 반영 중에는 되올리지 않는다
+  FB.dirty = true;
+  if (FB.pushTimer) clearTimeout(FB.pushTimer);
+  FB.pushTimer = setTimeout(fbFlush, FB_PUSH_MS);
+}
+
+async function fbFlush() {
+  if (!FB.mode || FB.pushing) return;
+  const ops = fbBuildOps();
+  FB.pushing = true;
+  FB.dirty = false;
+  try {
+    for (const op of ops) {
+      const ok = FB.mode === 'sdk' ? await fbWriteSdk(op) : await fbWriteRest(op);
+      if (ok) fbCommitBase(op);
+    }
+    FB.lastSync = Date.now();
+    fbSaveBase();
+    fbSetState('synced', '');
+  } catch (err) {
+    console.warn('Firebase 저장 실패:', err);
+    fbSaveBase();
+    fbSetState('error', err && err.message);       // 실패해도 localStorage 에는 이미 저장돼 있다
+  } finally {
+    FB.pushing = false;
+    if (FB.dirty) fbPushSoon();
+  }
+}
+
+// 쓰기 성공한 항목만 기준점을 옮긴다
+function fbCommitBase(op) {
+  const local = fbLocalSnap();
+  if (op.kind === 'item-del' || op.kind === 'sub-del') fbClearTomb(op.path);
+  if (op.kind === 'item-del') return fbSetBaseEntry(op.col, op.id, null);
+  const L = local[op.col][op.id];
+  if (!L) return;
+  const B = fbBaseEntry(op.col, op.id);
+  if (op.kind === 'item') {
+    fbSetBaseEntry(op.col, op.id, { fields: L.fields, meta: L.meta, subs: (B && B.subs) || L.subs || null });
+  } else if (op.kind === 'sub' || op.kind === 'sub-del') {
+    const cur = fbBaseEntry(op.col, op.id) || { fields: L.fields, meta: L.meta, subs: {} };
+    if (!cur.subs) cur.subs = {};
+    if (op.kind === 'sub-del') delete cur.subs[op.sid];
+    else if (L.subs && L.subs[op.sid]) cur.subs[op.sid] = JSON.parse(JSON.stringify(L.subs[op.sid]));
+    fbSetBaseEntry(op.col, op.id, cur);
+  }
+}
+
+// SDK — 항목 하나를 트랜잭션으로 쓴다. 원격 revision 이 더 크면 쓰지 않는다.
+async function fbWriteSdk(op) {
+  const ref = FB.sdk.ref(FB.db, `${FB.path}/${op.path}`);
+  if (op.kind === 'item-del' || op.kind === 'sub-del') {
+    await FB.sdk.remove(ref);
+    return true;
+  }
+  const next = op.value, meta = op.meta;
+  const res = await FB.sdk.runTransaction(ref, cur => {
+    if (cur && fbNewer(cur, meta)) return;                 // 원격이 더 최신 — 덮어쓰지 않고 중단
+    if (op.kind === 'item') return Object.assign({}, cur || {}, next);  // subtasks 는 건드리지 않는다
+    return next;
+  }, { applyLocally: false });
+  return res.committed;
+}
+
+// REST — 노드 단위 PATCH. 쓰기 전에 원격 revision 을 확인한다.
+function fbNodeUrl(path) { return `${FB.url}/${FB.path}/${path}.json`; }
+
+async function fbGetNode(path) {
+  const res = await fetch(fbNodeUrl(path), { headers: { 'X-Firebase-ETag': 'true' }, cache: 'no-store' });
+  if (!res.ok) throw new Error(`읽기 실패 (HTTP ${res.status})`);
+  const etag = res.headers.get('ETag');
+  if (!etag && !FB.etagWarned) {
+    FB.etagWarned = true;
+    console.warn('Firebase ETag 를 읽을 수 없습니다 — revision 비교와 저장 후 재확인으로 충돌을 막습니다');
+  }
+  return { data: await res.json(), etag };
+}
+
+async function fbWriteRest(op) {
+  if (op.kind === 'item-del' || op.kind === 'sub-del') {
+    const res = await fetch(fbNodeUrl(op.path), { method: 'DELETE' });
+    if (!res.ok) throw new Error(`삭제 실패 (HTTP ${res.status})`);
+    return true;
+  }
+  for (let attempt = 0; attempt < 3; attempt++) {
+    const got = await fbGetNode(op.path);
+    if (got.data && fbNewer(got.data, op.meta)) return false;   // 원격이 더 최신 — 그대로 둔다
+
+    const headers = { 'Content-Type': 'application/json' };
+    if (got.etag) { headers['X-Firebase-ETag'] = 'true'; headers['if-match'] = got.etag; }
+    // PATCH — 이 노드의 지정한 필드만 바꾼다. tasks/{id} 를 PATCH 해도 subtasks 는 남는다.
+    const res = await fetch(fbNodeUrl(op.path), { method: 'PATCH', headers, body: JSON.stringify(op.value) });
+    if (res.status === 412) continue;                            // 그 사이 남이 썼다 — 다시 확인
+    if (!res.ok) throw new Error(`저장 실패 (HTTP ${res.status})`);
+
+    // 저장 직후 되읽어 실제로 남았는지 확인한다
+    const after = await fbGetNode(op.path);
+    if (after.data && !fbNewer(after.data, op.meta) && fbEq(fbFields(after.data), fbFields(op.value))) return true;
+    if (after.data && fbNewer(after.data, op.meta)) return false; // 더 최신 값이 이겼다
+  }
+  return false;
+}
+
+// ---- 읽기 ----
+function fbOnRemote(raw) {
+  const remote = fbRemoteSnap(raw);
+  fbLoadBase();
+
+  if (fbSnapEmpty(remote) && !FB.base) {
+    // 원격이 비었고 기준점도 없다 — 이 브라우저 데이터를 최초 1회 올린다
+    FB.base = fbEmptySnap();
+    fbSaveBase();
+    FB.lastSync = Date.now();
+    fbSetState('synced', '');
+    fbPushSoon();
+    return;
+  }
+
+  fbMergeInto(remote);
+
+  // 기준점은 "원격이 실제로 이랬다" 는 기록 — 편집 중이라 미룬 항목도 그대로 기록한다
+  FB.base = remote;
+  fbSaveBase();
+  FB.lastSync = Date.now();
+  fbSetState('synced', '');
+
+  // 아직 못 올린 내 변경이 남아 있으면 올린다
+  if (fbBuildOps().length > 0) fbPushSoon();
+}
+
+async function fbPoll() {
+  try {
+    const res = await fetch(`${FB.url}/${FB.path}.json`, { cache: 'no-store' });
+    if (!res.ok) throw new Error(`읽기 실패 (HTTP ${res.status})`);
+    fbOnRemote(await res.json());
+  } catch (err) {
+    fbSetState('error', err && err.message);
+  }
+}
+
+// ---- 같은 브라우저의 다른 탭 ----
+// 한 탭이 저장하면 다른 탭이 곧바로 같은 localStorage 를 읽어 항목 단위로 병합한다.
+// 자기가 보낸 신호는 무시한다.
+function fbBroadcast() {
+  try { if (FB.channel) FB.channel.postMessage({ from: fbClientId(), at: Date.now() }); } catch (e) {}
+}
+function fbSyncFromTabs() {
+  if (FB.applying || FB.pushing) return;
+  let stored = null;
+  try { stored = JSON.parse(localStorage.getItem(STORAGE_KEY) || 'null'); } catch (e) { return; }
+  if (!stored) return;
+  const snap = {};
+  FB_COLS.forEach(col => {
+    snap[col] = {};
+    (Array.isArray(stored[col]) ? stored[col] : []).forEach(item => {
+      if (item && item.id != null) snap[col][item.id] = fbEntry(col, item);
+    });
+  });
+  if (fbMergeInto(snap) && fbBuildOps().length > 0) fbPushSoon();
+}
+function fbSetupTabSync() {
+  try {
+    if (typeof BroadcastChannel === 'function') {
+      FB.channel = new BroadcastChannel(FB_CHANNEL);
+      FB.channel.onmessage = ev => {
+        if (!ev.data || ev.data.from === fbClientId()) return;   // 내가 보낸 건 무시
+        fbSyncFromTabs();
+      };
+    }
+  } catch (e) {}
+  window.addEventListener('storage', ev => {                     // BroadcastChannel 이 없을 때의 대비책
+    if (ev.key === STORAGE_KEY) fbSyncFromTabs();
+  });
+}
 
 // ---- 상태 배지 (연결 중 / 팀 데이터 동기화 / 연결 오류) ----
 function fbSetState(state, err) {
@@ -3184,210 +3701,10 @@ function fbSetState(state, err) {
     icon.textContent = '☁️'; text.textContent = '연결 중';
     el.title = '팀 데이터에 연결하는 중입니다';
   }
-  const panel = $('sync-state-value');
-  if (panel && UI.modalOpen === 'sync') renderSyncPanel();
-}
-
-// ---- 정규화 ----
-// Firebase 는 null 값을 버리고 객체 키 순서를 보장하지 않는다.
-// 비교와 병합이 흔들리지 않도록 저장·수신 양쪽을 같은 모양으로 맞춘다.
-function fbClean(v) {
-  if (Array.isArray(v)) return v.map(fbClean).filter(x => x !== null && x !== undefined);
-  if (v && typeof v === 'object') {
-    const o = {};
-    Object.keys(v).sort().forEach(k => {
-      const c = fbClean(v[k]);
-      if (c !== null && c !== undefined) o[k] = c;
-    });
-    return o;
-  }
-  return v === undefined ? null : v;
-}
-function fbNormalize(raw) {
-  const o = {};
-  FB_COLS.forEach(k => {
-    const v = raw && raw[k];
-    o[k] = Array.isArray(v) ? v.filter(x => x && typeof x === 'object')
-         : (v && typeof v === 'object') ? Object.values(v).filter(x => x && typeof x === 'object')
-         : [];
-  });
-  return fbClean(o);
-}
-function fbSnapshot() {
-  const o = {};
-  FB_COLS.forEach(k => o[k] = Array.isArray(DATA[k]) ? DATA[k] : []);
-  return fbClean(o);
-}
-function fbSame(a, b) { return JSON.stringify(a) === JSON.stringify(b); }
-function fbIsEmpty(s) { return FB_COLS.every(k => (s[k] || []).length === 0); }
-
-// ---- 3-way 병합 ----
-// base = 내가 마지막으로 확인한 원격 상태.
-// base 와 비교해서 "내가 바꾼 것"과 "남이 바꾼 것"을 가려내므로,
-// 거의 동시에 저장해도 상대의 변경분을 통째로 덮어쓰지 않는다.
-function fbMergeList(base, mine, theirs) {
-  const idx = arr => { const m = Object.create(null); (arr || []).forEach(x => { if (x && x.id != null) m[x.id] = x; }); return m; };
-  const B = idx(base), M = idx(mine), T = idx(theirs);
-  const s = x => x === undefined ? undefined : JSON.stringify(x);
-  const out = [], seen = new Set();
-  const order = [...(mine || []), ...(theirs || [])].map(x => x && x.id);
-  for (const id of order) {
-    if (id == null || seen.has(id)) continue;
-    seen.add(id);
-    const b = B[id], m = M[id], t = T[id];
-    if (m && t) {
-      out.push(s(m) !== s(b) ? m : t);              // 내가 고쳤으면 내 것, 아니면 남의 최신본
-    } else if (m) {
-      if (!(b && s(m) === s(b))) out.push(m);       // 남이 지움 — 내가 손댔거나 새로 넣은 것만 살린다
-    } else if (t) {
-      if (!(b && s(t) === s(b))) out.push(t);       // 내가 지움 — 남이 손댔거나 새로 넣은 것만 살린다
-    }
-  }
-  return out;
-}
-function fbMerge(base, mine, theirs) {
-  const o = {};
-  FB_COLS.forEach(k => o[k] = fbMergeList(base && base[k], mine[k], theirs[k]));
-  return fbClean(o);
-}
-
-// ---- 기준점 보관 ----
-// 새로고침해도 기준점이 남아 있어야 "남이 지운 항목"이 내 로컬에서 되살아나지 않는다.
-function fbLoadBase() {
-  try { const raw = localStorage.getItem(FB_BASE_KEY); FB.base = raw ? JSON.parse(raw) : null; }
-  catch (e) { FB.base = null; }
-}
-function fbSetBase(snap) {
-  FB.base = snap;
-  try { localStorage.setItem(FB_BASE_KEY, JSON.stringify(snap)); } catch (e) {}
-}
-
-// ---- 원격 → 화면 ----
-function fbApply(next) {
-  FB.applying = true;
-  try {
-    FB_COLS.forEach(k => { DATA[k] = JSON.parse(JSON.stringify(next[k] || [])); });
-    migrateData();
-    localStorage.setItem(STORAGE_KEY, JSON.stringify(DATA));
-    renderAll();
-  } finally {
-    FB.applying = false;
-  }
-}
-
-function fbOnRemote(raw) {
-  const theirs = fbNormalize(raw);
-  const mine   = fbSnapshot();
-
-  // 원격이 비어 있다 — 이 브라우저 데이터를 최초 1회 올린다
-  if (fbIsEmpty(theirs)) {
-    fbSetBase(theirs);
-    FB.lastSync = Date.now();
-    fbSetState('synced', '');
-    if (!fbIsEmpty(mine)) fbPushSoon();
-    return;
-  }
-
-  // 기준점이 없는 첫 연결에서는 어느 쪽도 지우지 않고 합친다.
-  // (기존 사용자의 localStorage 데이터가 갑자기 사라지지 않게)
-  const merged = fbMerge(FB.base, mine, theirs);
-
-  if (!fbSame(merged, mine)) fbApply(merged);
-  fbSetBase(theirs);
-  FB.lastSync = Date.now();
-  fbSetState('synced', '');
-  if (!fbSame(merged, theirs)) fbPushSoon();   // 내 변경분이 남아 있으면 올린다
-}
-
-// ---- 화면 → 원격 ----
-function fbPushSoon() {
-  if (!FB.mode || FB.applying) return;          // 원격 반영 중에는 되올리지 않는다 (무한 반복 차단)
-  FB.dirty = true;
-  if (FB.pushTimer) clearTimeout(FB.pushTimer);
-  FB.pushTimer = setTimeout(fbPushNow, FB_PUSH_MS);
-}
-
-async function fbPushNow() {
-  if (!FB.mode || FB.pushing) return;
-  FB.pushing = true;
-  FB.dirty = false;
-  try {
-    const committed = FB.mode === 'sdk' ? await fbPushSdk() : await fbPushRest();
-    // 올린 결과에는 남의 변경분도 합쳐져 있다 — 화면에도 반영해서
-    // 로컬과 기준점을 일치시킨다. (안 하면 다음 병합이 남의 변경을 내 편집으로 오인한다)
-    if (!fbSame(committed, fbSnapshot())) fbApply(committed);
-    fbSetBase(committed);
-    FB.lastSync = Date.now();
-    fbSetState('synced', '');
-  } catch (err) {
-    console.warn('Firebase 저장 실패:', err);
-    fbSetState('error', err && err.message);    // 실패해도 localStorage 에는 이미 저장돼 있다
-  } finally {
-    FB.pushing = false;
-    if (FB.dirty) fbPushSoon();
-  }
-}
-
-// SDK — 트랜잭션이 충돌 시 알아서 다시 시도한다
-async function fbPushSdk() {
-  const mine = fbSnapshot();
-  const res = await FB.sdk.runTransaction(FB.ref, cur => {
-    return fbMerge(cur == null ? null : FB.base, mine, fbNormalize(cur));
-  }, { applyLocally: false });
-  if (!res.committed) throw new Error('저장이 취소되었습니다');
-  return fbNormalize(res.snapshot.val());
-}
-
-// REST — ETag 조건부 쓰기로 같은 효과를 낸다 (412 면 다시 합쳐서 재시도)
-function fbRestUrl() { return `${FB.url}/${FB.path}.json`; }
-
-async function fbGetRest() {
-  const res = await fetch(fbRestUrl(), { headers: { 'X-Firebase-ETag': 'true' }, cache: 'no-store' });
-  if (!res.ok) throw new Error(`읽기 실패 (HTTP ${res.status})`);
-  const etag = res.headers.get('ETag');
-  if (!etag && !FB.etagWarned) {
-    FB.etagWarned = true;
-    console.warn('Firebase ETag 를 읽을 수 없습니다 — 저장 후 재확인 방식으로 충돌을 처리합니다');
-  }
-  return { data: fbNormalize(await res.json()), etag };
-}
-
-async function fbPushRest() {
-  let lastErr = null;
-  for (let attempt = 0; attempt < 4; attempt++) {
-    const got  = await fbGetRest();
-    const mine = fbSnapshot();
-    const merged = fbMerge(FB.base, mine, got.data);
-    if (fbSame(merged, got.data)) { FB.etag = got.etag; return merged; }  // 올릴 게 없다
-
-    const headers = { 'Content-Type': 'application/json', 'X-Firebase-ETag': 'true' };
-    if (got.etag) headers['if-match'] = got.etag;                         // 조건부 쓰기 — 그 사이 바뀌었으면 412
-    const res = await fetch(fbRestUrl(), { method: 'PUT', headers, body: JSON.stringify(merged) });
-
-    if (res.status === 412) { lastErr = new Error('다른 사용자가 먼저 저장했습니다'); continue; }
-    if (!res.ok) throw new Error(`저장 실패 (HTTP ${res.status})`);
-    if (got.etag) { FB.etag = res.headers.get('ETag'); return merged; }
-
-    // ETag 를 쓸 수 없는 환경(CORS 로 응답 헤더가 가려진 경우) —
-    // 쓴 직후 다시 읽어서 내 변경이 실제로 남았는지 확인하고, 겹쳤으면 다시 합친다.
-    const after = await fbGetRest();
-    if (fbSame(after.data, merged)) return merged;
-    lastErr = new Error('다른 사용자의 저장과 겹쳤습니다');
-  }
-  throw lastErr || new Error('저장 충돌이 계속됩니다');
+  if (UI.modalOpen === 'sync' && $('sync-state-value')) renderSyncPanel();
 }
 
 // ---- 연결 ----
-async function fbPoll() {
-  try {
-    const got = await fbGetRest();
-    FB.etag = got.etag;
-    fbOnRemote(got.data);
-  } catch (err) {
-    fbSetState('error', err && err.message);
-  }
-}
-
 function fbStartRest(reason) {
   if (FB.mode === 'rest') return;
   if (reason) console.warn('Firebase 실시간 연결 불가 — 2초 주기 동기화로 전환:', reason);
@@ -3407,19 +3724,17 @@ async function fbStart() {
     ]);
     // Realtime Database 만 쓰므로 databaseURL 하나면 초기화된다 — API 키가 필요 없다
     const app = appMod.initializeApp({ databaseURL: FB.url });
-    const db  = dbMod.getDatabase(app);
+    FB.db   = dbMod.getDatabase(app);
     FB.sdk  = dbMod;
-    FB.ref  = dbMod.ref(db, FB.path);
+    FB.root = dbMod.ref(FB.db, FB.path);
     FB.mode = 'sdk';
 
-    // 실시간 리스너 — 남의 변경이 즉시 들어온다
-    dbMod.onValue(FB.ref,
+    dbMod.onValue(FB.root,
       snap => { if (!FB.pushing) { try { fbOnRemote(snap.val()); } catch (e) { console.error('원격 반영 실패:', e); } } },
       err  => { fbSetState('error', err && err.message); fbStartRest(err && err.message); }
     );
 
-    // 네트워크가 끊기면 배지로 알린다
-    dbMod.onValue(dbMod.ref(db, '.info/connected'), s => {
+    dbMod.onValue(dbMod.ref(FB.db, '.info/connected'), s => {
       clearTimeout(FB.offlineTimer);
       if (s.val() === true) {
         FB.online = true;
@@ -3442,12 +3757,22 @@ function fbInit() {
     localStorage.removeItem('task_tracker_gh_config');
     localStorage.removeItem('task_tracker_gh_token');
   } catch (e) {}
+  fbClientId();
+  fbMarkSeen();
+  fbSetupTabSync();
   fbSetState('connecting', '');
   fbStart();
-  // 다른 탭에서 돌아왔을 때 한 번 맞춘다
   document.addEventListener('visibilitychange', () => {
     if (!document.hidden && FB.mode === 'rest') fbPoll();
   });
+}
+
+// 모달을 닫으면 편집 중이라 미뤄둔 원격 변경을 반영한다
+function fbReleaseLock() {
+  if (!FB.deferred) return;
+  FB.deferred = false;
+  if (FB.mode === 'rest') fbPoll();
+  else if (FB.base) fbMergeInto(FB.base);
 }
 
 // ---- 상태 패널 ----
@@ -3470,17 +3795,17 @@ function renderSyncPanel() {
 }
 async function syncPullNow() {
   fbSetState('connecting', '');
-  if (FB.mode === 'rest') { await fbPoll(); }
+  if (FB.mode === 'rest') await fbPoll();
   else if (FB.mode === 'sdk') {
-    try { fbOnRemote(await FB.sdk.get(FB.ref).then(s => s.val())); }
+    try { fbOnRemote(await FB.sdk.get(FB.root).then(s => s.val())); }
     catch (err) { fbSetState('error', err && err.message); }
-  } else { await fbStart(); }
+  } else await fbStart();
   renderSyncPanel();
   toast(FB.state === 'error' ? '연결 오류 — 이 PC에는 저장돼 있습니다' : '팀 데이터를 받아왔습니다');
 }
 async function syncPushNow() {
   if (!FB.mode) return toast('아직 연결되지 않았습니다');
-  await fbPushNow();
+  await fbFlush();
   renderSyncPanel();
   toast(FB.state === 'error' ? '올리기 실패 — 이 PC에는 저장돼 있습니다' : '팀 데이터에 반영했습니다');
 }
@@ -3535,8 +3860,15 @@ function toast(msg) {
   setTimeout(() => t.classList.remove('show'), 1800);
 }
 function save() {
+  // 모든 변경은 save() 를 지나간다.
+  // 1) 바뀐 항목에만 revision/updatedAt/updatedBy 도장을 찍고
+  // 2) 이 PC에 저장한 뒤
+  // 3) 같은 브라우저의 다른 탭에 알리고
+  // 4) 바뀐 항목만 팀 데이터에 올린다.
+  fbRecordDeletions();
+  fbStampChanges();
   localStorage.setItem(STORAGE_KEY, JSON.stringify(DATA));
-  // 업무·루틴·진척률 등 모든 변경은 save() 를 지나간다 — 여기서 팀 데이터에 반영한다
+  fbBroadcast();
   fbPushSoon();
 }
 function load() {
@@ -3968,6 +4300,8 @@ function closeModal() {
   // edit id 리셋
   if ($('routine-edit-id')) $('routine-edit-id').value = '';
   if ($('project-edit-id')) $('project-edit-id').value = '';
+  // 편집이 끝났으니, 편집 중이라 미뤄둔 원격 변경을 이제 반영한다
+  if (typeof fbReleaseLock === 'function') fbReleaseLock();
 }
 
 // ===== 루틴 모달 =====
@@ -4219,10 +4553,15 @@ function deleteProjectFromModal() {
   toast('🗑 프로젝트 삭제됨');
 }
 
+// 보조업무 추가는 이 함수 하나만 실행된다 — 프로젝트 삭제도, 모달 제출도, 전체 저장도 하지 않는다
 function addDraftSubtask() {
   const input = $('project-modal-sub-input');
+  if (!input) return;
   const title = input.value.trim();
-  if (!title) return toast('보조 업무 제목을 입력하세요');
+  if (!title) return;                    // 빈 값이면 아무 것도 하지 않는다
+  if (UI._addingSub) return;             // 연타로 두 번 들어가지 않게
+  UI._addingSub = true;
+  setTimeout(() => { UI._addingSub = false; }, 0);
   UI.draftSubtasks.push({
     id: uid(),
     title,
@@ -4491,7 +4830,10 @@ function addSubtaskInline(taskId) {
   const input = $('proj-sub-input-' + taskId);
   if (!input) return;
   const title = input.value.trim();
-  if (!title) return toast('보조 업무 제목을 입력하세요');
+  if (!title) return;                    // 빈 값이면 아무 것도 하지 않는다
+  if (UI._addingSub) return;
+  UI._addingSub = true;
+  setTimeout(() => { UI._addingSub = false; }, 0);
   const task = DATA.tasks.find(t => t.id === taskId);
   if (!task) return;
   if (!task.subtasks) task.subtasks = [];
@@ -4609,7 +4951,8 @@ function renderProjectCard(task, memberMap) {
       ${formOpen ? `
         <div class="project-add-subtask-form">
           <input type="text" id="proj-sub-input-${task.id}" placeholder="보조 업무 제목 (예: 도면 5건 재작업)"
-            onkeydown="if(event.key==='Enter')addSubtaskInline('${task.id}'); else if(event.key==='Escape')hideSubtaskForm('${task.id}');">
+            autocomplete="off"
+            onkeydown="if(event.key==='Enter'){event.preventDefault();event.stopPropagation();addSubtaskInline('${task.id}');} else if(event.key==='Escape'){event.preventDefault();hideSubtaskForm('${task.id}');}">
           <button onclick="addSubtaskInline('${task.id}')">추가</button>
           <button class="cancel" onclick="hideSubtaskForm('${task.id}')">취소</button>
         </div>
@@ -4649,7 +4992,8 @@ function renderSubtasksHTML(task) {
         </div>`
       }
       <div class="subtask-add">
-        <input type="text" id="sub-input-${task.id}" placeholder="하위업무 추가 — 예: 도면 5건 재작업" onkeydown="if(event.key==='Enter')addSubtask('${task.id}')">
+        <input type="text" id="sub-input-${task.id}" placeholder="하위업무 추가 — 예: 도면 5건 재작업" autocomplete="off"
+          onkeydown="if(event.key==='Enter'){event.preventDefault();event.stopPropagation();addSubtask('${task.id}');}">
         <button onclick="addSubtask('${task.id}')">+ 추가</button>
       </div>
     </div>
@@ -5548,7 +5892,10 @@ function addSubtask(taskId) {
   const input = $('sub-input-' + taskId);
   if (!input) return;
   const title = input.value.trim();
-  if (!title) return toast('하위업무 제목을 입력하세요');
+  if (!title) return;                    // 빈 값이면 아무 것도 하지 않는다
+  if (UI._addingSub) return;
+  UI._addingSub = true;
+  setTimeout(() => { UI._addingSub = false; }, 0);
   const task = DATA.tasks.find(t => t.id === taskId);
   if (!task) return;
   if (!task.subtasks) task.subtasks = [];
