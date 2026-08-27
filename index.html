@@ -8,25 +8,25 @@
 <link href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css" rel="stylesheet">
 <style>
   :root {
-    --bg: #FAF8FD;
+    --bg: #F4F5F7;
     --surface: #FFFFFF;
-    --ink: #241E33;
-    --ink-2: #443A5C;
-    --muted: #6F6884;
-    --line: #E7E1F3;
-    --line-2: #F2EDFA;
-    --accent: #6B4FA8;
-    --accent-soft: #EDE7F9;
-    --accent-2: #7A5FBF;
-    --accent-2-soft: #F0EBFB;
+    --ink: #1F2124;
+    --ink-2: #45484D;
+    --muted: #6B7076;
+    --line: #E3E5E8;
+    --line-2: #F1F2F4;
+    --accent: #3A3D42;
+    --accent-soft: #ECEDEF;
+    --accent-2: #5C6066;
+    --accent-2-soft: #F0F1F3;
     --success: #2E7D52;
     --success-soft: #DCEEDE;
     --warn: #B4651E;
     --warn-soft: #F7E6CE;
     --danger: #B83A2E;
     --danger-soft: #FADEDA;
-    --shadow-sm: 0 1px 2px rgba(36,30,51,0.04), 0 1px 3px rgba(36,30,51,0.03);
-    --shadow-md: 0 6px 24px rgba(36,30,51,0.06), 0 2px 6px rgba(36,30,51,0.04);
+    --shadow-sm: 0 1px 2px rgba(31,33,36,0.04), 0 1px 3px rgba(31,33,36,0.03);
+    --shadow-md: 0 6px 24px rgba(31,33,36,0.06), 0 2px 6px rgba(31,33,36,0.04);
     --radius: 14px;
     --radius-sm: 10px;
     /* 글꼴 통일 — 본문·제목·숫자 모두 같은 스택을 쓴다 */
@@ -51,7 +51,7 @@
 
   /* ===== Header ===== */
   .topbar {
-    background: linear-gradient(180deg, #FCFAFE, var(--bg));
+    background: linear-gradient(180deg, #FCFCFD, var(--bg));
     border-bottom: 1px solid var(--line);
     padding: 22px 36px 28px;
   }
@@ -92,9 +92,9 @@
     animation: cloud-pulse 2s infinite;
   }
   .cloud-status.syncing {
-    background: linear-gradient(135deg, #F6F2FC, #F8F5FD);
-    border-color: #CBBBE9;
-    color: #553D8C;
+    background: linear-gradient(135deg, #F5F6F8, #F7F8F9);
+    border-color: #C8CBD0;
+    color: #33363A;
   }
   .cloud-status.error {
     background: var(--danger-soft);
@@ -109,8 +109,8 @@
 
   /* Firebase 설정 모달 */
   .fb-status-card {
-    background: linear-gradient(135deg, #F3EFFC, #FAF7FE);
-    border: 1px solid #D6C9EF;
+    background: linear-gradient(135deg, #F2F3F5, #F9FAFB);
+    border: 1px solid #D3D6DA;
     border-radius: 10px;
     padding: 14px 16px;
   }
@@ -122,7 +122,7 @@
     font-size: 12px;
   }
   .fb-status-line + .fb-status-line {
-    border-top: 1px dashed #D6C9EF;
+    border-top: 1px dashed #D3D6DA;
     padding-top: 8px;
     margin-top: 4px;
   }
@@ -144,7 +144,7 @@
   .fb-help {
     margin-top: 20px;
     padding: 12px 14px;
-    background: #FCFAFE;
+    background: #FCFCFD;
     border: 1px solid var(--line-2);
     border-radius: 8px;
     font-size: 12px;
@@ -181,7 +181,7 @@
     border-radius: 3px;
     font-family: var(--num);
     font-size: 11px;
-    color: #553D8C;
+    color: #33363A;
   }
   .fb-help-content a {
     color: var(--accent);
@@ -221,9 +221,9 @@
   /* ===== 팀 KPI 목표 카드 ===== */
   .team-kpi-card {
     margin-top: 16px;
-    background: linear-gradient(135deg, #F3EFFC 0%, #FCFAFE 100%);
-    border: 1px solid #D6C9EF;
-    border-left: 4px solid #7A5FBF;
+    background: linear-gradient(135deg, #F2F3F5 0%, #FCFCFD 100%);
+    border: 1px solid #D3D6DA;
+    border-left: 4px solid #5C6066;
     border-radius: 10px;
     padding: 14px 18px;
   }
@@ -239,9 +239,9 @@
     color: var(--ink); letter-spacing: -0.01em;
   }
   .team-kpi-label {
-    font-size: 10px; font-weight: 800; color: #6B4FA8;
+    font-size: 10px; font-weight: 800; color: #3A3D42;
     text-transform: uppercase; letter-spacing: 0.12em;
-    background: #E6DDF7; padding: 2px 8px; border-radius: 99px;
+    background: #E6E8EB; padding: 2px 8px; border-radius: 99px;
     margin-left: 4px;
   }
   .team-kpi-input {
@@ -258,11 +258,11 @@
     transition: all 0.15s;
   }
   .team-kpi-input:hover {
-    border-color: #D6C9EF;
+    border-color: #D3D6DA;
   }
   .team-kpi-input:focus {
     outline: none;
-    border-color: #7A5FBF;
+    border-color: #5C6066;
     box-shadow: 0 0 0 3px rgba(184, 153, 104, 0.15);
   }
   .team-kpi-input::placeholder {
@@ -276,12 +276,12 @@
     align-items: center;
     gap: 8px;
     padding: 6px 10px;
-    background: linear-gradient(180deg, #F8F5FD, #F3EFFC);
-    border: 1px dashed #D6C9EF;
+    background: linear-gradient(180deg, #F7F8F9, #F2F3F5);
+    border: 1px dashed #D3D6DA;
     border-radius: 6px;
     margin-top: 8px;
     font-size: 11px;
-    color: #553D8C;
+    color: #33363A;
   }
   .member-kpi-flag {
     font-size: 11px;
@@ -302,24 +302,24 @@
   .member-kpi-input {
     width: 100%;
     padding: 5px 8px;
-    border: 1px solid #D6C9EF;
+    border: 1px solid #D3D6DA;
     background: var(--surface);
     border-radius: 4px;
     font-size: 11px;
     font-weight: 600;
-    color: #553D8C;
+    color: #33363A;
     font-family: inherit;
     box-sizing: border-box;
   }
   .member-kpi-input:focus {
     outline: none;
-    border-color: #7A5FBF;
+    border-color: #5C6066;
     box-shadow: 0 0 0 2px rgba(184, 153, 104, 0.15);
   }
   .member-kpi-edit-btn {
     background: transparent;
     border: none;
-    color: #6B4FA8;
+    color: #3A3D42;
     font-size: 11px;
     cursor: pointer;
     padding: 2px 4px;
@@ -353,7 +353,7 @@
   }
   .hero-kpi-bar-fill {
     height: 100%; border-radius: 99px;
-    background: linear-gradient(90deg, var(--accent), #8367C4);
+    background: linear-gradient(90deg, var(--accent), #6B7076);
     transition: width 0.5s cubic-bezier(.2,.8,.2,1);
   }
   .hero-kpi-bar-fill.warn { background: var(--warn); }
@@ -426,7 +426,7 @@
   /* + 새 직원 추가 카드 */
   .today-card-add {
     background: transparent;
-    border: 2px dashed #CBBBE9;
+    border: 2px dashed #C8CBD0;
     cursor: pointer;
     display: flex;
     align-items: center;
@@ -435,7 +435,7 @@
     transition: all 0.2s;
   }
   .today-card-add:hover {
-    background: #F8F5FD;
+    background: #F7F8F9;
     border-color: var(--accent-2);
     border-style: solid;
     transform: translateY(-2px);
@@ -443,7 +443,7 @@
   }
   .today-card-add-inner {
     text-align: center;
-    color: #6B4FA8;
+    color: #3A3D42;
     padding: 24px;
   }
   .today-card-add-icon {
@@ -457,7 +457,7 @@
     font-family: var(--display);
     font-size: 14px;
     font-weight: 800;
-    color: #553D8C;
+    color: #33363A;
     margin-bottom: 4px;
   }
   .today-card-add-sub {
@@ -467,7 +467,7 @@
   .today-card-head {
     padding: 16px 20px 14px; border-bottom: 1px solid var(--line-2);
     display: flex; justify-content: space-between; align-items: center;
-    background: linear-gradient(180deg, #FCFAFE, var(--surface));
+    background: linear-gradient(180deg, #FCFCFD, var(--surface));
   }
   .member-info { display: flex; align-items: center; gap: 12px; }
   .avatar {
@@ -569,7 +569,7 @@
   .routine-edit-btn:hover {
     background: var(--accent-2-soft);
     border-color: var(--accent-2);
-    color: #553D8C;
+    color: #33363A;
   }
   .routine-del-btn {
     font-size: 16px;
@@ -590,7 +590,7 @@
     font-weight: 700; flex-shrink: 0;
   }
   .routine-tag.daily { background: var(--accent-soft); color: var(--accent); }
-  .routine-tag.weekly { background: var(--accent-2-soft); color: #553D8C; }
+  .routine-tag.weekly { background: var(--accent-2-soft); color: #33363A; }
   .routine-tag.monthly { background: var(--success-soft); color: var(--success); }
 
   /* 일회성 업무 미니 리스트 — 진행중 프로젝트는 모두 베이지 톤 */
@@ -598,16 +598,16 @@
   .task-mini {
     display: flex; align-items: center; gap: 10px;
     padding: 9px 10px;
-    background: linear-gradient(180deg, #FCFAFE, var(--bg));
+    background: linear-gradient(180deg, #FCFCFD, var(--bg));
     border-radius: 8px;
-    border: 1px solid #D6C9EF;
+    border: 1px solid #D3D6DA;
     border-left: 3px solid var(--accent-2);
     transition: all 0.15s;
     cursor: pointer;
   }
   /* 우선순위는 작은 점으로만 표시 — 좌측 색깔 띠 통일 */
   .task-mini.status-doing {
-    background: linear-gradient(180deg, #F3EFFC, #FCFAFE);
+    background: linear-gradient(180deg, #F2F3F5, #FCFCFD);
   }
   .task-mini.status-done {
     background: linear-gradient(180deg, #F4F9F2, var(--bg));
@@ -622,9 +622,9 @@
   }
   /* 루틴성 task는 보라 톤 유지 (프로젝트와 구분) */
   .task-mini.routine-type {
-    background: linear-gradient(180deg, #FBFAFE, var(--bg));
-    border-color: #E0D8F5;
-    border-left-color: #7E63C6;
+    background: linear-gradient(180deg, #FBFBFC, var(--bg));
+    border-color: #E0E2E5;
+    border-left-color: #5C6066;
   }
   .task-mini:hover {
     box-shadow: var(--shadow-sm);
@@ -656,11 +656,11 @@
   }
   .task-mini-progress-fill {
     height: 100%;
-    background: linear-gradient(90deg, #CBBBE9, var(--accent-2));
+    background: linear-gradient(90deg, #C8CBD0, var(--accent-2));
     border-radius: 99px;
   }
   .task-mini.routine-type .task-mini-progress-fill {
-    background: linear-gradient(90deg, #D2C6EE, #7E63C6);
+    background: linear-gradient(90deg, #CFD2D6, #5C6066);
   }
   .task-mini-toggle {
     background: transparent;
@@ -680,8 +680,8 @@
   .task-mini-expand {
     margin-top: 4px;
     padding: 10px 12px;
-    background: linear-gradient(180deg, #F8F5FD, #FCFAFE);
-    border: 1px solid #D6C9EF;
+    background: linear-gradient(180deg, #F7F8F9, #FCFCFD);
+    border: 1px solid #D3D6DA;
     border-radius: 8px;
     display: none;
   }
@@ -689,11 +689,11 @@
   .task-mini-expand-head {
     display: flex; align-items: center; gap: 8px;
     padding-bottom: 8px;
-    border-bottom: 1px dashed #D6C9EF;
+    border-bottom: 1px dashed #D3D6DA;
     margin-bottom: 8px;
     font-size: 11px;
     font-weight: 700;
-    color: #553D8C;
+    color: #33363A;
   }
   .task-mini-expand-actions {
     margin-left: auto;
@@ -701,16 +701,16 @@
   }
   .task-mini-expand-actions button {
     background: var(--surface);
-    border: 1px solid #D6C9EF;
+    border: 1px solid #D3D6DA;
     border-radius: 5px;
     padding: 3px 8px;
     font-size: 10px;
-    color: #553D8C;
+    color: #33363A;
     cursor: pointer;
     transition: all 0.15s;
   }
   .task-mini-expand-actions button:hover {
-    background: #E6DDF7;
+    background: #E6E8EB;
     border-color: var(--accent-2);
   }
   .task-mini-expand-actions button.danger {
@@ -756,7 +756,7 @@
     font-family: var(--num);
     font-size: 10px;
     font-weight: 700;
-    color: #553D8C;
+    color: #33363A;
   }
   .task-mini-sub-del {
     background: transparent;
@@ -967,24 +967,24 @@
   .table th {
     text-align: left; padding: 10px 16px; font-size: 10px; font-weight: 700;
     text-transform: uppercase; letter-spacing: 0.12em; color: var(--muted);
-    border-bottom: 1px solid var(--line); background: #FCFAFE;
+    border-bottom: 1px solid var(--line); background: #FCFCFD;
   }
   .table td {
     padding: 11px 16px; border-bottom: 1px solid var(--line-2);
     vertical-align: middle;
   }
   .table tr:last-child td { border-bottom: none; }
-  .table tr:hover td { background: #FCFAFE; }
+  .table tr:hover td { background: #FCFCFD; }
 
   .badge {
     display: inline-block; padding: 2px 8px; border-radius: 99px;
     font-size: 10px; font-weight: 700;
   }
   .badge.daily { background: var(--accent-soft); color: var(--accent); }
-  .badge.weekly { background: var(--accent-2-soft); color: #553D8C; }
+  .badge.weekly { background: var(--accent-2-soft); color: #33363A; }
   .badge.monthly { background: var(--success-soft); color: var(--success); }
   .badge.priority-high { background: var(--danger-soft); color: var(--danger); }
-  .badge.priority-mid { background: var(--accent-2-soft); color: #553D8C; }
+  .badge.priority-mid { background: var(--accent-2-soft); color: #33363A; }
   .badge.priority-low { background: var(--line-2); color: var(--muted); }
   .badge.status-todo { background: var(--line-2); color: var(--muted); }
   .badge.status-doing { background: var(--accent-soft); color: var(--accent); }
@@ -1030,7 +1030,7 @@
     cursor: pointer; user-select: none;
     transition: background 0.15s;
   }
-  .stale-head:hover { background: #FCFAFE; }
+  .stale-head:hover { background: #FCFCFD; }
   .stale-icon {
     width: 32px; height: 32px; border-radius: 8px;
     background: var(--warn-soft); color: var(--warn);
@@ -1063,7 +1063,7 @@
     border-top: 1px solid var(--line-2);
     padding: 14px 18px 18px;
     display: none;
-    background: linear-gradient(180deg, #FCFAFE, var(--surface));
+    background: linear-gradient(180deg, #FCFCFD, var(--surface));
   }
   .stale-banner.open .stale-body { display: block; }
   .stale-list {
@@ -1083,7 +1083,7 @@
     transition: all 0.15s;
   }
   .stale-item[onclick]:hover {
-    background: #F8F5FD;
+    background: #F7F8F9;
     box-shadow: 0 2px 8px rgba(0,0,0,0.06);
     transform: translateY(-1px);
   }
@@ -1111,7 +1111,7 @@
   }
 
   /* ===== 타입 뱃지 ===== */
-  .badge.type-routine { background: #EBE4F9; color: #7E63C6; }
+  .badge.type-routine { background: #EAECEE; color: #5C6066; }
   .badge.type-project { background: var(--accent-soft); color: var(--accent); }
 
   .tag-mini {
@@ -1122,13 +1122,13 @@
   .tag-mini.stale-tag { background: var(--warn-soft); color: var(--warn); }
   .tag-mini.urgent-tag { background: var(--danger-soft); color: var(--danger); }
   .tag-mini.project { background: var(--accent-soft); color: var(--accent); }
-  .tag-mini.routine-type { background: #EBE4F9; color: #7E63C6; }
+  .tag-mini.routine-type { background: #EAECEE; color: #5C6066; }
 
 
   /* 필터 토글 (관리 탭) */
   .filter-row {
     display: flex; gap: 6px; flex-wrap: wrap;
-    padding: 10px 16px; background: #FCFAFE;
+    padding: 10px 16px; background: #FCFCFD;
     border-bottom: 1px solid var(--line-2);
   }
   .filter-chip {
@@ -1154,14 +1154,14 @@
     padding: 18px 22px;
     border-bottom: 1px solid var(--line);
     display: flex; align-items: center; gap: 14px;
-    background: linear-gradient(180deg, #FCFAFE, var(--surface));
+    background: linear-gradient(180deg, #FCFCFD, var(--surface));
   }
   /* 간소화된 팀 헤더 */
   .team-block-head-simple {
     padding: 14px 20px;
     border-bottom: 1px solid var(--line);
     display: flex; align-items: center; gap: 12px;
-    background: #FCFAFE;
+    background: #FCFCFD;
   }
   .team-icon-box-sm {
     width: 28px; height: 28px; border-radius: 7px;
@@ -1178,13 +1178,13 @@
   .team-members-bar {
     padding: 12px 20px;
     border-bottom: 1px solid var(--line-2);
-    background: linear-gradient(180deg, #FCFAFE, var(--surface));
+    background: linear-gradient(180deg, #FCFCFD, var(--surface));
     display: flex; align-items: flex-start; gap: 12px;
     flex-wrap: wrap;
   }
   .team-members-label {
     font-size: 11px; font-weight: 800;
-    color: #553D8C;
+    color: #33363A;
     text-transform: uppercase;
     letter-spacing: 0.06em;
     padding-top: 6px;
@@ -1202,7 +1202,7 @@
     gap: 6px;
     padding: 5px 10px 5px 8px;
     background: var(--surface);
-    border: 1px solid #D6C9EF;
+    border: 1px solid #D3D6DA;
     border-radius: 99px;
     font-size: 12px;
     font-weight: 600;
@@ -1211,7 +1211,7 @@
     position: relative;
   }
   .team-member-chip:hover {
-    background: #F1ECFB;
+    background: #F0F1F3;
     border-color: var(--accent-2);
     transform: translateY(-1px);
     box-shadow: var(--shadow-sm);
@@ -1253,12 +1253,12 @@
     border-radius: 99px;
     font-size: 12px;
     font-weight: 700;
-    color: #553D8C;
+    color: #33363A;
     cursor: pointer;
     transition: all 0.15s;
   }
   .team-member-add-btn:hover {
-    background: #F1ECFB;
+    background: #F0F1F3;
     border-style: solid;
     border-color: var(--accent-2);
   }
@@ -1386,7 +1386,7 @@
 
   /* 하위업무 펼침 영역 */
   .subtask-container {
-    background: linear-gradient(180deg, #F8F5FD, var(--bg));
+    background: linear-gradient(180deg, #F7F8F9, var(--bg));
     border: 1px solid var(--line-2);
     border-left: 3px solid var(--accent-2);
     border-radius: 8px;
@@ -1468,7 +1468,7 @@
   }
   .expand-toggle:hover { background: var(--line-2); color: var(--ink); }
   .expand-toggle .sub-count {
-    background: var(--accent-2-soft); color: #553D8C;
+    background: var(--accent-2-soft); color: #33363A;
     padding: 1px 6px; border-radius: 99px;
     font-family: var(--num); margin-left: 4px;
   }
@@ -1482,7 +1482,7 @@
   /* 멤버 검색 (관리탭에서 멤버 많아질 때) */
   .search-row {
     display: flex; gap: 8px; align-items: center;
-    padding: 10px 16px; background: #FCFAFE;
+    padding: 10px 16px; background: #FCFCFD;
     border-bottom: 1px solid var(--line-2);
   }
   .search-row input {
@@ -1498,8 +1498,8 @@
     gap: 14px;
   }
   .project-card {
-    background: linear-gradient(180deg, #FCFAFE, var(--surface));
-    border: 1px solid #D6C9EF;
+    background: linear-gradient(180deg, #FCFCFD, var(--surface));
+    border: 1px solid #D3D6DA;
     border-left: 3px solid var(--accent-2);
     border-radius: 12px;
     padding: 14px 16px;
@@ -1519,9 +1519,9 @@
   .project-card.stale { border-left: 4px solid var(--warn); }
   /* 루틴성 task 카드는 보라 톤 (프로젝트와 구분) */
   .project-card.routine-task {
-    background: linear-gradient(180deg, #FBFAFE, var(--surface));
-    border-color: #E0D8F5;
-    border-left-color: #7E63C6;
+    background: linear-gradient(180deg, #FBFBFC, var(--surface));
+    border-color: #E0E2E5;
+    border-left-color: #5C6066;
   }
 
   .project-head {
@@ -1533,7 +1533,7 @@
     display: inline-flex; align-items: center; justify-content: center;
     font-size: 14px; flex-shrink: 0;
   }
-  .project-card.routine-task .project-icon { background: #7E63C6; }
+  .project-card.routine-task .project-icon { background: #5C6066; }
   .project-card.done .project-icon { background: var(--success); }
   .project-card.hold .project-icon { background: var(--danger); }
   .project-title-area { flex: 1; min-width: 0; }
@@ -1545,8 +1545,8 @@
     word-break: break-word;
     transition: color 0.15s;
   }
-  .project-title:hover { color: #553D8C; }
-  .project-card.routine-task .project-title:hover { color: #7E63C6; }
+  .project-title:hover { color: #33363A; }
+  .project-card.routine-task .project-title:hover { color: #5C6066; }
   .project-owner-badge {
     background: var(--line-2); color: var(--ink-2);
     padding: 3px 9px; border-radius: 99px;
@@ -1570,7 +1570,7 @@
     font-weight: 700;
   }
   .project-meta-status.done { background: var(--success-soft); color: var(--success); }
-  .project-meta-status.doing { background: #F1ECFB; color: #553D8C; }
+  .project-meta-status.doing { background: #F0F1F3; color: #33363A; }
   .project-meta-status.todo { background: var(--line-2); color: var(--muted); }
   .project-meta-status.hold { background: var(--warn-soft); color: var(--warn); }
   .project-meta-due.urgent { color: var(--danger); font-weight: 700; }
@@ -1584,7 +1584,7 @@
   }
   .project-progress-bar > div {
     height: 100%;
-    background: linear-gradient(90deg, #CBBBE9, var(--accent-2));
+    background: linear-gradient(90deg, #C8CBD0, var(--accent-2));
     border-radius: 99px;
     transition: width 0.3s;
   }
@@ -1592,14 +1592,14 @@
     background: var(--success);
   }
   .project-card.routine-task .project-progress-bar > div {
-    background: linear-gradient(90deg, #D2C6EE, #7E63C6);
+    background: linear-gradient(90deg, #CFD2D6, #5C6066);
   }
   .project-progress-pct {
     font-family: var(--num); font-size: 13px; font-weight: 800;
-    color: #553D8C;
+    color: #33363A;
     min-width: 42px; text-align: right;
   }
-  .project-card.routine-task .project-progress-pct { color: #7E63C6; }
+  .project-card.routine-task .project-progress-pct { color: #5C6066; }
   .project-card.done .project-progress-pct { color: var(--success); }
   .project-progress-actions {
     display: flex; gap: 4px;
@@ -1614,7 +1614,7 @@
     font-size: 12px;
     transition: all 0.15s;
   }
-  .project-icon-btn:hover { background: #F1ECFB; border-color: var(--accent-2); }
+  .project-icon-btn:hover { background: #F0F1F3; border-color: var(--accent-2); }
   .project-icon-btn.danger:hover { background: var(--danger-soft); border-color: var(--danger); color: var(--danger); }
 
   .project-subtasks {
@@ -1716,7 +1716,7 @@
   /* 보조업무 섹션 헤더 */
   .project-subtasks-section {
     margin-top: 4px;
-    background: linear-gradient(180deg, #F8F5FD, var(--bg));
+    background: linear-gradient(180deg, #F7F8F9, var(--bg));
     border: 1px solid var(--line-2);
     border-left: 3px solid var(--accent-2);
     border-radius: 8px;
@@ -1780,17 +1780,17 @@
     display: inline-block;
   }
   .action-btn.project::before { background: var(--accent); }
-  .action-btn.routine::before { background: #7E63C6; }
+  .action-btn.routine::before { background: #5C6066; }
 
   /* 진한 베이지 강조 — primary 액션 */
   .action-btn.primary {
-    background: #CBBBE9;
-    border-color: #7A5FBF;
-    color: #402D6B;
+    background: #C8CBD0;
+    border-color: #5C6066;
+    color: #26282B;
   }
   .action-btn.primary:hover {
-    background: #BFAEE4;
-    border-color: #8367C4;
+    background: #BEC2C7;
+    border-color: #6B7076;
   }
   /* ghost — 화이트 톤 */
   .action-btn.ghost {
@@ -1946,7 +1946,7 @@
     transition: all 0.15s;
   }
   .project-add-subtask-form button:hover {
-    background: linear-gradient(135deg, #553D8C, #8367C4);
+    background: linear-gradient(135deg, #33363A, #6B7076);
   }
   .project-add-subtask-form button.cancel {
     background: var(--surface); color: var(--muted);
@@ -2096,7 +2096,7 @@
   .modal-foot {
     padding: 14px 22px;
     border-top: 1px solid var(--line);
-    background: #FCFAFE;
+    background: #FCFCFD;
     display: flex; gap: 10px; justify-content: flex-end;
     flex-shrink: 0;
   }
@@ -2118,7 +2118,7 @@
     box-shadow: 0 2px 6px rgba(24, 33, 29, 0.1);
   }
   .modal-btn.primary:hover {
-    background: linear-gradient(135deg, #553D8C, #8367C4);
+    background: linear-gradient(135deg, #33363A, #6B7076);
     transform: translateY(-1px);
     box-shadow: 0 4px 12px rgba(24, 33, 29, 0.15);
   }
@@ -2215,13 +2215,13 @@
     line-height: 1.5;
   }
   .type-choice.routine:hover {
-    border-color: #7E63C6;
+    border-color: #5C6066;
   }
-  .type-choice.routine:hover .type-choice-title { color: #7E63C6; }
+  .type-choice.routine:hover .type-choice-title { color: #5C6066; }
   .type-choice.project:hover {
     border-color: var(--accent-2);
   }
-  .type-choice.project:hover .type-choice-title { color: #553D8C; }
+  .type-choice.project:hover .type-choice-title { color: #33363A; }
 
   /* 빈도 선택 칩 */
   .freq-pick {
@@ -2359,7 +2359,7 @@
   }
   .modal-subtask-add button:hover {
     transform: translateY(-1px);
-    background: linear-gradient(135deg, #553D8C, #8367C4);
+    background: linear-gradient(135deg, #33363A, #6B7076);
     box-shadow: 0 4px 8px rgba(0,0,0,0.12);
   }
 
@@ -2617,13 +2617,13 @@
         <input type="text" id="tm-name" placeholder="팀 이름 (예: 연구개발팀)">
         <input type="text" id="tm-icon" placeholder="🔬" maxlength="2" style="text-align:center; font-size:18px;">
         <select id="tm-color">
-          <option value="#6B4FA8">보라</option>
-          <option value="#7A5FBF">연보라</option>
-          <option value="#2E7D52">그린</option>
-          <option value="#B4651E">오렌지</option>
-          <option value="#7E63C6">바이올렛</option>
-          <option value="#B83A2E">레드</option>
-          <option value="#443A5C">차콜</option>
+          <option value="#2F3237">진회색</option>
+          <option value="#45484D">차콜</option>
+          <option value="#3F4A54">블루그레이</option>
+          <option value="#3E4C46">그린그레이</option>
+          <option value="#4A4A42">웜그레이</option>
+          <option value="#5A4F4F">모브그레이</option>
+          <option value="#55505C">바이올렛그레이</option>
         </select>
         <button class="btn accent" onclick="addTeam()">+ 팀 추가</button>
       </div>
@@ -2651,14 +2651,14 @@
         <input type="text" id="m-name" placeholder="이름 (예: 김혜진)">
         <input type="text" id="m-role" placeholder="직책 (예: 연구원)">
         <select id="m-color">
-          <option value="#6B4FA8">보라</option>
-          <option value="#7A5FBF">연보라</option>
-          <option value="#2E7D52">그린</option>
-          <option value="#B4651E">오렌지</option>
-          <option value="#7E63C6">바이올렛</option>
-          <option value="#B83A2E">레드</option>
-          <option value="#443A5C">차콜</option>
-          <option value="#6F6884">그레이</option>
+          <option value="#2F3237">진회색</option>
+          <option value="#45484D">차콜</option>
+          <option value="#3F4A54">블루그레이</option>
+          <option value="#3E4C46">그린그레이</option>
+          <option value="#4A4A42">웜그레이</option>
+          <option value="#5A4F4F">모브그레이</option>
+          <option value="#55505C">바이올렛그레이</option>
+          <option value="#5C6066">미드그레이</option>
         </select>
         <button class="btn accent" onclick="addMember()">+ 추가</button>
       </div>
@@ -2943,7 +2943,7 @@
 <div class="modal-backdrop" id="modal-routine" onclick="if(event.target===this)closeModal()">
   <div class="modal">
     <div class="modal-head">
-      <div class="modal-head-icon" style="background:#EBE4F9; color:#7E63C6;">🔄</div>
+      <div class="modal-head-icon" style="background:#EAECEE; color:#5C6066;">🔄</div>
       <div>
         <div class="modal-title" id="routine-modal-title">루틴 업무 등록</div>
         <div class="modal-subtitle">정기적으로 반복되는 업무 — 빈도에 따라 자동 체크 갱신됩니다</div>
@@ -3033,7 +3033,7 @@
         </div>
       </div>
 
-      <div style="background:#FCFAFE; border:1px solid var(--line-2); border-radius:8px; padding:10px 12px; font-size:12px; color:var(--ink-2); margin-top:8px;">
+      <div style="background:#FCFCFD; border:1px solid var(--line-2); border-radius:8px; padding:10px 12px; font-size:12px; color:var(--ink-2); margin-top:8px;">
         💡 <b>자동 체크 갱신:</b> 지정한 빈도(주기) 안에서 한 번이라도 완료 체크하면 그 주기는 완료로 처리됩니다. 다음 주기가 시작되면 자동으로 미완료 상태가 됩니다.
       </div>
     </div>
@@ -3049,7 +3049,7 @@
 <div class="modal-backdrop" id="modal-project" onclick="if(event.target===this)closeModal()">
   <div class="modal modal-lg">
     <div class="modal-head">
-      <div class="modal-head-icon" style="background:var(--accent-2-soft); color:#553D8C;">🚀</div>
+      <div class="modal-head-icon" style="background:var(--accent-2-soft); color:#33363A;">🚀</div>
       <div>
         <div class="modal-title" id="project-modal-title">프로젝트 등록</div>
         <div class="modal-subtitle">메인 프로젝트와 보조 업무를 한 번에 등록</div>
@@ -3122,7 +3122,7 @@
 <div class="modal-backdrop" id="modal-firebase" onclick="if(event.target===this)closeModal()">
   <div class="modal modal-lg">
     <div class="modal-head">
-      <div class="modal-head-icon" style="background:#EDE7F9; color:#6B4FA8;">☁️</div>
+      <div class="modal-head-icon" style="background:#ECEDEF; color:#3A3D42;">☁️</div>
       <div>
         <div class="modal-title">클라우드 동기화 설정</div>
         <div class="modal-subtitle">Firebase Realtime Database로 여러 명이 함께 사용할 수 있어요</div>
@@ -3304,7 +3304,7 @@
 const STORAGE_KEY = 'task_tracker_v19';
 const DEFAULT_TEAM_NAME = 'B2B';
 const TEAM_NAME_REV = 1; // 기본 팀 이름 일괄 변경 회차
-const COLOR_REV = 4;     // 팔레트 개정 회차 — 저장된 팀·멤버 색을 현재 팔레트로 맞춘다
+const COLOR_REV = 5;     // 팔레트 개정 회차 — 저장된 팀·멤버 색을 현재 팔레트로 맞춘다
 const FB_CONFIG_KEY = 'task_tracker_fb_config'; // Firebase URL + 팀 ID 저장용
 const STALE_DAYS = 7; // 정체 업무 기준 (일)
 
@@ -3647,7 +3647,7 @@ function migrateData() {
 
   // 팀이 하나도 없을 때만 기본 팀을 만든다 — 이미 있는 팀의 이름·색·아이콘은 건드리지 않는다
   if (DATA.teams.length === 0) {
-    DATA.teams.push({ id: 'team_main', name: DEFAULT_TEAM_NAME, color: '#6B4FA8', icon: '🏢' });
+    DATA.teams.push({ id: 'team_main', name: DEFAULT_TEAM_NAME, color: '#2F3237', icon: '🏢' });
   } else {
     const main = DATA.teams[0];
     if (DATA.teams.length > 1) {
@@ -3714,12 +3714,16 @@ function migrateData() {
 
   // 그동안 거쳐 간 팔레트로 저장된 팀·멤버 색을 원본 팔레트로 되돌린다
   if (DATA.colorRev !== COLOR_REV) {
-    const ORIGINAL = ['#6B4FA8','#7A5FBF','#2E7D52','#B4651E','#7E63C6','#B83A2E','#443A5C','#6F6884'];
+    const ORIGINAL = ['#2F3237','#45484D','#3F4A54','#3E4C46','#4A4A42','#5A4F4F','#55505C','#5C6066'];
     const RECOLOR = {};
-    [[0,['1B5E6E','3B5FA8','244A73','2E4C88']], [1,['B89968','5A7FC4','3A6EA5']],
-     [2,['2E7D52','2F8F7A','17693F']],           [3,['B4651E','C2803A','9A5B00']],
-     [4,['5B4B8A','7A6BC4','6B4E9E','3E6DB5']],  [5,['B83A2E','C05B57','B3261E']],
-     [6,['2D3934','41546F','33415C','1B3A5C']],  [7,['6B7570','6E8099','64748B','647389']]
+    [[0,['1B5E6E','3B5FA8','244A73','2E4C88','6B4FA8','3A3D42']],
+     [1,['B89968','5A7FC4','3A6EA5','7A5FBF','5C6066']],
+     [2,['2E7D52','2F8F7A','17693F']],
+     [3,['B4651E','C2803A','9A5B00']],
+     [4,['5B4B8A','7A6BC4','6B4E9E','3E6DB5','7E63C6']],
+     [5,['B83A2E','C05B57','B3261E']],
+     [6,['2D3934','41546F','33415C','1B3A5C','443A5C','45484D']],
+     [7,['6B7570','6E8099','64748B','647389','6F6884','6B7076']]
     ].forEach(([i, olds]) => olds.forEach(h => { RECOLOR['#' + h] = ORIGINAL[i]; }));
     const swap = o => { const n = RECOLOR[String(o.color || '').toUpperCase()]; if (n) o.color = n; };
     DATA.teams.forEach(swap);
@@ -3980,7 +3984,7 @@ function renderStaleBanner() {
             <div class="stale-item-title">${escapeHtml(tk.title)}</div>
             <div class="stale-item-days">${tk._staleDays}일</div>
             <div class="stale-item-meta">
-              <span style="display:inline-block; width:8px; height:8px; border-radius:99px; background:${m ? m.color : '#A49DB8'};"></span>
+              <span style="display:inline-block; width:8px; height:8px; border-radius:99px; background:${m ? m.color : '#9AA0A6'};"></span>
               <b style="color:var(--ink-2);">${m ? escapeHtml(m.name) : '—'}</b>
               <span>·</span>
               <span>${typeLabel}</span>
@@ -4374,7 +4378,7 @@ function renderDraftSubtasks() {
     if (UI.draftSubtasks.length > 0) {
       // 자동 계산값 - 읽기 전용 표시
       spinnerWrap.innerHTML = `
-        <div style="display:flex; align-items:center; gap:6px; padding: 6px 12px; background: #F4F0FB; border: 1px solid var(--line); border-radius: 6px;">
+        <div style="display:flex; align-items:center; gap:6px; padding: 6px 12px; background: #F3F4F6; border: 1px solid var(--line); border-radius: 6px;">
           <span style="font-family:var(--num); font-size:14px; font-weight:800; color:var(--accent);">${avg}%</span>
         </div>
       `;
@@ -4611,7 +4615,7 @@ function renderProjectCard(task, memberMap) {
     ? `🏁 ${startDate} 시작 · 완료까지 ${daysBetween(startDate, task.completedAt || t)}일`
     : elapsedDays === 0
       ? `📅 ${startDate} 시작 · 오늘 시작`
-      : `📅 ${startDate} 시작 · <b style="color:#553D8C; font-weight:800;">${elapsedDays}일 경과</b>`;
+      : `📅 ${startDate} 시작 · <b style="color:#33363A; font-weight:800;">${elapsedDays}일 경과</b>`;
 
   return `
     <div class="${cardClass}">
@@ -4621,7 +4625,7 @@ function renderProjectCard(task, memberMap) {
           <div class="project-title">${escapeHtml(task.title)}</div>
         </div>
         <div class="project-owner-badge" title="담당자: ${m ? escapeHtml(m.name) : '미지정'}">
-          <span class="owner-dot" style="background:${m ? m.color : '#A49DB8'};"></span>
+          <span class="owner-dot" style="background:${m ? m.color : '#9AA0A6'};"></span>
           ${m ? escapeHtml(m.name) : '미지정'}님
         </div>
       </div>
@@ -4637,7 +4641,7 @@ function renderProjectCard(task, memberMap) {
         <div class="project-progress-bar"><div style="width:${task.progress || 0}%"></div></div>
         ${subs.length > 0 ? `
           <div class="project-progress-pct" title="보조업무 ${subs.length}개의 평균">${task.progress || 0}%</div>
-          <span style="font-size:9px; color:#553D8C; font-weight:700; background:#E6DDF7; padding:2px 6px; border-radius:99px; white-space:nowrap;">📊 평균</span>
+          <span style="font-size:9px; color:#33363A; font-weight:700; background:#E6E8EB; padding:2px 6px; border-radius:99px; white-space:nowrap;">📊 평균</span>
         ` : pctSpinnerHTML(task.progress || 0, `updateProgress('${task.id}', __V__)`, 'lg')}
         <div class="project-progress-actions">
           <button class="project-icon-btn" onclick="cycleTaskStatus('${task.id}')" title="상태 변경">${statusIcon}</button>
@@ -4850,7 +4854,7 @@ function renderTeamBlock(team) {
             const freqLabel = FREQ_LABELS[r.frequency] || r.frequency;
             return `
               <div class="team-routine-row" style="grid-template-columns: 22px 1fr auto 22px;">
-                <div class="team-row-avatar" style="background:${m ? m.color : '#A49DB8'};" title="${m ? m.name : ''}">${m ? escapeHtml(initials(m.name)) : '?'}</div>
+                <div class="team-row-avatar" style="background:${m ? m.color : '#9AA0A6'};" title="${m ? m.name : ''}">${m ? escapeHtml(initials(m.name)) : '?'}</div>
                 <div class="team-row-title" onclick="openRoutineModal('${r.id}')" title="클릭으로 수정: ${escapeHtml(r.title)}">${escapeHtml(r.title)}</div>
                 <span class="routine-tag ${r.frequency}">${freqLabel}</span>
                 <button class="x-btn" onclick="deleteRoutine('${r.id}')">×</button>
@@ -4876,7 +4880,7 @@ function renderTeamBlock(team) {
             const isUrgent = tk.dueDate && new Date(tk.dueDate) < new Date(t) && tk.status !== 'done';
             return `
               <div class="team-task-row">
-                <div class="team-row-avatar" style="background:${m ? m.color : '#A49DB8'};" title="${m ? m.name : ''}">${m ? escapeHtml(initials(m.name)) : '?'}</div>
+                <div class="team-row-avatar" style="background:${m ? m.color : '#9AA0A6'};" title="${m ? m.name : ''}">${m ? escapeHtml(initials(m.name)) : '?'}</div>
                 <div class="team-row-title" ondblclick="editTaskTitle('${tk.id}')" title="더블클릭으로 수정">${escapeHtml(tk.title)}</div>
                 <span class="tag-mini ${isUrgent?'urgent-tag':'routine-type'}" style="${isUrgent?'background:var(--danger-soft); color:var(--danger);':''}">${tk.dueDate ? tk.dueDate.slice(5) : '—'}</span>
                 <div class="team-row-progress"><div style="width:${tk.progress||0}%"></div></div>
@@ -5053,7 +5057,7 @@ function renderTodayPage() {
       <div class="today-card">
         <div class="today-card-head">
           <div class="member-info">
-            <div class="avatar" style="background:${m.color || '#6B4FA8'};">${escapeHtml(initials(m.name))}</div>
+            <div class="avatar" style="background:${m.color || '#3A3D42'};">${escapeHtml(initials(m.name))}</div>
             <div>
               <div class="member-name">${escapeHtml(m.name)}</div>
               <div class="member-role">${escapeHtml(m.role || '')}</div>
@@ -5062,8 +5066,8 @@ function renderTodayPage() {
           <div class="today-progress">
             <div class="ring">
               <svg width="38" height="38">
-                <circle cx="19" cy="19" r="16" fill="none" stroke="#E7E1F3" stroke-width="3"/>
-                <circle cx="19" cy="19" r="16" fill="none" stroke="${m.color || '#6B4FA8'}" stroke-width="3"
+                <circle cx="19" cy="19" r="16" fill="none" stroke="#E3E5E8" stroke-width="3"/>
+                <circle cx="19" cy="19" r="16" fill="none" stroke="${m.color || '#3A3D42'}" stroke-width="3"
                   stroke-dasharray="${rCircum}" stroke-dashoffset="${rOffset}" stroke-linecap="round"/>
               </svg>
               <div class="ring-text">${pct}%</div>
@@ -5119,7 +5123,7 @@ function renderTodayPage() {
               let rightInfo = '';
               if (taskType === 'project' && tk.startDate) {
                 const days = daysBetween(tk.startDate, t);
-                rightInfo = `<div class="task-mini-due" style="color:#553D8C; font-weight:800;">+${days}d</div>`;
+                rightInfo = `<div class="task-mini-due" style="color:#33363A; font-weight:800;">+${days}d</div>`;
               } else if (tk.dueDate) {
                 rightInfo = `<div class="task-mini-due ${isUrgent ? 'urgent' : ''}">${tk.dueDate.slice(5)}</div>`;
               }
@@ -5367,12 +5371,12 @@ function renderManagePage() {
           </td>
           <td>
             <div style="display:flex; align-items:center; gap:10px;">
-              <div class="avatar" style="background:${m.color || '#6B4FA8'}; width:28px; height:28px; font-size:12px;">${escapeHtml(initials(m.name))}</div>
+              <div class="avatar" style="background:${m.color || '#3A3D42'}; width:28px; height:28px; font-size:12px;">${escapeHtml(initials(m.name))}</div>
               <span style="font-weight:700;">${escapeHtml(m.name)}</span>
             </div>
           </td>
           <td>${escapeHtml(m.role || '—')}</td>
-          <td><span style="display:inline-block; width:14px; height:14px; background:${m.color || '#6B4FA8'}; border-radius:4px; vertical-align: middle;"></span></td>
+          <td><span style="display:inline-block; width:14px; height:14px; background:${m.color || '#3A3D42'}; border-radius:4px; vertical-align: middle;"></span></td>
           <td><span class="badge status-doing">${activeCount}건</span></td>
           <td><span class="badge daily">${routineCount}개</span></td>
           <td><button class="x-btn" onclick="deleteMember('${m.id}')">×</button></td>
@@ -5451,7 +5455,7 @@ function renderManagePage() {
           <td>${m ? escapeHtml(m.name) : '—'}</td>
           <td style="font-weight:600;">
             ${escapeHtml(tk.title)}${isStale ? ' <span class="tag-mini stale-tag" style="background:var(--warn-soft); color:var(--warn);">정체</span>' : ''}
-            ${(tk.subtasks && tk.subtasks.length > 0) ? ` <span class="tag-mini" style="background:var(--accent-2-soft); color:#553D8C;">📎 ${tk.subtasks.filter(s=>s.status==='done').length}/${tk.subtasks.length}</span>` : ''}
+            ${(tk.subtasks && tk.subtasks.length > 0) ? ` <span class="tag-mini" style="background:var(--accent-2-soft); color:#33363A;">📎 ${tk.subtasks.filter(s=>s.status==='done').length}/${tk.subtasks.length}</span>` : ''}
           </td>
           <td><span class="badge type-${taskType}">${typeLabel}</span></td>
           <td style="font-family:var(--num); font-size:12px;">
@@ -5566,7 +5570,7 @@ function quickAddMember(teamId) {
   const role = (prompt('직책을 입력하세요 (예: 매니저, 수석매니저, 리드매니저). 없으면 빈칸:') || '').trim();
   // 사용 안 한 색상 우선
   const usedColors = new Set(DATA.members.filter(m => m.teamId === teamId).map(m => m.color));
-  const palette = ['#6B4FA8', '#7A5FBF', '#2E7D52', '#B4651E', '#7E63C6', '#B83A2E', '#443A5C', '#6F6884'];
+  const palette = ['#2F3237','#45484D','#3F4A54','#3E4C46','#4A4A42','#5A4F4F','#55505C','#5C6066'];
   const color = palette.find(c => !usedColors.has(c)) || palette[DATA.members.length % palette.length];
   DATA.members.push({
     id: uid(),
@@ -5864,13 +5868,13 @@ function loadSampleData(silent) {
   }
 
   const baseTeams = [
-    { id: 'team_main', name: DEFAULT_TEAM_NAME, color: '#6B4FA8', icon: '🏢', kpi: '' }
+    { id: 'team_main', name: DEFAULT_TEAM_NAME, color: '#2F3237', icon: '🏢', kpi: '' }
   ];
 
   const baseMembers = [
-    { id: 'mm1', teamId: 'team_main', name: '신한솔', role: '', color: '#6B4FA8', kpi: '' },
-    { id: 'mm2', teamId: 'team_main', name: '최세혁', role: '', color: '#B4651E', kpi: '' },
-    { id: 'mm3', teamId: 'team_main', name: '조재연', role: '', color: '#2E7D52', kpi: '' }
+    { id: 'mm1', teamId: 'team_main', name: '신한솔', role: '', color: '#2F3237', kpi: '' },
+    { id: 'mm2', teamId: 'team_main', name: '최세혁', role: '', color: '#45484D', kpi: '' },
+    { id: 'mm3', teamId: 'team_main', name: '조재연', role: '', color: '#3F4A54', kpi: '' }
   ];
 
   if (silent) {
@@ -5944,7 +5948,7 @@ function renderManualCard(x) {
   const hasContent = !!(x.content && x.content.trim());
   const m = manualMember(x.owner);
   const ownerName = m ? m.name : '미지정';
-  const ownerColor = m ? (m.color || '#6B4FA8') : '#A49DB8';
+  const ownerColor = m ? (m.color || '#3A3D42') : '#9AA0A6';
   const acts = [];
   if (hasUrl) acts.push(`<a class="dash-link app" href="${escapeHtml(normalizeUrl(x.url))}" target="_blank" rel="noopener">▶ 열기</a>`);
   if (hasContent) acts.push(`<button class="dash-link" onclick="openManualView('${x.id}')">📄 내용 보기</button>`);
@@ -6061,7 +6065,7 @@ function renderAutomationPage() {
 function renderDashCard(d) {
   const m = dashMember(d.owner);
   const ownerName = m ? m.name : '미지정';
-  const ownerColor = m ? (m.color || '#6B4FA8') : '#A49DB8';
+  const ownerColor = m ? (m.color || '#3A3D42') : '#9AA0A6';
   const openUrl = normalizeUrl(d.appUrl || d.htmlUrl || '');
   const tags = Array.isArray(d.tags) ? d.tags : [];
   const thumb = d.thumbnail
