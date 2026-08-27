@@ -270,64 +270,6 @@
     font-weight: 500;
   }
 
-  /* 멤버별 KPI 한 줄 */
-  .member-kpi-line {
-    display: flex;
-    align-items: center;
-    gap: 8px;
-    padding: 6px 10px;
-    background: linear-gradient(180deg, #F7F8F9, #F2F3F5);
-    border: 1px dashed #D3D6DA;
-    border-radius: 6px;
-    margin-top: 8px;
-    font-size: 11px;
-    color: #33363A;
-  }
-  .member-kpi-flag {
-    font-size: 11px;
-    flex-shrink: 0;
-  }
-  .member-kpi-text {
-    flex: 1;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    white-space: nowrap;
-    font-weight: 600;
-  }
-  .member-kpi-text.empty {
-    color: var(--muted);
-    font-style: italic;
-    font-weight: 500;
-  }
-  .member-kpi-input {
-    width: 100%;
-    padding: 5px 8px;
-    border: 1px solid #D3D6DA;
-    background: var(--surface);
-    border-radius: 4px;
-    font-size: 11px;
-    font-weight: 600;
-    color: #33363A;
-    font-family: inherit;
-    box-sizing: border-box;
-  }
-  .member-kpi-input:focus {
-    outline: none;
-    border-color: #5C6066;
-    box-shadow: 0 0 0 2px rgba(184, 153, 104, 0.15);
-  }
-  .member-kpi-edit-btn {
-    background: transparent;
-    border: none;
-    color: #3A3D42;
-    font-size: 11px;
-    cursor: pointer;
-    padding: 2px 4px;
-    flex-shrink: 0;
-    opacity: 0.6;
-    transition: opacity 0.15s;
-  }
-  .member-kpi-edit-btn:hover { opacity: 1; }
   .hero-kpis {
     display: grid; grid-template-columns: minmax(0, 300px); gap: 12px;
   }
@@ -408,61 +350,10 @@
   @media (max-width: 1180px) { .today-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
   @media (max-width: 760px)  { .today-grid { grid-template-columns: minmax(0, 1fr); } }
 
-  /* 제목 옆 작은 직원 추가 버튼 */
-  .member-add-btn {
-    width: 30px; height: 30px; margin-left: 8px;
-    border: 1px solid var(--line); background: var(--surface);
-    border-radius: 5px; color: var(--ink-2);
-    font-size: 15px; line-height: 1; font-weight: 700;
-    display: inline-flex; align-items: center; justify-content: center;
-    transition: background .12s, border-color .12s;
-  }
-  .member-add-btn:hover { background: var(--line-2); border-color: var(--muted); color: var(--ink); }
   .today-card {
     background: var(--surface); border: 1px solid var(--line);
     border-radius: var(--radius); overflow: hidden;
     display: flex; flex-direction: column;
-  }
-  /* + 새 직원 추가 카드 */
-  .today-card-add {
-    background: transparent;
-    border: 2px dashed #C8CBD0;
-    cursor: pointer;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    min-height: 220px;
-    transition: all 0.2s;
-  }
-  .today-card-add:hover {
-    background: #F7F8F9;
-    border-color: var(--accent-2);
-    border-style: solid;
-    transform: translateY(-2px);
-    box-shadow: var(--shadow-sm);
-  }
-  .today-card-add-inner {
-    text-align: center;
-    color: #3A3D42;
-    padding: 24px;
-  }
-  .today-card-add-icon {
-    font-size: 42px;
-    font-weight: 200;
-    color: var(--accent-2);
-    line-height: 1;
-    margin-bottom: 8px;
-  }
-  .today-card-add-title {
-    font-family: var(--display);
-    font-size: 14px;
-    font-weight: 800;
-    color: #33363A;
-    margin-bottom: 4px;
-  }
-  .today-card-add-sub {
-    font-size: 11px;
-    color: var(--muted);
   }
   .today-card-head {
     padding: 16px 20px 14px; border-bottom: 1px solid var(--line-2);
@@ -497,7 +388,9 @@
     padding: 14px 20px;
     border-bottom: 1px solid var(--line-2);
   }
-  .today-section:last-child { border-bottom: none; }
+  /* 하단 버튼 줄이 없어졌으므로 마지막 섹션이 남는 높이를 채운다 —
+     카드끼리 높이가 다를 때 아래에 빈 띠가 생기지 않게 */
+  .today-section:last-child { border-bottom: none; flex: 1 1 auto; }
   .today-section-label {
     font-size: 10px; color: var(--muted); font-weight: 700;
     text-transform: uppercase; letter-spacing: 0.14em;
@@ -1979,30 +1872,6 @@
   }
 
 
-  /* ===== 플로팅 추가 버튼 (FAB) ===== */
-  .fab-add {
-    position: fixed;
-    right: 28px; bottom: 28px;
-    width: 60px; height: 60px;
-    border-radius: 50%;
-    background: linear-gradient(135deg, var(--accent), var(--accent-2));
-    color: white;
-    border: none;
-    font-size: 28px;
-    font-weight: 300;
-    cursor: pointer;
-    box-shadow: 0 8px 24px rgba(27, 94, 110, 0.35), 0 2px 8px rgba(0,0,0,0.1);
-    z-index: 900;
-    transition: all 0.2s;
-    display: inline-flex; align-items: center; justify-content: center;
-    line-height: 1;
-  }
-  .fab-add:hover {
-    transform: translateY(-2px) scale(1.05);
-    box-shadow: 0 12px 28px rgba(27, 94, 110, 0.45), 0 4px 12px rgba(0,0,0,0.15);
-  }
-  .fab-add:active { transform: translateY(0) scale(1); }
-
   /* 상단 큰 추가 버튼 */
   .top-add-btn {
     padding: 10px 18px;
@@ -2594,7 +2463,6 @@
     <div class="section-title">
       팀 멤버별 오늘 할 일
       <span class="count" id="today-day-text">2026년 5월 11일 (월요일)</span>
-      <button class="member-add-btn" id="today-add-member" title="새 직원 추가" onclick="quickAddMemberDefault()">＋</button>
     </div>
     <div class="today-grid" id="today-grid"></div>
   </div>
@@ -2804,7 +2672,6 @@
 </main>
 
 <!-- ===== 플로팅 추가 버튼 ===== -->
-<button class="fab-add" onclick="openAddMenu()" title="새 업무 추가 (Ctrl+N)">＋</button>
 
 <!-- ===== 모달: 추가 메뉴 (루틴 vs 프로젝트 선택) ===== -->
 <!-- 매뉴얼 추가/수정 모달 -->
@@ -4948,48 +4815,6 @@ function quickAddTeamTask(teamId, taskType) {
 
 // ===== 마인드맵 =====
 // 구조: ROOT -> [팀] -> [멤버] -> [업무 (project/routine)] -> [하위업무]
-// ===== KPI 관리 =====
-function updateMemberKPI(memberId, val) {
-  const m = DATA.members.find(x => x.id === memberId);
-  if (!m) return;
-  m.kpi = (val || '').trim();
-  save();
-  renderTodayPage();
-  toast(m.kpi ? `✓ ${m.name}님 KPI 저장됨` : `${m.name}님 KPI 비움`);
-}
-
-// 멤버 KPI 인라인 편집 진입
-function startMemberKPIEdit(memberId) {
-  const el = document.querySelector(`[data-kpi-row="${memberId}"]`);
-  if (!el) return;
-  const m = DATA.members.find(x => x.id === memberId);
-  if (!m) return;
-  el.innerHTML = `
-    <span class="member-kpi-flag">🎯</span>
-    <input type="text" class="member-kpi-input"
-      id="member-kpi-input-${memberId}"
-      value="${escapeHtml(m.kpi || '')}"
-      placeholder="이 직원의 KPI 목표를 한 줄로 적어주세요"
-      onblur="commitMemberKPI('${memberId}', this.value)"
-      onkeydown="if(event.key==='Enter')this.blur(); else if(event.key==='Escape'){this.dataset.cancel='1';this.blur();}"
-      autofocus>
-  `;
-  setTimeout(() => {
-    const inp = $(`member-kpi-input-${memberId}`);
-    if (inp) { inp.focus(); inp.select(); }
-  }, 10);
-}
-
-function commitMemberKPI(memberId, val) {
-  const inp = $(`member-kpi-input-${memberId}`);
-  if (inp && inp.dataset.cancel === '1') {
-    // Esc로 취소
-    renderTodayPage();
-    return;
-  }
-  updateMemberKPI(memberId, val);
-}
-
 // ===== Hero =====
 function renderHero() {
   // 진행 중 업무
@@ -5077,13 +4902,6 @@ function renderTodayPage() {
               <div class="ring-text">${pct}%</div>
             </div>
           </div>
-        </div>
-
-        <!-- 개인 KPI 한 줄 -->
-        <div class="member-kpi-line" data-kpi-row="${m.id}" onclick="startMemberKPIEdit('${m.id}')" title="클릭하여 KPI 수정">
-          <span class="member-kpi-flag">🎯</span>
-          <span class="member-kpi-text ${m.kpi ? '' : 'empty'}">${m.kpi ? escapeHtml(m.kpi) : '연간 KPI 목표를 입력하세요'}</span>
-          <button class="member-kpi-edit-btn" onclick="event.stopPropagation(); startMemberKPIEdit('${m.id}')">✏️</button>
         </div>
 
         <div class="today-section">
@@ -5182,45 +5000,9 @@ function renderTodayPage() {
             }).join('')}</div>`
           }
         </div>
-
-        <div style="margin-top: 10px; display:grid; grid-template-columns: 1fr 1fr; gap:8px;">
-          <button class="action-btn project sm" onclick="openProjectModalForMember('${m.id}')">
-            <span class="action-icon">＋</span><span>프로젝트 추가</span>
-          </button>
-          <button class="action-btn routine sm" onclick="openRoutineModalForMember('${m.id}')">
-            <span class="action-icon">＋</span><span>루틴 추가</span>
-          </button>
-        </div>
       </div>
     `;
   }).join('');
-}
-
-// 제목 옆 작은 ＋ 버튼 — 첫 번째 팀에 멤버를 추가한다
-function quickAddMemberDefault() {
-  if (!DATA.teams.length) return toast('먼저 팀을 추가해주세요 (관리 탭에서)');
-  quickAddMember(DATA.teams[0].id);
-}
-
-// 멤버 컨텍스트에서 모달 열기 (담당자 미리 선택)
-function openProjectModalForMember(memberId) {
-  const m = DATA.members.find(x => x.id === memberId);
-  if (!m) return;
-  openProjectModal();
-  setTimeout(() => {
-    $('project-modal-member').value = memberId;
-  }, 50);
-}
-
-function openRoutineModalForMember(memberId) {
-  const m = DATA.members.find(x => x.id === memberId);
-  if (!m) return;
-  openRoutineModal();
-  setTimeout(() => {
-    $('routine-modal-team').value = m.teamId;
-    updateRoutineModalMembers();
-    $('routine-modal-member').value = memberId;
-  }, 50);
 }
 
 function quickAddTask(memberId) {
