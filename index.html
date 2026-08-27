@@ -59,7 +59,7 @@
     display: flex; align-items: center; gap: 14px; margin-bottom: 24px;
     flex-wrap: wrap;
   }
-  .brand { display: flex; align-items: baseline; gap: 12px; margin-right: auto; }
+  .brand { display: flex; align-items: center; gap: 12px; margin-right: auto; }
   .topbar-actions {
     display: flex; align-items: center; gap: 8px;
     flex-wrap: wrap;
@@ -187,14 +187,16 @@
     color: var(--accent);
     text-decoration: underline;
   }
-  .brand-mark {
-    font-family: var(--display); font-weight: 800; font-size: 22px;
-    letter-spacing: -0.03em; color: var(--ink);
-  }
-  .brand-mark::before { content: "●"; color: var(--accent); margin-right: 10px; font-size: 14px; vertical-align: middle; }
-  .brand-sub {
-    font-size: 12px; color: var(--muted);
-    text-transform: uppercase; letter-spacing: 0.16em;
+  /* 브랜드 로고 — B2B 워드마크 */
+  .brand-logo {
+    font-family: var(--display);
+    font-weight: 900;
+    font-size: 30px;
+    letter-spacing: -0.045em;
+    line-height: 1;
+    color: #12306B;
+    display: inline-block;
+    user-select: none;
   }
   .today-pill {
     display: inline-flex; align-items: center; gap: 8px;
@@ -2466,8 +2468,7 @@
 <header class="topbar">
   <div class="brand-row">
     <div class="brand">
-      <span class="brand-mark">B2B 업무 트래커</span>
-      <span class="brand-sub">SERVICE OPS · TASK TRACKER</span>
+      <span class="brand-logo" role="img" aria-label="B2B 업무 트래커">B2B</span>
     </div>
     <div class="today-pill" id="today-pill">2026.05.11 월</div>
     <div class="topbar-actions">
