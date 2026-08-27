@@ -5553,7 +5553,7 @@ function renderTodayPage() {
       const bDate = b.dueDate || '9999-12-31';
       return aDate.localeCompare(bDate);
     });
-    const topTasks = tasks.slice(0, 5);
+    const topTasks = tasks;   // 전부 보여준다 (예전에는 5건까지만)
 
     // 진행률 ring SVG
     const rCircum = 2 * Math.PI * 16;
@@ -5590,6 +5590,31 @@ function renderTodayPage() {
         </div>
 
         <div class="today-section">
+          <div class="today-section-label">
+            <span>🔄 오늘 루틴</span>
+            <span class="today-section-count">${doneToday}/${totalToday}</span>
+          </div>
+          ${totalToday === 0 ? `<div class="empty-small">오늘 예정된 루틴이 없어요.</div>` :
+            `<div class="routine-list">${todayRoutines.map(r => {
+              const isDone = doneIds.has(r.id);
+              const freqTag = `<span class="routine-tag ${r.frequency}">${
+                r.frequency === 'daily' ? '매일' :
+                r.frequency === 'weekly' ? '주간' : '월간'
+              }</span>`;
+              return `
+                <div class="routine-item ${isDone ? 'done' : ''}">
+                  <span class="routine-check" onclick="toggleRoutineCheck('${r.id}','${t}')"></span>
+                  <span class="routine-title" onclick="toggleRoutineCheck('${r.id}','${t}')">${escapeHtml(r.title)}</span>
+                  ${freqTag}
+                  <button class="routine-edit-btn" onclick="event.stopPropagation(); openRoutineModal('${r.id}')" title="루틴 수정">✏️</button>
+                  <button class="routine-del-btn" onclick="event.stopPropagation(); deleteRoutineQuick('${r.id}')" title="루틴 삭제">×</button>
+                </div>
+              `;
+            }).join('')}</div>`
+          }
+        </div>
+
+        <div class="today-section is-last">
           <div class="today-section-label">
             <span>🚀 진행중 프로젝트</span>
             <span class="today-section-count">${tasks.length}건</span>
@@ -5654,32 +5679,6 @@ function renderTodayPage() {
                     <button class="task-mini-toggle" title="${isExpanded ? '접기' : '펼치기'}">▼</button>
                   </div>
                   ${expandHtml}
-                </div>
-              `;
-            }).join('')}</div>`
-          }
-          ${tasks.length > 5 ? `<div style="font-size: 11px; color: var(--muted); margin-top: 8px; text-align: center;">외 ${tasks.length - 5}건</div>` : ''}
-        </div>
-
-        <div class="today-section is-last">
-          <div class="today-section-label">
-            <span>🔄 오늘 루틴</span>
-            <span class="today-section-count">${doneToday}/${totalToday}</span>
-          </div>
-          ${totalToday === 0 ? `<div class="empty-small">오늘 예정된 루틴이 없어요.</div>` :
-            `<div class="routine-list">${todayRoutines.map(r => {
-              const isDone = doneIds.has(r.id);
-              const freqTag = `<span class="routine-tag ${r.frequency}">${
-                r.frequency === 'daily' ? '매일' :
-                r.frequency === 'weekly' ? '주간' : '월간'
-              }</span>`;
-              return `
-                <div class="routine-item ${isDone ? 'done' : ''}">
-                  <span class="routine-check" onclick="toggleRoutineCheck('${r.id}','${t}')"></span>
-                  <span class="routine-title" onclick="toggleRoutineCheck('${r.id}','${t}')">${escapeHtml(r.title)}</span>
-                  ${freqTag}
-                  <button class="routine-edit-btn" onclick="event.stopPropagation(); openRoutineModal('${r.id}')" title="루틴 수정">✏️</button>
-                  <button class="routine-del-btn" onclick="event.stopPropagation(); deleteRoutineQuick('${r.id}')" title="루틴 삭제">×</button>
                 </div>
               `;
             }).join('')}</div>`
