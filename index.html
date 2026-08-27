@@ -59,7 +59,7 @@
     display: flex; align-items: center; gap: 14px; margin-bottom: 24px;
     flex-wrap: wrap;
   }
-  .brand { display: flex; align-items: center; gap: 12px; margin-right: auto; }
+  .brand { display: flex; align-items: center; gap: 12px; margin-right: 10px; }
   .topbar-actions {
     display: flex; align-items: center; gap: 8px;
     flex-wrap: wrap;
@@ -216,10 +216,6 @@
   .hero-title .accent {
     background: linear-gradient(180deg, transparent 60%, var(--accent-2-soft) 60%);
   }
-  .hero-sub {
-    font-size: 13px; color: var(--muted); margin-top: 6px;
-  }
-
   /* ===== 팀 KPI 목표 카드 ===== */
   .team-kpi-card {
     margin-top: 16px;
@@ -305,16 +301,17 @@
   .hero-kpi-foot { font-size: 11px; color: var(--muted); }
 
   /* ===== Tabs ===== */
-  .tabs-wrap {
-    background: var(--surface); border-bottom: 1px solid var(--line);
-    padding: 0 36px; position: sticky; top: 0; z-index: 50;
+  /* 탭 — 헤더의 로고 오른쪽에 나란히 */
+  .tabs {
+    display: flex; gap: 2px; margin-right: auto; flex-wrap: wrap;
+    align-items: center;
   }
-  .tabs { display: flex; gap: 4px; }
   .tab {
-    padding: 16px 22px; background: transparent; border: none;
-    color: var(--muted); font-size: 14px; font-weight: 600;
+    padding: 8px 12px; background: transparent; border: none;
+    color: var(--muted); font-size: 13px; font-weight: 600;
     letter-spacing: -0.01em; border-bottom: 2px solid transparent;
-    transition: all 0.18s; display: flex; align-items: center; gap: 8px;
+    transition: all 0.18s; display: flex; align-items: center; gap: 6px;
+    white-space: nowrap; cursor: pointer;
   }
   .tab:hover { color: var(--ink); }
   .tab.active { color: var(--ink); border-bottom-color: var(--accent); }
@@ -957,7 +954,7 @@
   @media (max-width: 720px) {
     main { padding: 18px 16px 60px; }
     .topbar { padding: 16px 18px 22px; }
-    .tabs-wrap { padding: 0 16px; overflow-x: auto; }
+    .tab { padding: 7px 9px; font-size: 12px; gap: 4px; }
     .hero-title { font-size: 22px; }
     .hero-kpis { grid-template-columns: 1fr; }
   }
@@ -2470,6 +2467,13 @@
     <div class="brand">
       <span class="brand-logo" role="img" aria-label="B2B 업무 트래커">B2B</span>
     </div>
+      <div class="tabs">
+        <button class="tab active" data-page="today">📅 오늘</button>
+        <button class="tab" data-page="team">👥 팀별 보기</button>
+        <button class="tab" data-page="automation">🚀 자동화</button>
+        <button class="tab" data-page="manuals">📖 매뉴얼</button>
+        <button class="tab" data-page="manage">⚙️ 관리</button>
+      </div>
     <div class="today-pill" id="today-pill">2026.05.11 월</div>
     <div class="topbar-actions">
       <!-- 깃허브 동기화 상태 -->
@@ -2491,10 +2495,6 @@
   </div>
 
   <div class="hero">
-    <div>
-      <p class="hero-sub">루틴 업무는 빈도에 맞춰 자동 갱신되고, 프로젝트는 보조 업무로 쪼개서 관리합니다.</p>
-
-    </div>
     <div class="hero-kpis">
       <div class="hero-kpi">
         <div class="hero-kpi-label">🚀 진행중 프로젝트</div>
@@ -2521,17 +2521,6 @@
     </div>
   </div>
 </header>
-
-<!-- ============== TABS ============== -->
-<div class="tabs-wrap">
-  <div class="tabs">
-    <button class="tab active" data-page="today">📅 오늘</button>
-    <button class="tab" data-page="team">👥 팀별 보기</button>
-    <button class="tab" data-page="automation">🚀 자동화</button>
-    <button class="tab" data-page="manuals">📖 매뉴얼</button>
-    <button class="tab" data-page="manage">⚙️ 관리</button>
-  </div>
-</div>
 
 <!-- ============== MAIN ============== -->
 <main>
@@ -3749,10 +3738,15 @@ async function fbFlush() {
   FB.pushing = true;
   FB.dirty = false;
   try {
+    let refused = false;
     for (const op of ops) {
       const ok = FB.mode === 'sdk' ? await fbWriteSdk(op) : await fbWriteRest(op);
       if (ok) fbCommitBase(op);
+      else refused = true;          // 원격이 더 최신이라 안 썼다
     }
+    // 안 쓰인 항목이 있으면 곧바로 최신본을 받아 온다.
+    // 그러지 않으면 같은 쓰기를 계속 다시 시도하느라 받기가 밀린다.
+    if (refused) setTimeout(() => { if (!FB.pushing) fbRefreshNow(); }, 50);
     FB.lastSync = Date.now();
     fbSaveBase();
     fbSetState('synced', '');
@@ -3899,6 +3893,14 @@ function fbOnRemote(raw) {
   if (fbBuildOps().length > 0) fbPushSoon();
 }
 
+// 지금 바로 최신본 받기 (SDK/REST 어느 쪽이든)
+function fbRefreshNow() {
+  if (FB.mode === 'rest') return fbPoll();
+  if (FB.mode === 'sdk' && FB.sdk && FB.root) {
+    return FB.sdk.get(FB.root).then(s => fbOnRemote(s.val())).catch(() => {});
+  }
+}
+
 async function fbPoll() {
   try {
     const res = await fetch(`${FB.url}/${FB.path}.json`, { cache: 'no-store' });
@@ -3916,7 +3918,11 @@ function fbBroadcast() {
   try { if (FB.channel) FB.channel.postMessage({ from: fbClientId(), at: Date.now() }); } catch (e) {}
 }
 function fbSyncFromTabs() {
-  if (FB.applying || FB.pushing) return;
+  // 바쁠 때 온 알림을 그냥 버리면 그 변경은 다음 폴링까지 화면에 안 뜬다 — 곧 다시 시도한다
+  if (FB.applying || FB.pushing) {
+    if (!FB.tabRetry) FB.tabRetry = setTimeout(() => { FB.tabRetry = null; fbSyncFromTabs(); }, 400);
+    return;
+  }
   let stored = null;
   try { stored = JSON.parse(localStorage.getItem(STORAGE_KEY) || 'null'); } catch (e) { return; }
   if (!stored) return;
@@ -3969,12 +3975,14 @@ function fbSetState(state, err) {
 
 // ---- 연결 ----
 function fbStartRest(reason) {
-  if (FB.mode === 'rest') return;
+  if (FB.mode === 'rest' && FB.pollTimer) return;   // 타이머가 죽어 있으면 다시 건다
   if (reason) console.warn('Firebase 실시간 연결 불가 — 2초 주기 동기화로 전환:', reason);
   FB.mode = 'rest';
   if (FB.pollTimer) clearInterval(FB.pollTimer);
   fbPoll();
-  FB.pollTimer = setInterval(() => { if (!FB.pushing && !FB.dirty) fbPoll(); }, FB_POLL_MS);
+  // 올릴 것이 남아 있어도 받기는 계속한다 — 병합이 내 변경을 지키므로 안전하고,
+  // 이걸 막으면 저장이 잦은 탭의 화면이 계속 옛것으로 남는다
+  FB.pollTimer = setInterval(() => { if (!FB.pushing) fbPoll(); }, FB_POLL_MS);
 }
 
 async function fbStart() {
