@@ -5356,6 +5356,7 @@ function renderTeamBlock(team) {
   // 담당자 필터 — 선택한 멤버가 이 팀에 있을 때만 적용한다
   const pickedId = (UI.memberFilter && memberIds.includes(UI.memberFilter)) ? UI.memberFilter : null;
   const shownTasks = pickedId ? activeTasks.filter(tk => tk.memberId === pickedId) : activeTasks;
+  const shownRoutines = pickedId ? teamRoutines.filter(r => r.memberId === pickedId) : teamRoutines;
 
   const projectTasks = shownTasks.filter(tk => (tk.taskType||'project') === 'project')
     .sort((a,b)=>(a.dueDate||'9999').localeCompare(b.dueDate||'9999'));
@@ -5422,13 +5423,13 @@ function renderTeamBlock(team) {
       <div style="padding: 8px 20px 4px;">
         <div class="team-section-head">
           <span>🔄 루틴 업무</span>
-          <span class="count-pill">${teamRoutines.length}</span>
+          <span class="count-pill">${shownRoutines.length}</span>
           <button class="action-btn routine xs" style="margin-left:auto;" onclick="quickAddTeamRoutine('${team.id}')">
             <span class="action-icon">＋</span><span>루틴 추가</span>
           </button>
         </div>
-        ${teamRoutines.length === 0 ? '<div class="empty-small">등록된 루틴이 없어요.</div>' :
-          `<div style="display:grid; grid-template-columns: repeat(auto-fill, minmax(280px,1fr)); gap:5px;">${teamRoutines.map(r => {
+        ${shownRoutines.length === 0 ? '<div class="empty-small">등록된 루틴이 없어요.</div>' :
+          `<div style="display:grid; grid-template-columns: repeat(auto-fill, minmax(280px,1fr)); gap:5px;">${shownRoutines.map(r => {
             const m = memberMap[r.memberId];
             const freqLabel = FREQ_LABELS[r.frequency] || r.frequency;
             return `
