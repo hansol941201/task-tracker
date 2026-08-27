@@ -2172,6 +2172,29 @@
     border-color: var(--accent);
     box-shadow: 0 0 0 3px var(--accent-soft);
   }
+
+  /* 진척률 스피너는 모달 안에서도 자기 크기를 지킨다
+     — .modal-field input[type="number"] 의 100% 폭·10px 패딩을 되돌린다 */
+  .modal-field .pct-input-wrap input[type="number"] {
+    width: 38px;
+    padding: 0 4px;
+    border: none;
+    border-radius: 0;
+    font-size: 12px;
+    background: transparent;
+  }
+  .modal-field .pct-input-wrap.lg input[type="number"] {
+    width: 46px;
+    font-size: 14px;
+  }
+  .modal-field .pct-input-wrap.sm input[type="number"] {
+    width: 32px;
+    font-size: 11px;
+  }
+  .modal-field .pct-input-wrap input[type="number"]:focus {
+    border-color: transparent;
+    box-shadow: none;
+  }
   .modal-row {
     display: grid;
     gap: 12px;
