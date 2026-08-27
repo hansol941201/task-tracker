@@ -4,10 +4,8 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>업무 트래커 | B2B</title>
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>
 <link href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css" rel="stylesheet">
-<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,400;12..96,600;12..96,800&family=JetBrains+Mono:wght@400;600;800&display=swap" rel="stylesheet">
 <style>
   :root {
     --bg: #FAF8FD;
@@ -31,9 +29,10 @@
     --shadow-md: 0 6px 24px rgba(36,30,51,0.06), 0 2px 6px rgba(36,30,51,0.04);
     --radius: 14px;
     --radius-sm: 10px;
-    --num: 'JetBrains Mono','Bricolage Grotesque',Pretendard,sans-serif;
-    --display: 'Bricolage Grotesque',Pretendard,sans-serif;
-    --body: Pretendard,'Bricolage Grotesque',sans-serif;
+    /* 글꼴 통일 — 본문·제목·숫자 모두 같은 스택을 쓴다 */
+    --body: Pretendard,-apple-system,BlinkMacSystemFont,'Apple SD Gothic Neo','Malgun Gothic',system-ui,sans-serif;
+    --display: var(--body);
+    --num: var(--body);
   }
   * { box-sizing: border-box; }
   html, body { margin: 0; padding: 0; }
@@ -43,6 +42,7 @@
     color: var(--ink);
     -webkit-font-smoothing: antialiased;
     font-feature-settings: 'ss01' on, 'cv11' on;
+    font-variant-numeric: tabular-nums;
     line-height: 1.5;
   }
   .num, .tabular { font-family: var(--num); font-variant-numeric: tabular-nums; letter-spacing: -0.01em; }
@@ -1591,7 +1591,7 @@
   }
 
   /* 마인드맵 SVG 노드 스타일은 SVG 내부에서 처리 */
-  .mm-node-text { font-family: 'Pretendard', sans-serif; font-weight: 700; }
+  .mm-node-text { font-family: Pretendard, sans-serif; font-weight: 700; }
   .mm-edge { fill: none; stroke-width: 1.5; }
   .mm-node-bg { stroke-width: 1.5; }
 
@@ -5767,7 +5767,7 @@ function renderMindmapSVG(root) {
   return `<svg id="mindmap-svg" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ${width} ${height}" width="${width}" height="${height}" style="background:white;">
     <defs>
       <style>
-        .mm-node-text { font-family: 'Pretendard', -apple-system, sans-serif; }
+        .mm-node-text { font-family: Pretendard, -apple-system, sans-serif; }
       </style>
     </defs>
     <text x="20" y="28" font-family="Pretendard, sans-serif" font-size="13" font-weight="800" fill="#241E33">🗺️ 업무 마인드맵</text>
