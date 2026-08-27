@@ -1162,6 +1162,16 @@
     transform: translateY(-1px);
     box-shadow: var(--shadow-sm);
   }
+  .team-member-chip:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+  /* 선택된 담당자 */
+  .team-member-chip.on {
+    background: var(--ink);
+    border-color: var(--ink);
+  }
+  .team-member-chip.on .team-member-chip-name,
+  .team-member-chip.on .team-member-chip-role { color: var(--surface); }
+  .team-member-chip.on .team-member-chip-del { color: rgba(255,255,255,0.75); }
+  .team-member-chip.on:hover { background: var(--ink); border-color: var(--ink); }
   .team-member-chip-dot {
     width: 8px; height: 8px; border-radius: 99px;
     flex-shrink: 0;
@@ -4111,6 +4121,7 @@ let UI = {
   staleOpen: false,
   taskFilter: 'all',
   teamFilter: 'all',
+  memberFilter: null,   // 팀별 보기에서 선택한 담당자 (null = 전체)
   expandedTasks: new Set(),
   openSubtaskForm: new Set(),
   modalOpen: null,
@@ -5311,6 +5322,13 @@ function setTeamFilter(id) {
   renderTeamPage();
 }
 
+// 담당자 필터 — 같은 멤버를 다시 누르면 해제되어 전체가 보인다.
+// 화면 표시만 바꾼다: 업무 데이터도, 저장도, 진척률 계산도 건드리지 않는다.
+function setMemberFilter(memberId) {
+  UI.memberFilter = (memberId && UI.memberFilter !== memberId) ? memberId : null;
+  renderTeamPage();
+}
+
 function renderTeamBlock(team) {
   const members = teamMembers(team.id);
   const memberIds = members.map(m => m.id);
@@ -5335,9 +5353,13 @@ function renderTeamBlock(team) {
   members.forEach(m => memberMap[m.id] = m);
 
   // 프로젝트 / 루틴성 분리
-  const projectTasks = activeTasks.filter(tk => (tk.taskType||'project') === 'project')
+  // 담당자 필터 — 선택한 멤버가 이 팀에 있을 때만 적용한다
+  const pickedId = (UI.memberFilter && memberIds.includes(UI.memberFilter)) ? UI.memberFilter : null;
+  const shownTasks = pickedId ? activeTasks.filter(tk => tk.memberId === pickedId) : activeTasks;
+
+  const projectTasks = shownTasks.filter(tk => (tk.taskType||'project') === 'project')
     .sort((a,b)=>(a.dueDate||'9999').localeCompare(b.dueDate||'9999'));
-  const routineTasks = activeTasks.filter(tk => tk.taskType === 'routine')
+  const routineTasks = shownTasks.filter(tk => tk.taskType === 'routine')
     .sort((a,b)=>(a.dueDate||'9999').localeCompare(b.dueDate||'9999'));
 
   return `
@@ -5358,8 +5380,17 @@ function renderTeamBlock(team) {
       <div class="team-members-bar">
         <span class="team-members-label">👥 팀 멤버</span>
         <div class="team-members-chips">
+          <div class="team-member-chip ${!pickedId ? 'on' : ''}" role="button" tabindex="0"
+            title="이 팀 전체 보기" aria-pressed="${!pickedId}"
+            onclick="setMemberFilter(null)"
+            onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();setMemberFilter(null);}">
+            <span class="team-member-chip-name">전체</span>
+          </div>
           ${members.map(m => `
-            <div class="team-member-chip" title="${escapeHtml(m.name)}">
+            <div class="team-member-chip ${pickedId === m.id ? 'on' : ''}" role="button" tabindex="0"
+              title="${escapeHtml(m.name)} 담당 프로젝트만 보기" aria-pressed="${pickedId === m.id}"
+              onclick="setMemberFilter('${m.id}')"
+              onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();setMemberFilter('${m.id}');}">
               <span class="team-member-chip-dot" style="background:${m.color};"></span>
               <span class="team-member-chip-name">${escapeHtml(m.name)}</span>
               ${m.role ? `<span class="team-member-chip-role">${escapeHtml(m.role)}</span>` : ''}
