@@ -2502,8 +2502,8 @@
     </div>
     <div class="today-pill" id="today-pill">2026.05.11 월</div>
     <div class="topbar-actions">
-      <!-- Firebase 클라우드 동기화 상태 -->
-      <div class="cloud-status" id="cloud-status" onclick="openFirebaseSettings()" title="클라우드 동기화 설정">
+      <!-- 깃허브 동기화 상태 -->
+      <div class="cloud-status" id="cloud-status" onclick="openGithubSettings()" title="깃허브 동기화 설정">
         <span class="cloud-icon" id="cloud-icon">☁️</span>
         <span class="cloud-text" id="cloud-text">로컬만</span>
       </div>
@@ -3118,186 +3118,108 @@
   </div>
 </div>
 
-<!-- ===== 모달: Firebase 클라우드 동기화 설정 ===== -->
-<div class="modal-backdrop" id="modal-firebase" onclick="if(event.target===this)closeModal()">
-  <div class="modal modal-lg">
+<!-- ===== 모달: 깃허브 동기화 설정 ===== -->
+<div class="modal-backdrop" id="modal-github" onclick="if(event.target===this)closeModal()">
+  <div class="modal">
     <div class="modal-head">
-      <div class="modal-head-icon" style="background:#ECEDEF; color:#3A3D42;">☁️</div>
+      <div class="modal-head-icon" style="background:var(--accent-2-soft); color:#33363A;">☁️</div>
       <div>
-        <div class="modal-title">클라우드 동기화 설정</div>
-        <div class="modal-subtitle">Firebase Realtime Database로 여러 명이 함께 사용할 수 있어요</div>
+        <div class="modal-title">깃허브 동기화</div>
+        <div class="modal-subtitle">업무 데이터를 깃허브 저장소에 JSON으로 보관합니다</div>
       </div>
       <button class="modal-close-btn" onclick="closeModal()">×</button>
     </div>
     <div class="modal-body">
-      <!-- 현재 상태 -->
-      <div id="fb-status-card" class="fb-status-card">
+
+      <div class="fb-status-card" style="margin-bottom:18px;">
         <div class="fb-status-line">
           <span class="fb-status-label">현재 상태</span>
-          <span class="fb-status-value" id="fb-status-value">로컬 전용</span>
+          <span class="fb-status-value" id="gh-status-value">로컬 전용</span>
         </div>
         <div class="fb-status-line">
-          <span class="fb-status-label">팀 ID</span>
-          <span class="fb-status-value" id="fb-status-team">—</span>
+          <span class="fb-status-label">저장 위치</span>
+          <span class="fb-status-value" id="gh-status-file" style="word-break:break-all; text-align:right;">—</span>
         </div>
         <div class="fb-status-line">
           <span class="fb-status-label">마지막 동기화</span>
-          <span class="fb-status-value" id="fb-status-time">—</span>
+          <span class="fb-status-value" id="gh-status-time">—</span>
         </div>
       </div>
 
-      <!-- 설정 영역 -->
-      <div class="modal-field" style="margin-top: 16px;">
-        <label class="modal-field-label">Firebase Project URL</label>
-        <input type="text" id="fb-db-url" placeholder="https://your-project-id-default-rtdb.firebaseio.com">
-        <div style="font-size:11px; color:var(--muted); margin-top:4px;">
-          Firebase 콘솔 → Realtime Database → 화면 상단의 URL을 그대로 붙여넣으세요
+      <div class="modal-row cols-2">
+        <div class="modal-field">
+          <label class="modal-field-label">소유자 (계정명) *</label>
+          <input type="text" id="gh-owner" placeholder="예: hansol941201" autocomplete="off" spellcheck="false">
+        </div>
+        <div class="modal-field">
+          <label class="modal-field-label">저장소 이름 *</label>
+          <input type="text" id="gh-repo" placeholder="예: task-tracker-data" autocomplete="off" spellcheck="false">
+        </div>
+      </div>
+
+      <div class="modal-row cols-2">
+        <div class="modal-field">
+          <label class="modal-field-label">파일 경로</label>
+          <input type="text" id="gh-path" placeholder="tracker-data.json" autocomplete="off" spellcheck="false">
+        </div>
+        <div class="modal-field">
+          <label class="modal-field-label">브랜치</label>
+          <input type="text" id="gh-branch" placeholder="main" autocomplete="off" spellcheck="false">
         </div>
       </div>
 
       <div class="modal-field">
-        <label class="modal-field-label">팀 ID (영문/숫자/하이픈만, 같은 ID 사용하는 사람끼리 데이터 공유)</label>
-        <input type="text" id="fb-team-id" placeholder="예: service-ops-2026">
-        <div style="font-size:11px; color:var(--muted); margin-top:4px;">
-          팀원들이 모두 똑같은 ID를 입력해야 같은 데이터를 봅니다. 헷갈리지 않게 정해주세요.
+        <label class="modal-field-label">개인 액세스 토큰 *</label>
+        <input type="password" id="gh-token" placeholder="github_pat_… 또는 ghp_…" autocomplete="off" spellcheck="false">
+        <div style="font-size:11px; color:var(--muted); margin-top:6px; padding:0 4px; line-height:1.6;">
+          ⚠️ 토큰은 이 브라우저에만 저장됩니다. 저장소 하나에만 권한을 준
+          <b>Fine-grained token</b> 을 쓰고, 저장소 안에는 절대 커밋하지 마세요.
         </div>
       </div>
 
-      <div class="fb-actions">
-        <button class="action-btn primary" onclick="connectFirebase()">
-          <span class="action-icon">🔗</span><span>연결 / 동기화 시작</span>
-        </button>
-        <button class="action-btn ghost" onclick="disconnectFirebase()" id="fb-disconnect-btn" style="display:none;">
-          <span class="action-icon">🔌</span><span>연결 해제</span>
-        </button>
-        <button class="action-btn ghost" onclick="pullFromFirebase()" id="fb-pull-btn" style="display:none;">
-          <span class="action-icon">⬇️</span><span>클라우드에서 가져오기</span>
-        </button>
-        <button class="action-btn ghost" onclick="pushToFirebase()" id="fb-push-btn" style="display:none;">
-          <span class="action-icon">⬆️</span><span>현재 데이터 올리기</span>
-        </button>
-      </div>
-
-      <!-- 사용 안내 -->
       <details class="fb-help">
-        <summary>📖 Firebase 설정 방법 (처음 사용 시 펼쳐서 확인)</summary>
+        <summary>토큰은 어떻게 만드나요?</summary>
         <div class="fb-help-content">
-          <h4>1단계: Firebase 프로젝트 생성</h4>
-          <ol>
-            <li><a href="https://console.firebase.google.com/" target="_blank">Firebase 콘솔</a> 접속 (구글 계정 필요)</li>
-            <li><b>프로젝트 추가</b> 클릭 → 프로젝트 이름 입력 (예: <code>task-tracker</code>)</li>
-            <li>Google Analytics는 <b>사용 안 함</b> 선택 (필수 아님)</li>
-          </ol>
-
-          <h4>2단계: Realtime Database 활성화</h4>
-          <ol>
-            <li>좌측 메뉴 <b>빌드 → Realtime Database</b></li>
-            <li><b>데이터베이스 만들기</b> 클릭</li>
-            <li>위치: <b>asia-southeast1</b> 또는 가까운 곳 선택</li>
-            <li>보안 규칙: <b>테스트 모드로 시작</b> 선택 (나중에 보안 강화 권장)</li>
-            <li>생성 후 화면 상단의 URL을 복사 (<code>https://...firebaseio.com</code> 형태)</li>
-          </ol>
-
-          <h4>3단계: 이 화면에 입력</h4>
-          <ol>
-            <li>위에서 복사한 URL을 <b>Firebase Project URL</b>에 붙여넣기</li>
-            <li><b>팀 ID</b>는 팀원들끼리 합의한 동일한 문자열 (예: <code>service-ops-2026</code>)</li>
-            <li><b>연결 / 동기화 시작</b> 클릭</li>
-          </ol>
-
-          <h4>4단계: 팀원에게 공유</h4>
+          <h4>1. 데이터를 담을 저장소 만들기</h4>
           <ul>
-            <li>같은 GitHub Pages URL을 모두 사용</li>
-            <li>이 설정 화면에서 <b>같은 Firebase URL + 같은 팀 ID</b> 입력하면 즉시 같은 데이터를 봄</li>
-            <li>한 명이 추가/수정하면 다른 사람 화면에 <b>실시간 반영</b></li>
+            <li>새 저장소를 하나 만듭니다 — 예: <code>task-tracker-data</code></li>
+            <li><b>Private</b> 로 두는 것을 권합니다. 업무 내용이 공개되지 않습니다.</li>
           </ul>
-
-          <h4>⚠️ 보안 주의</h4>
+          <h4>2. Fine-grained 토큰 발급</h4>
+          <ol>
+            <li>깃허브 → Settings → Developer settings → Personal access tokens → <b>Fine-grained tokens</b></li>
+            <li>Generate new token 을 누릅니다.</li>
+            <li>Repository access → <b>Only select repositories</b> → 방금 만든 저장소 <b>하나만</b> 선택</li>
+            <li>Permissions → Repository permissions → <b>Contents</b> 를 <b>Read and write</b> 로 변경</li>
+            <li>생성된 토큰을 복사해 위 칸에 붙여넣고 [연결하기] 를 누릅니다.</li>
+          </ol>
+          <h4>3. 팀원과 함께 쓰기</h4>
           <ul>
-            <li>테스트 모드는 30일 후 자동 차단됩니다. Firebase 보안 규칙을 적절히 설정하세요.</li>
-            <li>이 URL/팀 ID를 아는 사람은 누구나 데이터를 보고 수정할 수 있으니 공개하지 마세요.</li>
-            <li>민감한 정보(개인정보, 비밀번호 등)는 저장하지 마세요.</li>
+            <li>저장소 Settings → Collaborators 에서 팀원을 초대합니다.</li>
+            <li>팀원도 각자 자기 토큰을 만들어 <b>같은 소유자·저장소·파일 경로</b> 를 입력하면 됩니다.</li>
+            <li>저장할 때마다 자동으로 커밋되고, 새로고침하면 최신본을 받아옵니다.</li>
+          </ul>
+          <h4>주의</h4>
+          <ul>
+            <li>토큰은 이 브라우저의 localStorage 에만 저장됩니다. 공용 PC 에서는 쓰고 나서 [연결 해제] 를 눌러 주세요.</li>
+            <li>토큰을 저장소 안 파일에 적어 커밋하면 깃허브가 자동으로 폐기합니다. 절대 커밋하지 마세요.</li>
+            <li>두 사람이 동시에 고치면 나중에 저장한 쪽이 물어본 뒤 덮어씁니다.</li>
           </ul>
         </div>
       </details>
+
     </div>
     <div class="modal-foot">
+      <button class="modal-btn danger" id="gh-disconnect-btn" onclick="disconnectGithub()" style="display:none; margin-right:auto;">연결 해제</button>
+      <button class="modal-btn" id="gh-pull-btn" onclick="pullFromGithub()" style="display:none;">깃허브에서 받기</button>
+      <button class="modal-btn" id="gh-push-btn" onclick="pushToGithub()" style="display:none;">깃허브에 올리기</button>
       <button class="modal-btn" onclick="closeModal()">닫기</button>
+      <button class="modal-btn primary" onclick="connectGithub()">연결하기</button>
     </div>
   </div>
 </div>
 
 <div class="toast" id="toast"></div>
-
-<!-- ===== Firebase SDK (ES 모듈) — window.FB 전역 노출 ===== -->
-<script type="module">
-  import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.4/firebase-app.js";
-  import { getDatabase, ref, set, get, onValue, off }
-    from "https://www.gstatic.com/firebasejs/10.12.4/firebase-database.js";
-
-  window.FB = {
-    _app: null,
-    _db: null,
-    _ref: null,
-    _unsubscribe: null,
-    _initialized: false,
-    _suppressNextSnapshot: false,
-
-    init(dbUrl, teamId) {
-      // 이전 연결 해제
-      this.disconnect();
-      const config = { databaseURL: dbUrl };
-      this._app = initializeApp(config, 'task-tracker-' + Date.now());
-      this._db = getDatabase(this._app);
-      this._ref = ref(this._db, 'teams/' + teamId);
-      this._initialized = true;
-    },
-
-    async pull() {
-      if (!this._ref) throw new Error('not connected');
-      const snap = await get(this._ref);
-      return snap.exists() ? snap.val() : null;
-    },
-
-    async push(data) {
-      if (!this._ref) throw new Error('not connected');
-      this._suppressNextSnapshot = true;
-      await set(this._ref, data);
-    },
-
-    subscribe(callback) {
-      if (!this._ref) throw new Error('not connected');
-      this._unsubscribe = onValue(this._ref, (snap) => {
-        if (this._suppressNextSnapshot) {
-          // 내가 방금 푸시한 거라 무시 (loopback 방지)
-          this._suppressNextSnapshot = false;
-          return;
-        }
-        if (snap.exists()) callback(snap.val());
-      }, (err) => {
-        console.error('Firebase subscribe error:', err);
-        callback(null, err);
-      });
-    },
-
-    disconnect() {
-      if (this._unsubscribe) {
-        try { this._unsubscribe(); } catch(e) {}
-        this._unsubscribe = null;
-      }
-      this._ref = null;
-      this._initialized = false;
-    },
-
-    isConnected() {
-      return this._initialized && this._ref !== null;
-    }
-  };
-
-  // 모듈 로드 완료 알림 — 메인 스크립트가 폴링으로 기다림
-  window.FB_READY = true;
-  window.dispatchEvent(new CustomEvent('fb-ready'));
-</script>
 
 
 <script>
@@ -3305,258 +3227,266 @@ const STORAGE_KEY = 'task_tracker_v19';
 const DEFAULT_TEAM_NAME = 'B2B';
 const TEAM_NAME_REV = 1; // 기본 팀 이름 일괄 변경 회차
 const COLOR_REV = 5;     // 팔레트 개정 회차 — 저장된 팀·멤버 색을 현재 팔레트로 맞춘다
-const FB_CONFIG_KEY = 'task_tracker_fb_config'; // Firebase URL + 팀 ID 저장용
 const STALE_DAYS = 7; // 정체 업무 기준 (일)
 
-// ===== Firebase 클라우드 동기화 상태 =====
-let FB_STATE = {
+const GH_CONFIG_KEY = 'task_tracker_gh_config'; // 저장소·경로 (토큰은 별도 보관)
+const GH_TOKEN_KEY  = 'task_tracker_gh_token';  // 개인 액세스 토큰 — 이 브라우저에만 남는다
+
+// ===== 깃허브 동기화 상태 =====
+let GH = {
+  owner: '', repo: '', path: 'tracker-data.json', branch: 'main',
+  token: '',
+  sha: null,          // 원격 파일의 현재 sha — 덮어쓰기 충돌 감지에 쓴다
   connected: false,
-  dbUrl: '',
-  teamId: '',
   lastSync: null,
-  pendingPush: false,    // 로컬 변경이 있어 푸시 대기 중
-  pushTimer: null        // 디바운스 타이머
+  pushTimer: null
 };
 
-function loadFBConfig() {
+function loadGhConfig() {
   try {
-    const c = JSON.parse(localStorage.getItem(FB_CONFIG_KEY) || 'null');
-    if (c && c.dbUrl && c.teamId) {
-      FB_STATE.dbUrl = c.dbUrl;
-      FB_STATE.teamId = c.teamId;
-      return true;
+    const c = JSON.parse(localStorage.getItem(GH_CONFIG_KEY) || 'null');
+    if (c) {
+      GH.owner  = c.owner  || '';
+      GH.repo   = c.repo   || '';
+      GH.path   = c.path   || 'tracker-data.json';
+      GH.branch = c.branch || 'main';
     }
-  } catch(e) {}
-  return false;
+  } catch (e) {}
+  GH.token = localStorage.getItem(GH_TOKEN_KEY) || '';
+  GH.connected = !!(GH.owner && GH.repo && GH.token);
+  return GH.connected;
 }
-
-function saveFBConfig() {
-  localStorage.setItem(FB_CONFIG_KEY, JSON.stringify({
-    dbUrl: FB_STATE.dbUrl,
-    teamId: FB_STATE.teamId
+function saveGhConfig() {
+  localStorage.setItem(GH_CONFIG_KEY, JSON.stringify({
+    owner: GH.owner, repo: GH.repo, path: GH.path, branch: GH.branch
   }));
+  if (GH.token) localStorage.setItem(GH_TOKEN_KEY, GH.token);
+}
+function clearGhConfig() {
+  localStorage.removeItem(GH_CONFIG_KEY);
+  localStorage.removeItem(GH_TOKEN_KEY);
+  GH = { owner:'', repo:'', path:'tracker-data.json', branch:'main',
+         token:'', sha:null, connected:false, lastSync:null, pushTimer:null };
 }
 
-function clearFBConfig() {
-  localStorage.removeItem(FB_CONFIG_KEY);
-  FB_STATE.dbUrl = '';
-  FB_STATE.teamId = '';
+// UTF-8 안전 base64 (한글 제목이 깨지지 않게)
+function b64Encode(str) {
+  const bytes = new TextEncoder().encode(str);
+  let bin = ''; bytes.forEach(b => { bin += String.fromCharCode(b); });
+  return btoa(bin);
+}
+function b64Decode(b64) {
+  const bin = atob(String(b64 || '').replace(/\s/g, ''));
+  return new TextDecoder().decode(Uint8Array.from(bin, c => c.charCodeAt(0)));
+}
+
+function ghUrl() {
+  return `https://api.github.com/repos/${GH.owner}/${GH.repo}/contents/${GH.path}`;
+}
+function ghHeaders() {
+  return {
+    'Authorization': 'Bearer ' + GH.token,
+    'Accept': 'application/vnd.github+json',
+    'X-GitHub-Api-Version': '2022-11-28'
+  };
+}
+function ghErrorText(res, body) {
+  if (res.status === 401) return '토큰이 올바르지 않습니다 (401)';
+  if (res.status === 403) return '권한이 없습니다. 토큰에 Contents 읽기·쓰기 권한을 주세요 (403)';
+  if (res.status === 404) return '저장소나 브랜치를 찾을 수 없습니다 (404)';
+  if (res.status === 409 || res.status === 422) return '원격 파일이 그 사이 바뀌었습니다';
+  return `요청 실패 (${res.status}) ${body && body.message ? '· ' + body.message : ''}`;
+}
+
+// 원격 파일 읽기 — 없으면 null
+async function ghFetchRemote() {
+  const res = await fetch(`${ghUrl()}?ref=${encodeURIComponent(GH.branch)}`, { headers: ghHeaders() });
+  if (res.status === 404) { GH.sha = null; return null; }
+  const body = await res.json().catch(() => ({}));
+  if (!res.ok) throw new Error(ghErrorText(res, body));
+  GH.sha = body.sha || null;
+  return JSON.parse(b64Decode(body.content));
+}
+
+// 현재 데이터를 원격에 쓰기
+async function ghWriteRemote(message) {
+  const payload = {
+    message: message || `업무 트래커 데이터 갱신 (${new Date().toLocaleString('ko-KR')})`,
+    content: b64Encode(JSON.stringify(DATA, null, 2)),
+    branch: GH.branch
+  };
+  if (GH.sha) payload.sha = GH.sha;
+  const res = await fetch(ghUrl(), { method: 'PUT', headers: ghHeaders(), body: JSON.stringify(payload) });
+  const body = await res.json().catch(() => ({}));
+  if (!res.ok) throw new Error(ghErrorText(res, body));
+  GH.sha = body.content && body.content.sha ? body.content.sha : GH.sha;
+  GH.lastSync = Date.now();
+  return true;
+}
+
+// 원격 데이터를 로컬에 적용
+function applyRemoteData(remote) {
+  DATA = {
+    teams:  remote.teams  || [],
+    members: remote.members || [],
+    routines: remote.routines || [],
+    routineChecks: remote.routineChecks || [],
+    tasks: remote.tasks || [],
+    dashboards: remote.dashboards || [],
+    manuals: remote.manuals || []
+  };
+  migrateData();
+  localStorage.setItem(STORAGE_KEY, JSON.stringify(DATA));
+  renderAll();
 }
 
 function updateCloudStatusUI() {
-  const statusEl = document.getElementById('cloud-status');
-  const textEl = document.getElementById('cloud-text');
-  const iconEl = document.getElementById('cloud-icon');
+  const statusEl = $('cloud-status'), textEl = $('cloud-text'), iconEl = $('cloud-icon');
   if (!statusEl) return;
-
   statusEl.classList.remove('connected', 'syncing', 'error');
-  if (FB_STATE.connected) {
+  if (GH.connected) {
     statusEl.classList.add('connected');
     iconEl.textContent = '☁️';
-    textEl.textContent = `${FB_STATE.teamId} · 동기화 중`;
-  } else if (FB_STATE.dbUrl) {
+    textEl.textContent = `${GH.owner}/${GH.repo} · 동기화 중`;
+  } else if (GH.owner && GH.repo) {
     statusEl.classList.add('error');
     iconEl.textContent = '⚠️';
-    textEl.textContent = '연결 끊김';
+    textEl.textContent = '토큰 없음';
   } else {
     iconEl.textContent = '☁️';
     textEl.textContent = '로컬만';
   }
 }
 
-function openFirebaseSettings() {
+function openGithubSettings() {
   closeModal();
-  document.getElementById('modal-firebase').classList.add('open');
-  UI.modalOpen = 'firebase';
-
-  // 현재 상태 표시
-  document.getElementById('fb-db-url').value = FB_STATE.dbUrl || '';
-  document.getElementById('fb-team-id').value = FB_STATE.teamId || '';
-  document.getElementById('fb-status-value').textContent =
-    FB_STATE.connected ? '✅ 클라우드 동기화 중' : (FB_STATE.dbUrl ? '⚠️ 연결 끊김' : '🔒 로컬 전용');
-  document.getElementById('fb-status-team').textContent = FB_STATE.teamId || '—';
-  document.getElementById('fb-status-time').textContent = FB_STATE.lastSync
-    ? new Date(FB_STATE.lastSync).toLocaleString('ko-KR') : '—';
-
-  const isConn = FB_STATE.connected;
-  document.getElementById('fb-disconnect-btn').style.display = isConn ? 'inline-flex' : 'none';
-  document.getElementById('fb-pull-btn').style.display = isConn ? 'inline-flex' : 'none';
-  document.getElementById('fb-push-btn').style.display = isConn ? 'inline-flex' : 'none';
+  $('modal-github').classList.add('open');
+  UI.modalOpen = 'github';
+  $('gh-owner').value  = GH.owner;
+  $('gh-repo').value   = GH.repo;
+  $('gh-path').value   = GH.path;
+  $('gh-branch').value = GH.branch;
+  $('gh-token').value  = GH.token;
+  $('gh-status-value').textContent = GH.connected ? '깃허브 동기화 중' : (GH.owner ? '토큰 없음' : '로컬 전용');
+  $('gh-status-file').textContent  = GH.owner ? `${GH.owner}/${GH.repo} · ${GH.path} (${GH.branch})` : '—';
+  $('gh-status-time').textContent  = GH.lastSync ? new Date(GH.lastSync).toLocaleString('ko-KR') : '—';
+  const on = GH.connected ? 'inline-flex' : 'none';
+  $('gh-disconnect-btn').style.display = on;
+  $('gh-pull-btn').style.display = on;
+  $('gh-push-btn').style.display = on;
 }
 
-async function connectFirebase() {
-  const dbUrl = document.getElementById('fb-db-url').value.trim();
-  const teamId = document.getElementById('fb-team-id').value.trim();
+// 연결 — 원격에 파일이 있으면 어느 쪽을 남길지 물어본다
+async function connectGithub() {
+  const owner  = $('gh-owner').value.trim();
+  const repo   = $('gh-repo').value.trim();
+  const path   = $('gh-path').value.trim() || 'tracker-data.json';
+  const branch = $('gh-branch').value.trim() || 'main';
+  const token  = $('gh-token').value.trim();
 
-  if (!dbUrl) return toast('⚠️ Firebase Project URL을 입력하세요');
-  if (!teamId) return toast('⚠️ 팀 ID를 입력하세요');
-  if (!/^https:\/\/.+firebaseio\.com\/?$/.test(dbUrl) && !/^https:\/\/.+firebasedatabase\.app\/?$/.test(dbUrl)) {
-    return toast('⚠️ Firebase URL 형식이 잘못되었습니다 (예: https://xxx-default-rtdb.firebaseio.com)');
-  }
-  if (!/^[a-zA-Z0-9_-]+$/.test(teamId)) {
-    return toast('⚠️ 팀 ID는 영문/숫자/하이픈/언더스코어만 사용 가능합니다');
-  }
+  if (!owner || !repo) return toast('소유자와 저장소 이름을 입력하세요');
+  if (!token) return toast('개인 액세스 토큰을 입력하세요');
+  if (!/^[\w.-]+$/.test(owner) || !/^[\w.-]+$/.test(repo)) return toast('소유자·저장소 이름 형식이 올바르지 않습니다');
 
-  if (!window.FB_READY || !window.FB) {
-    return toast('⚠️ Firebase SDK 로드 중입니다. 잠시 후 다시 시도해주세요.');
-  }
-
+  Object.assign(GH, { owner, repo, path, branch, token });
   try {
-    window.FB.init(dbUrl, teamId);
+    toast('깃허브 확인 중…');
+    const remote = await ghFetchRemote();
+    const localHasData = DATA.members.length > 0 || DATA.tasks.length > 0;
 
-    // 1) 먼저 원격에 데이터가 있는지 조회
-    toast('☁️ 클라우드 데이터 확인 중...');
-    const remote = await window.FB.pull();
-
-    if (remote && remote.members && remote.members.length > 0) {
-      // 원격에 데이터 있음 — 로컬과 비교
-      const localHasData = DATA.members.length > 0 || DATA.routines.length > 0 || DATA.tasks.length > 0;
-      if (localHasData) {
-        const msg = `☁️ 클라우드에 데이터가 있습니다:\n` +
-          `  • 멤버 ${(remote.members||[]).length}명, 루틴 ${(remote.routines||[]).length}개, 업무 ${(remote.tasks||[]).length}건\n\n` +
-          `🖥 현재 이 PC의 로컬 데이터:\n` +
-          `  • 멤버 ${DATA.members.length}명, 루틴 ${DATA.routines.length}개, 업무 ${DATA.tasks.length}건\n\n` +
-          `어떻게 할까요?\n` +
-          `  • [확인]: 클라우드 데이터를 받아와 이 PC를 덮어씁니다 (다른 팀원이 이미 작업 중인 경우 추천)\n` +
-          `  • [취소]: 이 PC의 데이터를 클라우드로 올립니다 (내가 데이터 관리자인 경우 추천)`;
-        if (confirm(msg)) {
-          // 원격 → 로컬
-          applyRemoteData(remote);
-          toast('✅ 클라우드 데이터를 받아왔습니다');
-        } else {
-          // 로컬 → 원격
-          await window.FB.push(serializeData());
-          toast('✅ 로컬 데이터를 클라우드에 올렸습니다');
-        }
-      } else {
-        // 로컬은 비어있음 → 그냥 원격 가져오기
-        applyRemoteData(remote);
-        toast('✅ 클라우드 데이터를 받아왔습니다');
-      }
+    if (remote && (remote.members || []).length > 0 && localHasData) {
+      const msg = `깃허브에 이미 데이터가 있습니다:\n` +
+        `  • 멤버 ${(remote.members||[]).length}명, 업무 ${(remote.tasks||[]).length}건\n\n` +
+        `이 PC의 데이터:\n` +
+        `  • 멤버 ${DATA.members.length}명, 업무 ${DATA.tasks.length}건\n\n` +
+        `[확인] 깃허브 데이터를 받아 이 PC를 덮어씁니다\n` +
+        `[취소] 이 PC의 데이터를 깃허브에 올립니다`;
+      if (confirm(msg)) { applyRemoteData(remote); toast('깃허브에서 받아왔습니다'); }
+      else { await ghWriteRemote('업무 트래커 데이터 업로드'); toast('깃허브에 올렸습니다'); }
+    } else if (remote && (remote.members || []).length > 0) {
+      applyRemoteData(remote); toast('깃허브에서 받아왔습니다');
     } else {
-      // 원격 비어있음 → 로컬 데이터 푸시
-      if (DATA.members.length === 0) {
-        toast('⚠️ 로컬도 클라우드도 비어있습니다. 멤버를 먼저 추가하세요.');
-      } else {
-        await window.FB.push(serializeData());
-        toast('✅ 이 PC의 데이터를 클라우드에 올렸습니다');
-      }
+      await ghWriteRemote('업무 트래커 데이터 최초 업로드'); toast('깃허브에 올렸습니다');
     }
 
-    // 2) 실시간 구독 시작
-    window.FB.subscribe((data, err) => {
-      if (err) {
-        FB_STATE.connected = false;
-        updateCloudStatusUI();
-        toast('⚠️ 클라우드 연결 오류 - 자세한 내용은 콘솔 확인');
-        return;
-      }
-      if (!data) return;
-      // 다른 사람의 변경 사항 적용
-      console.log('☁️ 원격 변경 감지 — 로컬 갱신');
-      applyRemoteData(data);
-      FB_STATE.lastSync = Date.now();
-      updateCloudStatusUI();
-      toast('☁️ 다른 사용자의 변경사항이 반영됨');
-    });
-
-    FB_STATE.connected = true;
-    FB_STATE.dbUrl = dbUrl;
-    FB_STATE.teamId = teamId;
-    FB_STATE.lastSync = Date.now();
-    saveFBConfig();
+    GH.connected = true;
+    GH.lastSync = Date.now();
+    saveGhConfig();
     updateCloudStatusUI();
-
-    // 모달 다시 그리기
-    openFirebaseSettings();
+    openGithubSettings();
   } catch (err) {
-    console.error('Firebase 연결 실패:', err);
-    toast('❌ 클라우드 연결 실패: ' + (err.message || ''));
-    FB_STATE.connected = false;
+    console.error('깃허브 연결 실패:', err);
+    GH.connected = false;
     updateCloudStatusUI();
+    toast('연결 실패: ' + err.message);
   }
 }
 
-function disconnectFirebase() {
-  if (!confirm('☁️ 클라우드 동기화를 끄시겠어요?\n이후 변경사항은 이 PC에만 저장됩니다.')) return;
-  if (window.FB) window.FB.disconnect();
-  FB_STATE.connected = false;
-  clearFBConfig();
+function disconnectGithub() {
+  if (!confirm('깃허브 동기화를 끄시겠어요?\n토큰도 이 브라우저에서 지워집니다. 이후 변경사항은 이 PC에만 저장됩니다.')) return;
+  clearGhConfig();
   updateCloudStatusUI();
-  openFirebaseSettings();
-  toast('🔌 클라우드 동기화 해제됨');
+  openGithubSettings();
+  toast('깃허브 동기화 해제됨');
 }
 
-async function pullFromFirebase() {
-  if (!FB_STATE.connected) return toast('⚠️ 먼저 연결해주세요');
-  if (!confirm('☁️ 클라우드의 데이터로 이 PC를 덮어쓸까요?\n로컬 변경사항은 사라집니다.')) return;
+async function pullFromGithub() {
+  if (!GH.connected) return toast('먼저 연결해주세요');
+  if (!confirm('깃허브의 데이터로 이 PC를 덮어쓸까요?\n이 PC의 변경사항은 사라집니다.')) return;
   try {
-    const remote = await window.FB.pull();
-    if (remote) {
-      applyRemoteData(remote);
-      toast('✅ 클라우드에서 가져왔습니다');
-    } else {
-      toast('⚠️ 클라우드에 데이터가 없습니다');
-    }
-  } catch (err) {
-    toast('❌ 가져오기 실패: ' + err.message);
-  }
-}
-
-async function pushToFirebase() {
-  if (!FB_STATE.connected) return toast('⚠️ 먼저 연결해주세요');
-  if (!confirm('☁️ 이 PC의 데이터를 클라우드에 올릴까요?\n클라우드의 기존 데이터는 덮어쓰여집니다.')) return;
-  try {
-    await window.FB.push(serializeData());
-    FB_STATE.lastSync = Date.now();
+    const remote = await ghFetchRemote();
+    if (!remote) return toast('깃허브에 파일이 없습니다');
+    applyRemoteData(remote);
+    GH.lastSync = Date.now();
     updateCloudStatusUI();
-    toast('✅ 클라우드에 올렸습니다');
+    toast('깃허브에서 받아왔습니다');
+  } catch (err) { toast('받기 실패: ' + err.message); }
+}
+
+async function pushToGithub() {
+  if (!GH.connected) return toast('먼저 연결해주세요');
+  try {
+    await ghWriteRemote();
+    updateCloudStatusUI();
+    toast('깃허브에 올렸습니다');
   } catch (err) {
-    toast('❌ 업로드 실패: ' + err.message);
+    // 원격이 그 사이 바뀐 경우 — sha 를 다시 읽고 한 번 더 물어본다
+    if (/바뀌었/.test(err.message)) {
+      await ghFetchRemote();
+      if (confirm('깃허브의 파일이 그 사이 바뀌었습니다.\n이 PC의 데이터로 덮어쓸까요?')) {
+        try { await ghWriteRemote('업무 트래커 데이터 덮어쓰기'); toast('깃허브에 올렸습니다'); return; }
+        catch (e2) { return toast('올리기 실패: ' + e2.message); }
+      }
+      return toast('올리기를 취소했습니다');
+    }
+    toast('올리기 실패: ' + err.message);
   }
 }
 
-// 원격 데이터를 로컬에 적용
-function applyRemoteData(remote) {
-  DATA = {
-    teams: remote.teams || [],
-    members: remote.members || [],
-    routines: remote.routines || [],
-    routineChecks: remote.routineChecks || [],
-    tasks: remote.tasks || [],
-    dashboards: remote.dashboards || (DATA && DATA.dashboards) || [],
-    manuals: remote.manuals || (DATA && DATA.manuals) || []
-  };
-  // 마이그레이션 적용 (구조 보강)
-  migrateData();
-  // 로컬에도 저장 (Firebase 끊길 때 대비)
-  localStorage.setItem(STORAGE_KEY, JSON.stringify(DATA));
-  renderAll();
-  // 구버전 원격 대신 로컬 최신본을 유지했다면, 원격도 최신본으로 밀어 올려 안정화
-  if (keptLocalOverStale) scheduleCloudPush();
+// 새로고침 시 조용히 최신본 받아오기
+async function ghAutoPull() {
+  try {
+    const remote = await ghFetchRemote();
+    if (remote && (remote.members || []).length > 0) applyRemoteData(remote);
+    GH.connected = true;
+    GH.lastSync = Date.now();
+  } catch (err) {
+    console.warn('깃허브 자동 동기화 실패:', err.message);
+    GH.connected = false;
+  }
+  updateCloudStatusUI();
 }
 
-// 직렬화 — Firebase에 보낼 형태
-function serializeData() {
-  return JSON.parse(JSON.stringify(DATA));
-}
-
-// 디바운스된 푸시 — save() 호출 시마다 1초 기다렸다가 한 번에 푸시
+// save() 마다 호출 — 3초 모았다가 한 번에 커밋
 function scheduleCloudPush() {
-  if (!FB_STATE.connected) return;
-  if (FB_STATE.pushTimer) clearTimeout(FB_STATE.pushTimer);
-  FB_STATE.pushTimer = setTimeout(async () => {
-    try {
-      await window.FB.push(serializeData());
-      FB_STATE.lastSync = Date.now();
-      updateCloudStatusUI();
-      console.log('☁️ 클라우드 자동 동기화 완료');
-    } catch (err) {
-      console.error('자동 동기화 실패:', err);
-      // 너무 자주 토스트가 뜨지 않게 콘솔만
-    }
-  }, 800);
+  if (!GH.connected) return;
+  if (GH.pushTimer) clearTimeout(GH.pushTimer);
+  GH.pushTimer = setTimeout(async () => {
+    try { await ghWriteRemote(); updateCloudStatusUI(); }
+    catch (err) { console.warn('깃허브 자동 저장 실패:', err.message); }
+  }, 3000);
 }
+
 // 빈도별 자동 체크 주기 (현재 주기 내 1회 체크하면 그 주기는 완료로 간주)
 // daily / weekly / monthly / quarterly / yearly
 const FREQ_LABELS = {
@@ -6186,66 +6116,11 @@ function init() {
   updateFreqOptions();
   renderAll();
 
-  // 저장된 Firebase 설정이 있으면 자동 재연결 시도
-  if (loadFBConfig()) {
-    updateCloudStatusUI();
-    // Firebase SDK 모듈이 로드된 후 연결
-    const tryAutoConnect = () => {
-      if (window.FB_READY && window.FB) {
-        autoReconnectFirebase();
-      } else {
-        // 모듈 로드 기다리기
-        window.addEventListener('fb-ready', autoReconnectFirebase, { once: true });
-        // 안전장치: 5초 후에도 안 되면 포기
-        setTimeout(() => {
-          if (!FB_STATE.connected && FB_STATE.dbUrl) {
-            console.warn('Firebase SDK 로드 실패 또는 시간 초과');
-          }
-        }, 5000);
-      }
-    };
-    setTimeout(tryAutoConnect, 200);
-  } else {
-    updateCloudStatusUI();
-  }
+  // 저장된 깃허브 설정이 있으면 조용히 최신 데이터를 받아온다
+  loadGhConfig();
+  updateCloudStatusUI();
+  if (GH.owner && GH.repo && GH.token) setTimeout(ghAutoPull, 200);
 }
-
-// 페이지 새로고침 후 자동 재연결 (조용히, 충돌 없이)
-async function autoReconnectFirebase() {
-  if (!FB_STATE.dbUrl || !FB_STATE.teamId) return;
-  try {
-    window.FB.init(FB_STATE.dbUrl, FB_STATE.teamId);
-
-    // 원격 데이터 받아오기 (자동 적용)
-    const remote = await window.FB.pull();
-    if (remote && remote.members && remote.members.length > 0) {
-      applyRemoteData(remote);
-    }
-
-    // 실시간 구독
-    window.FB.subscribe((data, err) => {
-      if (err) {
-        FB_STATE.connected = false;
-        updateCloudStatusUI();
-        return;
-      }
-      if (!data) return;
-      applyRemoteData(data);
-      FB_STATE.lastSync = Date.now();
-      updateCloudStatusUI();
-    });
-
-    FB_STATE.connected = true;
-    FB_STATE.lastSync = Date.now();
-    updateCloudStatusUI();
-    console.log('☁️ 클라우드 자동 재연결 완료:', FB_STATE.teamId);
-  } catch (err) {
-    console.error('자동 재연결 실패:', err);
-    FB_STATE.connected = false;
-    updateCloudStatusUI();
-  }
-}
-
 init();
 </script>
 
