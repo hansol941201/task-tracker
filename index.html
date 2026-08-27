@@ -367,12 +367,12 @@
     font-family: var(--display); font-weight: 800; font-size: 15px;
     color: var(--surface); letter-spacing: -0.02em;
   }
-  /* 이니셜 대신 브랜드 마크를 넣는 아바타 */
+  /* 이니셜 대신 브랜드 마크를 넣는 아바타 — 테두리 색으로 멤버를 구분한다 */
   .avatar.avatar-brand {
     box-sizing: border-box;
     background: var(--surface);
-    border: 1px solid var(--line);
-    padding: 6px;
+    border: 3px solid var(--line);
+    padding: 5px;
   }
   .avatar.avatar-brand svg {
     width: 100%; height: 100%; display: block;
@@ -4910,7 +4910,7 @@ function renderTodayPage() {
       <div class="today-card">
         <div class="today-card-head">
           <div class="member-info">
-            <div class="avatar avatar-brand" title="${escapeHtml(m.name)}">
+            <div class="avatar avatar-brand" style="border-color:${m.color || '#3A3D42'};" title="${escapeHtml(m.name)}">
               <svg viewBox="0 0 557 588" aria-hidden="true" focusable="false"><use href="#brand-n"/></svg>
             </div>
             <div>
