@@ -187,6 +187,21 @@
     color: var(--accent);
     text-decoration: underline;
   }
+  /* 최초 로딩 화면 */
+  .boot-overlay {
+    position: fixed; inset: 0; z-index: 3000;
+    display: none; align-items: center; justify-content: center;
+    background: var(--bg);
+  }
+  .boot-box { text-align: center; }
+  .boot-spin {
+    width: 28px; height: 28px; margin: 0 auto 14px;
+    border: 3px solid var(--line); border-top-color: var(--accent);
+    border-radius: 50%; animation: boot-rot 0.8s linear infinite;
+  }
+  @keyframes boot-rot { to { transform: rotate(360deg); } }
+  .boot-msg { font-size: 13px; font-weight: 600; color: var(--ink-2); }
+
   /* 구버전 알림 띠 */
   .update-banner {
     position: fixed; left: 0; right: 0; top: 0; z-index: 2000;
@@ -3170,6 +3185,7 @@
       </details>
     </div>
     <div class="modal-foot">
+      <button class="modal-btn" onclick="downloadFirebaseBackup()" style="margin-right:auto;">팀 데이터 백업</button>
       <button class="modal-btn" onclick="syncPullNow()">지금 받기</button>
       <button class="modal-btn" onclick="syncPushNow()">지금 올리기</button>
       <button class="modal-btn primary" onclick="closeModal()">닫기</button>
@@ -3267,6 +3283,38 @@ function restoreBackup(idx) {
   makeBackup('복구 직전');
   FB_COLS.forEach(c => { DATA[c] = Array.isArray(b.data[c]) ? JSON.parse(JSON.stringify(b.data[c])) : []; });
   migrateData();
+  // 되살린 항목의 삭제 기록을 지운다 — 안 그러면 새로고침하면 다시 사라진다
+  const tombs = fbLoadTombs();
+  FB_COLS.forEach(col => {
+    (DATA[col] || []).forEach(item => {
+      if (!item || item.id == null) return;
+      delete tombs[`${col}/${item.id}`];
+      if (col === 'tasks') (item.subtasks || []).forEach(st => {
+        if (st && st.id != null) delete tombs[`tasks/${item.id}/subtasks/${st.id}`];
+      });
+    });
+  });
+  fbSaveTombs(tombs);
+  // 원격에 남아 있는 삭제 기록도 지운다 — 이게 남아 있으면 다른 브라우저가 계속 걸러낸다
+  const clearRemote = [];
+  FB_COLS.forEach(col => (DATA[col] || []).forEach(item => {
+    if (!item || item.id == null) return;
+    const paths = [`${col}/${item.id}`];
+    if (col === 'tasks') (item.subtasks || []).forEach(st => {
+      if (st && st.id != null) paths.push(`tasks/${item.id}/subtasks/${st.id}`);
+    });
+    paths.forEach(p => {
+      if (FB.remoteTombs) delete FB.remoteTombs[p];
+      clearRemote.push(fbTombRemotePath(p));
+    });
+  }));
+  if (FB.mode) {
+    Promise.all(clearRemote.map(p => fbWriteRaw(p, null, false).catch(() => {})))
+      .then(() => console.log(`[TaskTracker] 복구 — 삭제 기록 ${clearRemote.length}건 해제`));
+  }
+  FB.seen = null;
+  fbMarkSeen();
+  FB.base = null; fbSaveBase(); fbLoadBase();   // 전부 다시 올리도록 기준점을 비운다
   save();
   renderAll();
   toast(`${when} 시점으로 되돌렸습니다`);
@@ -3346,7 +3394,17 @@ function rescueMissing(col, out, before, gone) {
 // 로그인 없이 누구나 읽고 쓰는 공개 DB 이므로 아래 값은 코드에 그대로 둔다.
 // 비밀번호나 토큰 같은 비밀값은 절대 여기에 넣지 않는다.
 // 배포 버전 — 팀원 PC 가 구버전을 물고 있는지 바로 확인할 수 있게 화면·콘솔·원격에 남긴다
-const APP_BUILD = '2026.08.27-05';
+const APP_BUILD = '2026.08.27-07';
+
+// 팀 멤버는 고정 id 와 고정 순서를 쓴다. 브라우저마다 새 id 를 만들면 같은 사람이
+// 여러 번 생기고 순서도 제각각이 된다.
+const CANON_MEMBERS = [
+  { id: 'member_jo_jaeyeon',   name: '조재연', order: 1, color: '#3F4A54' },
+  { id: 'member_choi_sehyeok', name: '최세혁', order: 2, color: '#45484D' },
+  { id: 'member_shin_hansol',  name: '신한솔', order: 3, color: '#2F3237' }
+];
+const MEMBER_DEDUPE_VERSION = 'members-canonical-v1';   // 한 번만 실행되는 정리 작업
+function normName(v) { return String(v == null ? '' : v).replace(/\s+/g, ' ').trim(); }
 const FB_URL  = 'https://b2b-task-tracker-39144-default-rtdb.asia-southeast1.firebasedatabase.app';
 const FB_PATH = 'shared/taskTracker';
 const FB_SDK_VER  = '10.12.5';
@@ -3374,7 +3432,10 @@ let FB = {
   lastSync: null, lastError: '', etagWarned: false,
   deferred: false,      // 편집 중이라 미뤄둔 원격 변경이 있는가
   seen: null,           // 이 탭이 마지막으로 알고 있던 항목들 — 삭제와 '아직 못 받음'을 구분한다
-  remoteTombs: {}       // 원격 삭제 기록
+  remoteTombs: {},      // 원격 삭제 기록
+  subscribed: false,    // 실시간 수신을 시작했는가
+  ready: false,         // 최초 Firebase 읽기가 끝났는가 — 끝나기 전에는 아무것도 저장하지 않는다
+  bootDone: false       // 첫 화면을 그렸는가
 };
 
 // ---- 탭 고유 id ----
@@ -3740,6 +3801,7 @@ function fbBuildOps() {
   // 남의 항목을 지우는 일이 없게 한다
   const tombs = fbLoadTombs();
   Object.keys(tombs).forEach(path => {
+    if (tombs[path] && tombs[path].synced) return;   // 원격에서 이미 사라졌다 — 계속 다시 지우지 않는다
     const parts = path.split('/');
     const tombOp = { kind: 'tomb', path: fbTombRemotePath(path),
                      value: { deletedAt: tombs[path].at || Date.now(), deletedBy: tombs[path].by || '' },
@@ -3756,6 +3818,9 @@ function fbBuildOps() {
 
 // ---- 쓰기 ----
 function fbPushSoon() {
+  // 최초 읽기가 끝나기 전에는 절대 올리지 않는다.
+  // (이 브라우저에 남아 있던 데이터가 공용 데이터에 섞여 들어가는 것을 막는다)
+  if (!FB.ready) return;
   if (!FB.mode || FB.applying) return;   // 원격 반영 중에는 되올리지 않는다
   FB.dirty = true;
   if (FB.pushTimer) clearTimeout(FB.pushTimer);
@@ -3794,6 +3859,10 @@ async function fbFlush() {
 // 쓰기 성공한 항목만 기준점을 옮긴다
 function fbCommitBase(op) {
   if (op.legacy || op.kind === 'tomb') return; // 잔재 청소·삭제 기록은 기준점을 건드리지 않는다
+  if (op.kind === 'item-del' || op.kind === 'sub-del') {
+    const t = fbLoadTombs();
+    if (t[op.path]) { t[op.path].synced = true; fbSaveTombs(t); }  // 지웠음을 확인 — 재요청 중단
+  }
   const local = fbLocalSnap();
   if (op.kind === 'item-del') return fbSetBaseEntry(op.col, op.id, null);
   const L = local[op.col][op.id];
@@ -3942,7 +4011,10 @@ function fbLegacyKeyOps(raw) {
       const v = node[key];
       if (!v || typeof v !== 'object' || v.id == null) return;
       const id = String(v.id);
-      if (id !== key && node[id]) ops.push({ kind: 'item-del', col, id: key, path: `${col}/${key}`, legacy: true });
+      if (id === key) return;
+      const twinExists = !!node[id];
+      const idDeleted = fbHasTomb(`${col}/${id}`) || !!(FB.remoteTombs || {})[`${col}/${id}`];
+      if (twinExists || idDeleted) ops.push({ kind: 'item-del', col, id: key, path: `${col}/${key}`, legacy: true });
     });
   });
   return ops;
@@ -4066,16 +4138,400 @@ function fbSetState(state, err) {
   if (UI.modalOpen === 'sync' && $('sync-state-value')) renderSyncPanel();
 }
 
+// ===== 중복 멤버 일회성 정리 =====
+// 같은 사람이 여러 id 로 들어가 있으면 카드가 두 벌로 보인다.
+// 지우기 전에 원본을 백업하고, 중복 멤버가 맡고 있던 업무를 대표 id 로 모두 옮긴 뒤에
+// 중복만 지운다. migrationVersion 을 남겨 두 번 실행되지 않는다.
+
+function fbRestPut(path, value) {
+  return fetch(`${FB.url}/${FB.path}/${path}.json`, {
+    method: 'PUT', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(value)
+  }).then(r => { if (!r.ok) throw new Error('HTTP ' + r.status); return true; });
+}
+function fbRestPatch(path, value) {
+  return fetch(`${FB.url}/${FB.path}/${path}.json`, {
+    method: 'PATCH', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(value)
+  }).then(r => { if (!r.ok) throw new Error('HTTP ' + r.status); return true; });
+}
+async function fbWriteRaw(path, value, merge) {
+  if (FB.mode === 'sdk' && FB.sdk && FB.db) {
+    const ref = FB.sdk.ref(FB.db, `${FB.path}/${path}`);
+    if (merge) await FB.sdk.update(ref, value); else await FB.sdk.set(ref, value);
+    return true;
+  }
+  return merge ? fbRestPatch(path, value) : fbRestPut(path, value);
+}
+
+// 원격 원본 전체를 backups/<시각> 아래에 복사해 둔다
+async function fbBackupRemote(raw, label) {
+  const stamp = new Date().toISOString().replace(/[.#$\[\]]/g, '-');
+  await fbWriteRaw(`backups/${stamp}`, { savedAt: Date.now(), by: fbClientId(), reason: label || 'auto', data: raw });
+  console.log(`[TaskTracker] 원격 백업 생성: backups/${stamp}`);
+  return stamp;
+}
+
+// 멤버가 참조되는 모든 자리를 새 id 로 바꾼다
+function repointMemberRefs(item, map) {
+  let n = 0;
+  const fix = (obj, key) => {
+    if (obj && obj[key] != null && map[obj[key]]) { obj[key] = map[obj[key]]; n++; }
+  };
+  ['memberId', 'owner', 'assignee', 'ownerId', 'assigneeId', 'memberID'].forEach(k => fix(item, k));
+  (item.subtasks || []).forEach(s => ['memberId', 'owner', 'assignee'].forEach(k => fix(s, k)));
+  return n;
+}
+
+// 내용 비교용 지문 — id·동기화용 값은 빼고 실제 내용만 본다
+function contentSig(it) {
+  const skip = { id: 1, updatedAt: 1, updatedBy: 1, revision: 1 };
+  const keys = Object.keys(it).filter(k => !skip[k]).sort();
+  return JSON.stringify(keys.map(k => {
+    if (k === 'subtasks') {
+      return ['subtasks', (it.subtasks || []).map(x =>
+        [normName(x.title), x.status || '', x.progress == null ? '' : x.progress].join('~')).sort()];
+    }
+    return [k, it[k]];
+  }));
+}
+// 제목·담당자·등록일이 모두 같은 묶음을 찾는다 (아직 아무것도 지우지 않는다)
+function collectDupGroups() {
+  const out = [];
+  ['tasks', 'routines'].forEach(col => {
+    const groups = {};
+    (DATA[col] || []).forEach(it => {
+      const title = normName(it.title || it.name);
+      if (!title) return;
+      const key = [title, it.memberId || '', it.createdAt || ''].join('§');
+      (groups[key] = groups[key] || []).push(it);
+    });
+    Object.keys(groups).forEach(k => { if (groups[k].length > 1) out.push({ col, list: groups[k] }); });
+  });
+  return out;
+}
+const fbSafeKey = v => String(v).replace(/[.#$\[\]\/]/g, '_');
+
+// 중복 정리 — 내용까지 똑같을 때만 하나로 줄이고, 지우는 쪽은 duplicateBackup 에 원본 그대로 남긴다.
+// 제목만 같고 내용이 다르면 절대 지우지 않는다 (보관만 하고 화면에도 그대로 둔다).
+async function quarantineDuplicates(stamp, groups) {
+  const report = { merged: [], uncertain: [] };
+  const store = {}, removed = [];
+  groups.forEach(({ col, list }) => {
+    const bySig = {};
+    list.forEach(it => { const g = contentSig(it); (bySig[g] = bySig[g] || []).push(it); });
+    Object.keys(bySig).forEach(sig => {
+      const same = bySig[sig];
+      if (same.length < 2) return;
+      same.slice(1).forEach(it => {
+        store[col] = store[col] || {};
+        store[col][fbSafeKey(it.id)] = it;
+        removed.push({ col, id: it.id });
+        report.merged.push({ col, title: it.title || it.name, keep: same[0].id, drop: it.id });
+      });
+    });
+    if (Object.keys(bySig).length > 1) {
+      list.forEach(it => { store[col] = store[col] || {}; store[col][fbSafeKey(it.id)] = it; });
+      report.uncertain.push({ col, title: list[0].title || list[0].name, ids: list.map(x => x.id) });
+    }
+  });
+  if (!removed.length && !report.uncertain.length) return report;
+
+  const at = Date.now(), by = fbClientId();
+  await fbWriteRaw(`duplicateBackup/${fbSafeKey(stamp)}`, {
+    savedAt: at, by, items: store,
+    note: '중복 정리 시 보관 — 내용이 다른 항목은 화면에도 그대로 남아 있습니다'
+  }, false).catch(e => console.warn('중복 보관 실패:', e && e.message));
+
+  if (removed.length) {
+    const tombs = fbLoadTombs();
+    FB.remoteTombs = FB.remoteTombs || {};
+    for (const { col, id } of removed) {
+      DATA[col] = (DATA[col] || []).filter(x => x.id !== id);
+      const path = `${col}/${id}`;
+      tombs[path] = { at, by };
+      FB.remoteTombs[path] = { deletedAt: at };
+      await fbWriteRaw(fbTombRemotePath(path), { deletedAt: at, deletedBy: by }, true).catch(() => {});
+      await fbWriteRaw(path, null, false).catch(e => console.warn('중복 삭제 실패', path, e && e.message));
+    }
+    fbSaveTombs(tombs);
+  }
+  console.warn('[TaskTracker] 중복 항목 정리', report);
+  return report;
+}
+
+async function runMemberMigration(raw) {
+  const applied = raw && raw._meta && raw._meta.migrationVersion;
+  if (applied === MEMBER_DEDUPE_VERSION) return null;   // 이미 정리됨
+
+  // 이름이 같은 멤버끼리 묶는다
+  const groups = {};
+  DATA.members.forEach(m => {
+    const key = normName(m.name);
+    if (!key) return;
+    (groups[key] = groups[key] || []).push(m);
+  });
+  const dupNames = Object.keys(groups).filter(k => groups[k].length > 1);
+  const needsCanonical = DATA.members.some(m => {
+    const c = CANON_MEMBERS.find(x => x.name === normName(m.name));
+    return c && m.id !== c.id;
+  });
+  const dupGroups = collectDupGroups();
+  if (!dupNames.length && !needsCanonical && !dupGroups.length) {
+    await fbWriteRaw('_meta', { migrationVersion: MEMBER_DEDUPE_VERSION, migratedAt: Date.now() }, true).catch(()=>{});
+    return null;
+  }
+
+  console.warn(`[TaskTracker] 정리 시작 — 중복 이름 ${dupNames.length}건 · 중복 후보 ${dupGroups.length}묶음`);
+  bootOverlay(true, '중복 멤버 정리 중…');
+  const backupPath = await fbBackupRemote(raw, MEMBER_DEDUPE_VERSION);
+
+  // 이름 → 대표 id (아는 사람은 고정 id, 나머지는 가장 오래된 id)
+  const idMap = {}, report = [];
+  Object.keys(groups).forEach(name => {
+    const list = groups[name];
+    const canon = CANON_MEMBERS.find(c => c.name === name);
+    const keepId = canon ? canon.id : list[0].id;
+    list.forEach(m => { if (m.id !== keepId) idMap[m.id] = keepId; });
+    if (canon || list.length > 1) {
+      report.push({ name, keepId, merged: list.filter(m => m.id !== keepId).map(m => m.id) });
+    }
+  });
+
+  // 참조 이전
+  let moved = 0;
+  DATA.tasks.forEach(t => moved += repointMemberRefs(t, idMap));
+  DATA.routines.forEach(r => moved += repointMemberRefs(r, idMap));
+  (DATA.dashboards || []).forEach(d => moved += repointMemberRefs(d, idMap));
+  (DATA.manuals || []).forEach(x => moved += repointMemberRefs(x, idMap));
+
+  // 참조를 옮기고 나면 같은 담당자로 묶이는 항목이 생긴다 — 그다음에 중복을 본다
+  const dupReport = await quarantineDuplicates(backupPath, collectDupGroups());
+
+  // 대표 멤버를 고정 id·이름·순서로 정리하고 중복은 없앤다
+  const kept = [];
+  Object.keys(groups).forEach(name => {
+    const list = groups[name];
+    const canon = CANON_MEMBERS.find(c => c.name === name);
+    const keepId = canon ? canon.id : list[0].id;
+    const src = list.find(m => m.id === keepId) || list[0];
+    const merged = Object.assign({}, src, { id: keepId, name });
+    if (canon) { merged.order = canon.order; if (!merged.color) merged.color = canon.color; }
+    // 중복 쪽에만 있던 값(직책 등)을 살린다
+    list.forEach(m => { if (!merged.role && m.role) merged.role = m.role; });
+    kept.push(merged);
+  });
+  kept.sort((a, b) => (a.order || 99) - (b.order || 99) || String(a.name).localeCompare(String(b.name)));
+  DATA.members = kept;
+
+  // 원격에서 중복 멤버 노드를 지운다.
+  // 삭제 기록도 함께 남긴다 — 안 그러면 다른 접속자가 "아직 못 받은 항목" 으로 보고 되살린다.
+  const tombs = fbLoadTombs(), at = Date.now(), by = fbClientId();
+  for (const oldId of Object.keys(idMap)) {
+    const path = `members/${oldId}`;
+    tombs[path] = { at, by };
+    await fbWriteRaw(fbTombRemotePath(path), { deletedAt: at, deletedBy: by }, true).catch(() => {});
+    await fbWriteRaw(path, null, false).catch(e => console.warn('삭제 실패', oldId, e.message));
+  }
+  fbSaveTombs(tombs);
+  FB.remoteTombs = FB.remoteTombs || {};
+  Object.keys(idMap).forEach(oldId => { FB.remoteTombs[`members/${oldId}`] = { deletedAt: at }; });
+
+  // 정리 결과를 올린다 (바뀐 항목만)
+  FB.base = null; fbSaveBase(); fbLoadBase();
+  fbMarkSeen();
+  localStorage.setItem(STORAGE_KEY, JSON.stringify(DATA));
+  await fbFlush();
+  await fbWriteRaw('_meta', {
+    migrationVersion: MEMBER_DEDUPE_VERSION, migratedAt: Date.now(),
+    migratedBy: fbClientId(), backup: backupPath
+  }, true).catch(()=>{});
+
+  const summary = { backupPath, merged: report, refsMoved: moved, duplicates: dupReport };
+  console.warn('[TaskTracker] 중복 멤버 정리 완료', summary);
+  const dupN = (dupReport.merged || []).length;
+  toast(`중복 멤버 ${Object.keys(idMap).length}건 정리 · 업무 ${moved}건 이전${dupN ? ` · 중복 업무 ${dupN}건 정리` : ''}`);
+  return summary;
+}
+
+// 관리자용 — 원격 원본 JSON 그대로 내려받기
+async function downloadFirebaseBackup() {
+  try {
+    toast('팀 데이터를 내려받는 중…');
+    const raw = await fbReadOnce();
+    const blob = new Blob([JSON.stringify(raw, null, 2)], { type: 'application/json' });
+    const a = document.createElement('a');
+    a.href = URL.createObjectURL(blob);
+    a.download = `팀데이터백업_${new Date().toISOString().slice(0,19).replace(/[:T]/g,'-')}.json`;
+    a.click();
+    URL.revokeObjectURL(a.href);
+    toast('팀 데이터 백업을 내려받았습니다 ✓');
+  } catch (err) {
+    console.error('[TaskTracker] 백업 실패:', err);
+    toast('백업 실패: ' + (err && err.message));
+  }
+}
+
+// ===== 최초 동기화 =====
+// 원칙: Firebase 가 유일한 원본이다.
+// 원격에 데이터가 있으면 이 브라우저에 남아 있던 값은 화면에도, 원격에도 섞지 않는다.
+// 원격이 정말 비어 있을 때만 기본 구성을 한 번 만든다.
+
+function bootOverlay(show, msg) {
+  let el = $('boot-overlay');
+  if (!el) {
+    el = document.createElement('div');
+    el.id = 'boot-overlay';
+    el.className = 'boot-overlay';
+    document.body.appendChild(el);
+  }
+  if (msg || !el.querySelector('.boot-spin')) {
+    el.innerHTML = '<div class="boot-box"><div class="boot-spin"></div>'
+      + '<div class="boot-msg" id="boot-msg">데이터 불러오는 중…</div></div>';
+  }
+  if (msg && $('boot-msg')) $('boot-msg').textContent = msg;
+  el.style.display = show ? 'flex' : 'none';
+}
+
+// 보여줄 캐시조차 없을 때 — 빈 화면 대신 이유를 띄운다
+function bootError(msg) {
+  bootOverlay(true);
+  const box = $('boot-overlay');
+  if (!box) return;
+  box.innerHTML = `<div class="boot-box">
+    <div class="boot-msg" style="font-size:14px; margin-bottom:6px;">팀 데이터에 연결하지 못했습니다</div>
+    <div class="boot-msg" style="font-weight:500; color:var(--muted);">${escapeHtml(msg || '')}</div>
+    <div class="boot-msg" style="font-weight:500; color:var(--muted); margin-top:10px;">
+      연결되면 자동으로 이어집니다.</div>
+    <button class="modal-btn primary" style="margin-top:14px;" onclick="location.reload()">다시 시도</button>
+  </div>`;
+}
+
+// 원격 스냅샷으로 DATA 를 통째로 세운다 (병합하지 않는다)
+function adoptRemote(remote) {
+  FB.applying = true;
+  try {
+    const rt = FB.remoteTombs || {};
+    FB_COLS.forEach(col => {
+      DATA[col] = Object.keys(remote[col] || {})
+        // 지웠다는 기록이 있는 항목은 아직 원격에 남아 있어도 되살리지 않는다
+        .filter(id => !fbHasTomb(`${col}/${id}`) && !rt[`${col}/${id}`])
+        .map(id => fbToItem(col, remote[col][id]));
+    });
+    migrateData();
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(DATA));  // localStorage 는 캐시일 뿐이다
+  } finally {
+    FB.applying = false;
+  }
+  fbSetBaseSnapshot(remote);
+  fbMarkSeen();
+}
+
+function fbSetBaseSnapshot(remote) {
+  FB.base = JSON.parse(JSON.stringify(remote));
+  fbSaveBase();
+}
+
+// 한 번만 읽어 온다 (SDK / REST 공통)
+async function fbReadOnce() {
+  if (FB.mode === 'sdk' && FB.sdk && FB.root) {
+    const snap = await FB.sdk.get(FB.root);
+    return snap.val();
+  }
+  const res = await fetch(`${FB.url}/${FB.path}.json`, { cache: 'no-store' });
+  if (!res.ok) throw new Error(`읽기 실패 (HTTP ${res.status})`);
+  return await res.json();
+}
+
+async function bootSync() {
+  bootOverlay(true, '팀 데이터 불러오는 중…');
+  let raw = null, failed = null;
+  try {
+    raw = await fbReadOnce();
+    console.log('[TaskTracker] Firebase read success (최초)');
+  } catch (err) {
+    failed = err;
+    console.error('[TaskTracker] Firebase 최초 읽기 실패:', err && err.message);
+  }
+
+  if (failed) {
+    // 연결 실패 — 원격이 비어 있는지 알 수 없으므로 기본 구성을 만들지 않는다.
+    // (여기서 만들면 나중에 그 값이 공용 데이터로 올라갈 수 있다)
+    loadCache();
+    FB.ready = false;
+    fbSetState('error', failed.message);
+    updateFreqOptions();
+    if (DATA.members.length === 0) {
+      // 이 PC에 보여줄 것이 아무것도 없다 — 빈 화면 대신 상황을 알린다
+      bootError(failed.message);
+    } else {
+      bootOverlay(false);
+      renderAll();
+      toast('팀 데이터에 연결하지 못했습니다 — 이 PC에 저장된 내용만 보고 있습니다');
+    }
+    setTimeout(bootSync, 5000);          // 연결되면 그때 공용 데이터로 맞춘다
+    return;
+  }
+
+  FB.remoteTombs = fbRemoteTombs(raw);
+  const remote = fbRemoteSnap(raw);
+
+  if (fbSnapEmpty(remote)) {
+    // 원격이 정말 비어 있다 — 팀 최초 1회만 기본 구성을 만든다
+    console.log('[TaskTracker] 원격이 비어 있음 — 기본 팀 구성을 최초 1회 생성');
+    bootOverlay(true, '팀 데이터 준비 중…');
+    seedInitialData();
+    FB.base = fbEmptySnap();
+    fbSaveBase();
+    fbMarkSeen();
+    FB.ready = true;
+    await fbFlush();
+  } else {
+    // 원격이 원본이다 — 이 브라우저에 있던 값은 쓰지 않는다
+    adoptRemote(remote);
+    FB.ready = true;
+    await runMemberMigration(raw);       // 중복 멤버 정리 (한 번만)
+  }
+
+  fbCheckBuild(raw && raw._meta);
+  FB.lastSync = Date.now();
+  fbSetState('synced', '');
+  updateFreqOptions();
+  renderAll();
+  bootOverlay(false);
+  FB.bootDone = true;
+  fbSubscribe();                          // 이제부터 실시간 수신 시작
+}
+
+// localStorage 캐시만 읽는다 — 없으면 빈 상태로 둔다 (여기서 seed 하지 않는다)
+function loadCache() {
+  const raw = localStorage.getItem(STORAGE_KEY);
+  if (!raw) { DATA = { teams: [], members: [], routines: [], routineChecks: [], tasks: [], dashboards: [], manuals: [] }; return; }
+  try { DATA = JSON.parse(raw); migrateData(); }
+  catch (e) { DATA = { teams: [], members: [], routines: [], routineChecks: [], tasks: [], dashboards: [], manuals: [] }; }
+}
+
 // ---- 연결 ----
 function fbStartRest(reason) {
   if (FB.mode === 'rest' && FB.pollTimer) return;   // 타이머가 죽어 있으면 다시 건다
   if (reason) console.warn('Firebase 실시간 연결 불가 — 2초 주기 동기화로 전환:', reason);
   FB.mode = 'rest';
   console.log(`[TaskTracker] Firebase connected (2초 주기 동기화) · build ${APP_BUILD}`);
+  if (FB.bootDone) { FB.subscribed = false; fbSubscribe(); }
+}
+
+// 최초 읽기가 끝난 뒤에만 실시간 수신을 시작한다.
+// 그 전에 켜 두면 이 브라우저 데이터가 공용 데이터와 섞인다.
+function fbSubscribe() {
+  if (FB.subscribed || !FB.ready) return;
+  FB.subscribed = true;
+  if (FB.mode === 'sdk' && FB.sdk && FB.root) {
+    FB.sdk.onValue(FB.root,
+      snap => { if (!FB.pushing) { try { fbOnRemote(snap.val()); } catch (e) { console.error('원격 반영 실패:', e); } } },
+      err  => { fbSetState('error', err && err.message); FB.subscribed = false; fbStartRest(err && err.message); }
+    );
+    return;
+  }
   if (FB.pollTimer) clearInterval(FB.pollTimer);
-  fbPoll();
-  // 올릴 것이 남아 있어도 받기는 계속한다 — 병합이 내 변경을 지키므로 안전하고,
-  // 이걸 막으면 저장이 잦은 탭의 화면이 계속 옛것으로 남는다
+  // 올릴 것이 남아 있어도 받기는 계속한다 — 병합이 내 변경을 지키므로 안전하다
   FB.pollTimer = setInterval(() => { if (!FB.pushing) fbPoll(); }, FB_POLL_MS);
 }
 
@@ -4094,11 +4550,6 @@ async function fbStart() {
     FB.root = dbMod.ref(FB.db, FB.path);
     FB.mode = 'sdk';
     console.log(`[TaskTracker] Firebase connected (실시간 리스너) · build ${APP_BUILD}`);
-
-    dbMod.onValue(FB.root,
-      snap => { if (!FB.pushing) { try { fbOnRemote(snap.val()); } catch (e) { console.error('원격 반영 실패:', e); } } },
-      err  => { fbSetState('error', err && err.message); fbStartRest(err && err.message); }
-    );
 
     dbMod.onValue(dbMod.ref(FB.db, '.info/connected'), s => {
       clearTimeout(FB.offlineTimer);
@@ -4125,13 +4576,13 @@ function fbInit() {
   } catch (e) {}
   console.log(`[TaskTracker] build ${APP_BUILD} · ${location.href}`);
   fbClientId();
-  fbMarkSeen();
   fbSetupTabSync();
   fbSetState('connecting', '');
-  fbStart();
   document.addEventListener('visibilitychange', () => {
-    if (!document.hidden && FB.mode === 'rest') fbPoll();
+    if (!document.hidden && FB.mode === 'rest' && FB.ready) fbPoll();
   });
+  // 연결 준비 → 최초 읽기 → 화면. 이 순서를 지켜야 이 PC 데이터가 공용에 섞이지 않는다.
+  return fbStart().then(bootSync);
 }
 
 // 모달을 닫으면 편집 중이라 미뤄둔 원격 변경을 반영한다
@@ -4534,7 +4985,18 @@ function syncTaskFromSubtasks(task) {
 
 // 팀 멤버 가져오기
 function teamMembers(teamId) {
-  return DATA.members.filter(m => m.teamId === teamId);
+  return orderedMembers().filter(m => m.teamId === teamId);
+}
+
+// 모든 브라우저에서 같은 순서로 — order 가 있으면 그걸 따르고, 없으면 이름순
+function orderedMembers() {
+  const rank = m => {
+    if (typeof m.order === 'number') return m.order;
+    const c = CANON_MEMBERS.find(x => x.name === normName(m.name));
+    return c ? c.order : 99;
+  };
+  return DATA.members.slice().sort((a, b) => rank(a) - rank(b)
+    || String(a.name).localeCompare(String(b.name)));
 }
 
 // ===== 진척률 ↑↓ 위젯 =====
@@ -5644,7 +6106,7 @@ function renderTodayPage() {
   }
 
   // 화면 표시 순서만 뒤집는다 (저장 순서는 그대로) — 조재연 → 최세혁 → 신한솔
-  const visibleMembers = DATA.members.slice().reverse();
+  const visibleMembers = orderedMembers();
 
   if (visibleMembers.length === 0) {
     grid.innerHTML = `<div class="empty" style="grid-column:1/-1;">
@@ -6735,11 +7197,10 @@ function loadSampleData(silent) {
     { id: 'team_main', name: DEFAULT_TEAM_NAME, color: '#2F3237', icon: '🏢', kpi: '' }
   ];
 
-  const baseMembers = [
-    { id: 'mm1', teamId: 'team_main', name: '신한솔', role: '', color: '#2F3237', kpi: '' },
-    { id: 'mm2', teamId: 'team_main', name: '최세혁', role: '', color: '#45484D', kpi: '' },
-    { id: 'mm3', teamId: 'team_main', name: '조재연', role: '', color: '#3F4A54', kpi: '' }
-  ];
+  // 고정 id·고정 순서 — 브라우저마다 다른 id 가 생기지 않게
+  const baseMembers = CANON_MEMBERS.map(c => ({
+    id: c.id, teamId: 'team_main', name: c.name, role: '', color: c.color, order: c.order, kpi: ''
+  }));
 
   if (silent) {
     DATA.teams = baseTeams;
@@ -7044,13 +7505,9 @@ function renderAll() {
 }
 
 function init() {
-  // 배포 버전 확인용 마커 — 콘솔(F12)에 이 문구가 보이면 '열기 버튼 수정본'이 적용된 것입니다.
-  window.__BUILD__ = 'shin-tracker-2026-08-26';
-  load();
-  updateFreqOptions();
-  renderAll();
-
-  // 팀 공용 데이터(Firebase)에 연결한다 — 실패해도 이 PC에서는 그대로 쓸 수 있다
+  window.__BUILD__ = APP_BUILD;
+  // 여기서 seed 하거나 그리지 않는다. Firebase 를 먼저 읽고 그 결과로 화면을 세운다.
+  bootOverlay(true, '팀 데이터 불러오는 중…');
   fbInit();
 }
 init();
